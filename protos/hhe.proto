@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option objc_class_prefix = "HHE";
+
+package hheproto;
+
+service AnalystService {
+  rpc getPublicKey (Empty) returns (PublicKeyMsg) { }
+  rpc addEncryptedResult(CiphertextMsg) returns (Empty) { }
+}
+
+service CSPService {
+  rpc addPublicKeys (PublicKeySetMsg) returns (Empty) { }
+  rpc addMLModel (MLModelMsg) returns (Empty) { }
+  rpc addEncryptedKeys(EncSymmetricKeysMsg) returns (Empty) { }
+  rpc addEncryptedData(EncSymmetricDataMsg) returns (Empty) { }
+}
+
+message Empty { }
+
+message PublicKeyMsg {
+  bytes data = 1;
+  int32 length = 2;
+}
+
+message PublicKeySetMsg {
+  PublicKeyMsg pk = 1;
+  PublicKeyMsg rk = 2;
+  PublicKeyMsg gk = 3;
+}
+
+message CiphertextMsg {
+  bytes data = 1;
+  int32 length = 2;
+}
+
+message MLModelMsg {
+  CiphertextMsg weights = 1;
+  CiphertextMsg bias = 2;
+  
+}
+
+message EncSymmetricKeysMsg {
+   repeated CiphertextMsg key = 1;
+}
+
+message EncSymmetricDataMsg {
+   repeated uint64 value = 1;
+}
