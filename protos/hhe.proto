@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option objc_class_prefix = "HHE";
+
+package hheproto;
+
+service AnalystService{
+    rpc getPublicKey (Empty) returns (PublicKeyMsg) { }
+    rpc addEncryptedResult(CiphertextMsg) returns (Empty) { }
+}
+
+message Empty{}
+
+message PublicKeyMsg{
+    bytes data = 1;
+    int32 length = 2;
+}
+
+message CiphertextMsg {
+    bytes data = 1;
+    int32 length = 2;
+}
