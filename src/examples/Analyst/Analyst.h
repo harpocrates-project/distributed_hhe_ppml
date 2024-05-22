@@ -39,6 +39,8 @@ class BaseAnalyst
         void generateHEKeys();
 
         int getPublicKeyBytes(seal_byte* &);
+        int getRelinKeysBytes(seal_byte* &);
+        int getGaloisKeysBytes(seal_byte* &);
 
         // pure virtual function
         virtual void func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec) = 0;

@@ -124,5 +124,108 @@ AnalystService::Service::~Service() {
 }
 
 
+static const char* CSPService_method_names[] = {
+  "/hheproto.CSPService/addPublicKeys",
+  "/hheproto.CSPService/addEncryptedKeys",
+};
+
+std::unique_ptr< CSPService::Stub> CSPService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
+  (void)options;
+  std::unique_ptr< CSPService::Stub> stub(new CSPService::Stub(channel, options));
+  return stub;
+}
+
+CSPService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_addPublicKeys_(CSPService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_addEncryptedKeys_(CSPService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  {}
+
+::grpc::Status CSPService::Stub::addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::PublicKeySetMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addPublicKeys_, context, request, response);
+}
+
+void CSPService::Stub::async::addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::PublicKeySetMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addPublicKeys_, context, request, response, std::move(f));
+}
+
+void CSPService::Stub::async::addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addPublicKeys_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::PrepareAsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::PublicKeySetMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addPublicKeys_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::AsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncaddPublicKeysRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status CSPService::Stub::addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addEncryptedKeys_, context, request, response);
+}
+
+void CSPService::Stub::async::addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedKeys_, context, request, response, std::move(f));
+}
+
+void CSPService::Stub::async::addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedKeys_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::PrepareAsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::EncSymmetricKeysMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addEncryptedKeys_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::AsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncaddEncryptedKeysRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+CSPService::Service::Service() {
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CSPService_method_names[0],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CSPService::Service, ::hheproto::PublicKeySetMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CSPService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::hheproto::PublicKeySetMsg* req,
+             ::hheproto::Empty* resp) {
+               return service->addPublicKeys(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CSPService_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CSPService::Service, ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CSPService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::hheproto::EncSymmetricKeysMsg* req,
+             ::hheproto::Empty* resp) {
+               return service->addEncryptedKeys(ctx, req, resp);
+             }, this)));
+}
+
+CSPService::Service::~Service() {
+}
+
+::grpc::Status CSPService::Service::addPublicKeys(::grpc::ServerContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CSPService::Service::addEncryptedKeys(::grpc::ServerContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+
 }  // namespace hheproto
 

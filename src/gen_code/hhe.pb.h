@@ -52,14 +52,22 @@ extern CiphertextMsgDefaultTypeInternal _CiphertextMsg_default_instance_;
 class Empty;
 struct EmptyDefaultTypeInternal;
 extern EmptyDefaultTypeInternal _Empty_default_instance_;
+class EncSymmetricKeysMsg;
+struct EncSymmetricKeysMsgDefaultTypeInternal;
+extern EncSymmetricKeysMsgDefaultTypeInternal _EncSymmetricKeysMsg_default_instance_;
 class PublicKeyMsg;
 struct PublicKeyMsgDefaultTypeInternal;
 extern PublicKeyMsgDefaultTypeInternal _PublicKeyMsg_default_instance_;
+class PublicKeySetMsg;
+struct PublicKeySetMsgDefaultTypeInternal;
+extern PublicKeySetMsgDefaultTypeInternal _PublicKeySetMsg_default_instance_;
 }  // namespace hheproto
 PROTOBUF_NAMESPACE_OPEN
 template<> ::hheproto::CiphertextMsg* Arena::CreateMaybeMessage<::hheproto::CiphertextMsg>(Arena*);
 template<> ::hheproto::Empty* Arena::CreateMaybeMessage<::hheproto::Empty>(Arena*);
+template<> ::hheproto::EncSymmetricKeysMsg* Arena::CreateMaybeMessage<::hheproto::EncSymmetricKeysMsg>(Arena*);
 template<> ::hheproto::PublicKeyMsg* Arena::CreateMaybeMessage<::hheproto::PublicKeyMsg>(Arena*);
+template<> ::hheproto::PublicKeySetMsg* Arena::CreateMaybeMessage<::hheproto::PublicKeySetMsg>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace hheproto {
 
@@ -347,6 +355,203 @@ class PublicKeyMsg final :
 };
 // -------------------------------------------------------------------
 
+class PublicKeySetMsg final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.PublicKeySetMsg) */ {
+ public:
+  inline PublicKeySetMsg() : PublicKeySetMsg(nullptr) {}
+  ~PublicKeySetMsg() override;
+  explicit PROTOBUF_CONSTEXPR PublicKeySetMsg(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PublicKeySetMsg(const PublicKeySetMsg& from);
+  PublicKeySetMsg(PublicKeySetMsg&& from) noexcept
+    : PublicKeySetMsg() {
+    *this = ::std::move(from);
+  }
+
+  inline PublicKeySetMsg& operator=(const PublicKeySetMsg& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PublicKeySetMsg& operator=(PublicKeySetMsg&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PublicKeySetMsg& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PublicKeySetMsg* internal_default_instance() {
+    return reinterpret_cast<const PublicKeySetMsg*>(
+               &_PublicKeySetMsg_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(PublicKeySetMsg& a, PublicKeySetMsg& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PublicKeySetMsg* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PublicKeySetMsg* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PublicKeySetMsg* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PublicKeySetMsg>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PublicKeySetMsg& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const PublicKeySetMsg& from) {
+    PublicKeySetMsg::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PublicKeySetMsg* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hheproto.PublicKeySetMsg";
+  }
+  protected:
+  explicit PublicKeySetMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPkFieldNumber = 1,
+    kRkFieldNumber = 2,
+    kGkFieldNumber = 3,
+  };
+  // .hheproto.PublicKeyMsg pk = 1;
+  bool has_pk() const;
+  private:
+  bool _internal_has_pk() const;
+  public:
+  void clear_pk();
+  const ::hheproto::PublicKeyMsg& pk() const;
+  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_pk();
+  ::hheproto::PublicKeyMsg* mutable_pk();
+  void set_allocated_pk(::hheproto::PublicKeyMsg* pk);
+  private:
+  const ::hheproto::PublicKeyMsg& _internal_pk() const;
+  ::hheproto::PublicKeyMsg* _internal_mutable_pk();
+  public:
+  void unsafe_arena_set_allocated_pk(
+      ::hheproto::PublicKeyMsg* pk);
+  ::hheproto::PublicKeyMsg* unsafe_arena_release_pk();
+
+  // .hheproto.PublicKeyMsg rk = 2;
+  bool has_rk() const;
+  private:
+  bool _internal_has_rk() const;
+  public:
+  void clear_rk();
+  const ::hheproto::PublicKeyMsg& rk() const;
+  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_rk();
+  ::hheproto::PublicKeyMsg* mutable_rk();
+  void set_allocated_rk(::hheproto::PublicKeyMsg* rk);
+  private:
+  const ::hheproto::PublicKeyMsg& _internal_rk() const;
+  ::hheproto::PublicKeyMsg* _internal_mutable_rk();
+  public:
+  void unsafe_arena_set_allocated_rk(
+      ::hheproto::PublicKeyMsg* rk);
+  ::hheproto::PublicKeyMsg* unsafe_arena_release_rk();
+
+  // .hheproto.PublicKeyMsg gk = 3;
+  bool has_gk() const;
+  private:
+  bool _internal_has_gk() const;
+  public:
+  void clear_gk();
+  const ::hheproto::PublicKeyMsg& gk() const;
+  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_gk();
+  ::hheproto::PublicKeyMsg* mutable_gk();
+  void set_allocated_gk(::hheproto::PublicKeyMsg* gk);
+  private:
+  const ::hheproto::PublicKeyMsg& _internal_gk() const;
+  ::hheproto::PublicKeyMsg* _internal_mutable_gk();
+  public:
+  void unsafe_arena_set_allocated_gk(
+      ::hheproto::PublicKeyMsg* gk);
+  ::hheproto::PublicKeyMsg* unsafe_arena_release_gk();
+
+  // @@protoc_insertion_point(class_scope:hheproto.PublicKeySetMsg)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::hheproto::PublicKeyMsg* pk_;
+    ::hheproto::PublicKeyMsg* rk_;
+    ::hheproto::PublicKeyMsg* gk_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_hhe_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CiphertextMsg final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.CiphertextMsg) */ {
  public:
@@ -395,7 +600,7 @@ class CiphertextMsg final :
                &_CiphertextMsg_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(CiphertextMsg& a, CiphertextMsg& b) {
     a.Swap(&b);
@@ -509,6 +714,163 @@ class CiphertextMsg final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_hhe_2eproto;
 };
+// -------------------------------------------------------------------
+
+class EncSymmetricKeysMsg final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.EncSymmetricKeysMsg) */ {
+ public:
+  inline EncSymmetricKeysMsg() : EncSymmetricKeysMsg(nullptr) {}
+  ~EncSymmetricKeysMsg() override;
+  explicit PROTOBUF_CONSTEXPR EncSymmetricKeysMsg(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  EncSymmetricKeysMsg(const EncSymmetricKeysMsg& from);
+  EncSymmetricKeysMsg(EncSymmetricKeysMsg&& from) noexcept
+    : EncSymmetricKeysMsg() {
+    *this = ::std::move(from);
+  }
+
+  inline EncSymmetricKeysMsg& operator=(const EncSymmetricKeysMsg& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EncSymmetricKeysMsg& operator=(EncSymmetricKeysMsg&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const EncSymmetricKeysMsg& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const EncSymmetricKeysMsg* internal_default_instance() {
+    return reinterpret_cast<const EncSymmetricKeysMsg*>(
+               &_EncSymmetricKeysMsg_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(EncSymmetricKeysMsg& a, EncSymmetricKeysMsg& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EncSymmetricKeysMsg* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(EncSymmetricKeysMsg* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  EncSymmetricKeysMsg* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EncSymmetricKeysMsg>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const EncSymmetricKeysMsg& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const EncSymmetricKeysMsg& from) {
+    EncSymmetricKeysMsg::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EncSymmetricKeysMsg* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hheproto.EncSymmetricKeysMsg";
+  }
+  protected:
+  explicit EncSymmetricKeysMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kKeyFieldNumber = 1,
+  };
+  // repeated .hheproto.CiphertextMsg key = 1;
+  int key_size() const;
+  private:
+  int _internal_key_size() const;
+  public:
+  void clear_key();
+  ::hheproto::CiphertextMsg* mutable_key(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg >*
+      mutable_key();
+  private:
+  const ::hheproto::CiphertextMsg& _internal_key(int index) const;
+  ::hheproto::CiphertextMsg* _internal_add_key();
+  public:
+  const ::hheproto::CiphertextMsg& key(int index) const;
+  ::hheproto::CiphertextMsg* add_key();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg >&
+      key() const;
+
+  // @@protoc_insertion_point(class_scope:hheproto.EncSymmetricKeysMsg)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg > key_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_hhe_2eproto;
+};
 // ===================================================================
 
 
@@ -596,6 +958,280 @@ inline void PublicKeyMsg::set_length(int32_t value) {
 
 // -------------------------------------------------------------------
 
+// PublicKeySetMsg
+
+// .hheproto.PublicKeyMsg pk = 1;
+inline bool PublicKeySetMsg::_internal_has_pk() const {
+  return this != internal_default_instance() && _impl_.pk_ != nullptr;
+}
+inline bool PublicKeySetMsg::has_pk() const {
+  return _internal_has_pk();
+}
+inline void PublicKeySetMsg::clear_pk() {
+  if (GetArenaForAllocation() == nullptr && _impl_.pk_ != nullptr) {
+    delete _impl_.pk_;
+  }
+  _impl_.pk_ = nullptr;
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_pk() const {
+  const ::hheproto::PublicKeyMsg* p = _impl_.pk_;
+  return p != nullptr ? *p : reinterpret_cast<const ::hheproto::PublicKeyMsg&>(
+      ::hheproto::_PublicKeyMsg_default_instance_);
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::pk() const {
+  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.pk)
+  return _internal_pk();
+}
+inline void PublicKeySetMsg::unsafe_arena_set_allocated_pk(
+    ::hheproto::PublicKeyMsg* pk) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.pk_);
+  }
+  _impl_.pk_ = pk;
+  if (pk) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.pk)
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_pk() {
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.pk_;
+  _impl_.pk_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_pk() {
+  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.pk)
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.pk_;
+  _impl_.pk_ = nullptr;
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_pk() {
+  
+  if (_impl_.pk_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hheproto::PublicKeyMsg>(GetArenaForAllocation());
+    _impl_.pk_ = p;
+  }
+  return _impl_.pk_;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_pk() {
+  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_pk();
+  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.pk)
+  return _msg;
+}
+inline void PublicKeySetMsg::set_allocated_pk(::hheproto::PublicKeyMsg* pk) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.pk_;
+  }
+  if (pk) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(pk);
+    if (message_arena != submessage_arena) {
+      pk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, pk, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.pk_ = pk;
+  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.pk)
+}
+
+// .hheproto.PublicKeyMsg rk = 2;
+inline bool PublicKeySetMsg::_internal_has_rk() const {
+  return this != internal_default_instance() && _impl_.rk_ != nullptr;
+}
+inline bool PublicKeySetMsg::has_rk() const {
+  return _internal_has_rk();
+}
+inline void PublicKeySetMsg::clear_rk() {
+  if (GetArenaForAllocation() == nullptr && _impl_.rk_ != nullptr) {
+    delete _impl_.rk_;
+  }
+  _impl_.rk_ = nullptr;
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_rk() const {
+  const ::hheproto::PublicKeyMsg* p = _impl_.rk_;
+  return p != nullptr ? *p : reinterpret_cast<const ::hheproto::PublicKeyMsg&>(
+      ::hheproto::_PublicKeyMsg_default_instance_);
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::rk() const {
+  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.rk)
+  return _internal_rk();
+}
+inline void PublicKeySetMsg::unsafe_arena_set_allocated_rk(
+    ::hheproto::PublicKeyMsg* rk) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rk_);
+  }
+  _impl_.rk_ = rk;
+  if (rk) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.rk)
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_rk() {
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.rk_;
+  _impl_.rk_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_rk() {
+  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.rk)
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.rk_;
+  _impl_.rk_ = nullptr;
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_rk() {
+  
+  if (_impl_.rk_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hheproto::PublicKeyMsg>(GetArenaForAllocation());
+    _impl_.rk_ = p;
+  }
+  return _impl_.rk_;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_rk() {
+  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_rk();
+  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.rk)
+  return _msg;
+}
+inline void PublicKeySetMsg::set_allocated_rk(::hheproto::PublicKeyMsg* rk) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.rk_;
+  }
+  if (rk) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(rk);
+    if (message_arena != submessage_arena) {
+      rk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rk, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rk_ = rk;
+  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.rk)
+}
+
+// .hheproto.PublicKeyMsg gk = 3;
+inline bool PublicKeySetMsg::_internal_has_gk() const {
+  return this != internal_default_instance() && _impl_.gk_ != nullptr;
+}
+inline bool PublicKeySetMsg::has_gk() const {
+  return _internal_has_gk();
+}
+inline void PublicKeySetMsg::clear_gk() {
+  if (GetArenaForAllocation() == nullptr && _impl_.gk_ != nullptr) {
+    delete _impl_.gk_;
+  }
+  _impl_.gk_ = nullptr;
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_gk() const {
+  const ::hheproto::PublicKeyMsg* p = _impl_.gk_;
+  return p != nullptr ? *p : reinterpret_cast<const ::hheproto::PublicKeyMsg&>(
+      ::hheproto::_PublicKeyMsg_default_instance_);
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::gk() const {
+  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.gk)
+  return _internal_gk();
+}
+inline void PublicKeySetMsg::unsafe_arena_set_allocated_gk(
+    ::hheproto::PublicKeyMsg* gk) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.gk_);
+  }
+  _impl_.gk_ = gk;
+  if (gk) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.gk)
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_gk() {
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.gk_;
+  _impl_.gk_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_gk() {
+  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.gk)
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.gk_;
+  _impl_.gk_ = nullptr;
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_gk() {
+  
+  if (_impl_.gk_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hheproto::PublicKeyMsg>(GetArenaForAllocation());
+    _impl_.gk_ = p;
+  }
+  return _impl_.gk_;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_gk() {
+  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_gk();
+  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.gk)
+  return _msg;
+}
+inline void PublicKeySetMsg::set_allocated_gk(::hheproto::PublicKeyMsg* gk) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.gk_;
+  }
+  if (gk) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(gk);
+    if (message_arena != submessage_arena) {
+      gk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, gk, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.gk_ = gk;
+  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.gk)
+}
+
+// -------------------------------------------------------------------
+
 // CiphertextMsg
 
 // bytes data = 1;
@@ -668,9 +1304,57 @@ inline void CiphertextMsg::set_length(int32_t value) {
   // @@protoc_insertion_point(field_set:hheproto.CiphertextMsg.length)
 }
 
+// -------------------------------------------------------------------
+
+// EncSymmetricKeysMsg
+
+// repeated .hheproto.CiphertextMsg key = 1;
+inline int EncSymmetricKeysMsg::_internal_key_size() const {
+  return _impl_.key_.size();
+}
+inline int EncSymmetricKeysMsg::key_size() const {
+  return _internal_key_size();
+}
+inline void EncSymmetricKeysMsg::clear_key() {
+  _impl_.key_.Clear();
+}
+inline ::hheproto::CiphertextMsg* EncSymmetricKeysMsg::mutable_key(int index) {
+  // @@protoc_insertion_point(field_mutable:hheproto.EncSymmetricKeysMsg.key)
+  return _impl_.key_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg >*
+EncSymmetricKeysMsg::mutable_key() {
+  // @@protoc_insertion_point(field_mutable_list:hheproto.EncSymmetricKeysMsg.key)
+  return &_impl_.key_;
+}
+inline const ::hheproto::CiphertextMsg& EncSymmetricKeysMsg::_internal_key(int index) const {
+  return _impl_.key_.Get(index);
+}
+inline const ::hheproto::CiphertextMsg& EncSymmetricKeysMsg::key(int index) const {
+  // @@protoc_insertion_point(field_get:hheproto.EncSymmetricKeysMsg.key)
+  return _internal_key(index);
+}
+inline ::hheproto::CiphertextMsg* EncSymmetricKeysMsg::_internal_add_key() {
+  return _impl_.key_.Add();
+}
+inline ::hheproto::CiphertextMsg* EncSymmetricKeysMsg::add_key() {
+  ::hheproto::CiphertextMsg* _add = _internal_add_key();
+  // @@protoc_insertion_point(field_add:hheproto.EncSymmetricKeysMsg.key)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg >&
+EncSymmetricKeysMsg::key() const {
+  // @@protoc_insertion_point(field_list:hheproto.EncSymmetricKeysMsg.key)
+  return _impl_.key_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

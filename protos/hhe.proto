@@ -9,14 +9,29 @@ service AnalystService{
     rpc addEncryptedResult(CiphertextMsg) returns (Empty) { }
 }
 
-message Empty{}
+service CSPService{
+    rpc addPublicKeys (PublicKeySetMsg) returns (Empty) { }
+    rpc addEncryptedKeys(EncSymmetricKeysMsg) returns (Empty) { }
+}
+
+message Empty{ }
 
 message PublicKeyMsg{
     bytes data = 1;
     int32 length = 2;
 }
 
+message PublicKeySetMsg {
+    PublicKeyMsg pk = 1;
+    PublicKeyMsg rk = 2;
+    PublicKeyMsg gk = 3;
+  }
+
 message CiphertextMsg {
     bytes data = 1;
     int32 length = 2;
+}
+
+message EncSymmetricKeysMsg {
+    repeated CiphertextMsg key = 1;
 }

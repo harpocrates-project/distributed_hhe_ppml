@@ -164,6 +164,7 @@ target_link_libraries(hhe_grpc_proto
 set(ANALYST_SOURCE
 	${SOURCE_DIR}/examples/Analyst/AnalystRPC.cpp
 	${SOURCE_DIR}/examples/Analyst/Analyst.cpp
+	${SOURCE_DIR}/examples/Analyst/CSPServiceAnalystClient.cpp
 	${SOURCE_DIR}/util/sealhelper.cpp
         ${SOURCE_DIR}/util/pastahelper.cpp
     	${SOURCE_DIR}/util/utils.cpp
@@ -175,6 +176,7 @@ set(ANALYST_SOURCE
 
 set(USER_SOURCE
 	${PROJECT_SOURCE_DIR}/src/examples/User/AnalystServiceUserClient.cpp
+	${PROJECT_SOURCE_DIR}/src/examples/User/CSPServiceUserClient.cpp
 	${PROJECT_SOURCE_DIR}/src/examples/User/User.cpp
 	${PROJECT_SOURCE_DIR}/src/examples/User/UserRPC.cpp
 	${PROJECT_SOURCE_DIR}/src/util/sealhelper.cpp
@@ -188,8 +190,9 @@ set(USER_SOURCE
 
 
 
-set(NN_Models
-    ${SOURCE_DIR}/examples/Models/test.cpp
+set(CSP_SOURCE
+    ${SOURCE_DIR}/examples/CSP/CSP.cpp
+    ${SOURCE_DIR}/examples/CSP/CSPRPC.cpp
     ${SOURCE_DIR}/util/sealhelper.cpp
     ${SOURCE_DIR}/util/pastahelper.cpp
     ${SOURCE_DIR}/util/utils.cpp
@@ -206,7 +209,7 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
 
 ADD_EXECUTABLE(analyst ${ANALYST_SOURCE})
 ADD_EXECUTABLE(user ${USER_SOURCE}) 
-add_executable(model ${NN_Models})
+add_executable(csp ${CSP_SOURCE})
 
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
@@ -216,11 +219,15 @@ target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SEAL::seal)
 
 
-target_link_libraries(model
+target_link_libraries(csp
     SEAL::seal
     keccak
     aes
-    pocketnn)
+    pocketnn
+    hhe_grpc_proto
+    ${_REFLECTION}
+    ${_GRPC_GRPCPP}
+    ${_PROTOBUF_LIBPROTOBUF})
 
 
 target_link_libraries(analyst

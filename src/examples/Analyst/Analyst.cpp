@@ -140,6 +140,42 @@ int BaseAnalyst::getPublicKeyBytes(seal_byte* &buffer)
     return he_pk_size;
 }
 
+int BaseAnalyst::getRelinKeysBytes(seal_byte* &buffer)
+{
+    int he_rk_size = he_rk.save_size();
+    buffer = new seal_byte[he_rk_size];
+    he_rk.save(buffer, he_rk_size);
+
+    cout << "[Analyst] Serialising Relin Key (size=" << he_rk_size << ")" << endl;
+
+    /*
+    for (int i = 0; i < 10; i++) {
+        std::cout << (int)buffer[i] << ' ';
+    }
+    cout << endl;
+    */
+
+    return he_rk_size;
+}
+
+int BaseAnalyst::getGaloisKeysBytes(seal_byte* &buffer)
+{
+    int he_gk_size = he_gk.save_size();
+    buffer = new seal_byte[he_gk_size];
+    he_gk.save(buffer, he_gk_size);
+
+    cout << "[Analyst] Serialising Galois Key (size=" << he_gk_size << ")" << endl;
+
+    /*
+    for (int i = 0; i < 10; i++) {
+        std::cout << (int)buffer[i] << ' ';
+    }
+    cout << endl;
+    */
+
+    return he_gk_size;
+}
+
 
 
 void Analyst_hhe_pktnn_1fc::func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec) { 

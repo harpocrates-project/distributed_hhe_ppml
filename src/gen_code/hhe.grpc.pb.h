@@ -391,6 +391,370 @@ class AnalystService final {
   typedef WithStreamedUnaryMethod_getPublicKey<WithStreamedUnaryMethod_addEncryptedResult<Service > > StreamedService;
 };
 
+class CSPService final {
+ public:
+  static constexpr char const* service_full_name() {
+    return "hheproto.CSPService";
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::hheproto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> AsyncaddPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(AsyncaddPublicKeysRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncaddPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(PrepareAsyncaddPublicKeysRaw(context, request, cq));
+    }
+    virtual ::grpc::Status addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::hheproto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> AsyncaddEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(AsyncaddEncryptedKeysRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncaddEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(PrepareAsyncaddEncryptedKeysRaw(context, request, cq));
+    }
+    class async_interface {
+     public:
+      virtual ~async_interface() {}
+      virtual void addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+    };
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::hheproto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> AsyncaddPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(AsyncaddPublicKeysRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncaddPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(PrepareAsyncaddPublicKeysRaw(context, request, cq));
+    }
+    ::grpc::Status addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::hheproto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> AsyncaddEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(AsyncaddEncryptedKeysRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncaddEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(PrepareAsyncaddEncryptedKeysRaw(context, request, cq));
+    }
+    class async final :
+      public StubInterface::async_interface {
+     public:
+      void addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void addEncryptedKeys(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+     private:
+      friend class Stub;
+      explicit async(Stub* stub): stub_(stub) { }
+      Stub* stub() { return stub_; }
+      Stub* stub_;
+    };
+    class async* async() override { return &async_stub_; }
+
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddPublicKeysRaw(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddEncryptedKeysRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricKeysMsg& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_addPublicKeys_;
+    const ::grpc::internal::RpcMethod rpcmethod_addEncryptedKeys_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status addPublicKeys(::grpc::ServerContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response);
+    virtual ::grpc::Status addEncryptedKeys(::grpc::ServerContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestaddPublicKeys(::grpc::ServerContext* context, ::hheproto::PublicKeySetMsg* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestaddEncryptedKeys(::grpc::ServerContext* context, ::hheproto::EncSymmetricKeysMsg* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_addPublicKeys<WithAsyncMethod_addEncryptedKeys<Service > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::PublicKeySetMsg, ::hheproto::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::hheproto::PublicKeySetMsg* request, ::hheproto::Empty* response) { return this->addPublicKeys(context, request, response); }));}
+    void SetMessageAllocatorFor_addPublicKeys(
+        ::grpc::MessageAllocator< ::hheproto::PublicKeySetMsg, ::hheproto::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::PublicKeySetMsg, ::hheproto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* addPublicKeys(
+      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response) { return this->addEncryptedKeys(context, request, response); }));}
+    void SetMessageAllocatorFor_addEncryptedKeys(
+        ::grpc::MessageAllocator< ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* addEncryptedKeys(
+      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_addPublicKeys<WithCallbackMethod_addEncryptedKeys<Service > > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestaddPublicKeys(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestaddEncryptedKeys(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->addPublicKeys(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* addPublicKeys(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->addEncryptedKeys(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* addEncryptedKeys(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_addPublicKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_addPublicKeys() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::hheproto::PublicKeySetMsg, ::hheproto::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::hheproto::PublicKeySetMsg, ::hheproto::Empty>* streamer) {
+                       return this->StreamedaddPublicKeys(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_addPublicKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status addPublicKeys(::grpc::ServerContext* /*context*/, const ::hheproto::PublicKeySetMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedaddPublicKeys(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::PublicKeySetMsg,::hheproto::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_addEncryptedKeys : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_addEncryptedKeys() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::hheproto::EncSymmetricKeysMsg, ::hheproto::Empty>* streamer) {
+                       return this->StreamedaddEncryptedKeys(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_addEncryptedKeys() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status addEncryptedKeys(::grpc::ServerContext* /*context*/, const ::hheproto::EncSymmetricKeysMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedaddEncryptedKeys(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::EncSymmetricKeysMsg,::hheproto::Empty>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<Service > > StreamedUnaryService;
+  typedef Service SplitStreamedService;
+  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<Service > > StreamedService;
+};
+
 }  // namespace hheproto
 
 

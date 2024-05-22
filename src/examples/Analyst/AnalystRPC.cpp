@@ -1,4 +1,5 @@
 #include "AnalystRPC.h"
+#include "CSPServiceAnalystClient.h"
 
 
 Status AnalystServiceImpl::getPublicKey(ServerContext* context, const Empty* request, PublicKeyMsg* reply){
@@ -18,9 +19,7 @@ void AnalystServiceImpl::runServer(){
     listener = new thread(&AnalystServiceImpl::startRPCService, this);
 }
 
-
-void AnalystServiceImpl::startRPCService()
-{
+void AnalystServiceImpl::startRPCService(){
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
 
@@ -41,25 +40,33 @@ void AnalystServiceImpl::startRPCService()
     server->Wait();
 }
 
-int main(int argc,char** argv)
-{
+int main(int argc,char** argv){
     BaseAnalyst* analyst;
     AnalystServiceImpl* analystRPC; 
+    CSPServiceAnalystClient* cspClient;	
 
     string url;
+    string cspUrl;
 
     if (argc == 3){
         url = argv[1];
+        cspUrl = argv[2];
     } else if (argc != 1){
         cout << "[Analyst Service] Wrong number of arguments provided – using default values" << endl;
         url = "localhost:50051";
+        cspUrl = "localhost:50052";
     } else {
         cout << "[Analyst Service] Wrong number of arguments provided – using default values" << endl;
         url = "localhost:50051";
+        cspUrl = "localhost:50052";
     }
 
     analyst = new Analyst_hhe_pktnn_1fc();
     analystRPC = new AnalystServiceImpl(url, analyst);
+
+    ChannelArguments args;
+    args.SetMaxSendMessageSize(-1);
+    cspClient = new CSPServiceAnalystClient(grpc::CreateCustomChannel(cspUrl, grpc::InsecureChannelCredentials(), args), analyst, url);
 
     analyst->generateHEKeys();
     analystRPC->runServer();   
@@ -72,6 +79,9 @@ int main(int argc,char** argv)
         analyst->getEncryptor(),
         analyst->getDecryptor()
     );
+
+    // should send public keys to cloud provider
+    cspClient->addPublicKeys();
 
     cout << "[Analyst Service] Press Enter to exit" << endl;
     std::cin.get();
