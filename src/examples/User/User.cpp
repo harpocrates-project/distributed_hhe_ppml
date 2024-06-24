@@ -18,7 +18,25 @@ void User::setUserSymmetricKey(){
 }
        
 vector<uint64_t> User::getUserSymmetricKey(){
+
     return client_sym_key;
+}
+
+void User::print_vec_Ciphertext(std::vector<seal::Ciphertext> input, size_t size)
+{
+        seal::seal_byte* buffer = nullptr;
+
+        for (int i = 0; i < size; i++)
+        {
+            int input_size = input[i].save_size();
+            buffer = new seal::seal_byte[input_size];
+            input[i].save(buffer, input_size); // write the he_pk to the buffer
+            cout << "\n";
+            for (int j=0; j < 10; j++){
+                std::cout << (int)buffer[j] << " ";
+            }
+        }
+        std::cout << std::endl;
 }
 
 void User::encryptData(vector<uint64_t> client_sym_key){
@@ -28,6 +46,7 @@ void User::encryptData(vector<uint64_t> client_sym_key){
     pasta::PASTA SymmetricEncryptor(client_sym_key, config::plain_mod);
     vi_se = pastahelper::symmetric_encrypt_vec(SymmetricEncryptor, vi); // the symmetric encrypted images
     utils::print_vec(vi_se, vi_se.size(), "vi_se");
+    cout << "vi_se size: " << vi_se.size() << endl;
 
     cout << "(Check) User decrypts symmetrically encrypted input" << endl;
     vector<uint64_t> vi_dec = pastahelper::symmetric_decrypt_vec(SymmetricEncryptor, vi_se); // the symmetric encrypted images
@@ -47,12 +66,19 @@ void User::encryptData(vector<uint64_t> client_sym_key){
             client_sym_key, 
             config::USE_BATCH, 
             *he_benc, 
-            *he_enc);
-    //utils::print_vec(client_sym_key, client_sym_key.size(), "client_sym_key");   
+            *he_enc); 
+    cout<< "print client_hhe_key: " << endl;
+    print_vec_Ciphertext(client_hhe_key, client_hhe_key.size());  
 }
 
 vector<Ciphertext> User::getEncryptedSymmetricKeys() { 
     return client_hhe_key; 
+}
+
+vector<uint64_t> User::getEncryptedData() { 
+    cout << "encrypted data via symmetric key algorithm" << endl;   
+    utils::print_vec(vi_se, vi_se.size(), "vi_se");
+    return vi_se; 
 }
 
 int User::getEncSymmetricKeyBytes(seal_byte* &buffer, int index)
@@ -86,7 +112,7 @@ void User::computingCheck(){
     matrix::vector vi = data[data_index];
     int64_t gt_out = labels[data_index][0];
     cout << "input vector vi.size() = " << vi.size() << ";\n";
-    // utils::print_vec(vi, vi.size(), "vi");
+    utils::print_vec(vi, vi.size(), "vi");
 
 
     // copy codes from Analyst

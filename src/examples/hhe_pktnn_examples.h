@@ -19,6 +19,11 @@
 #include "../../tests/ecg_tests.h"
 #include "../../tests/ecg_tests.h"
 
+using namespace std;
+using namespace seal;
+using namespace sealhelper;
+using namespace pastahelper;
+
 namespace hhe_pktnn_examples
 {
     struct Analyst
@@ -81,5 +86,19 @@ namespace hhe_pktnn_examples
     */
     int hhe_pktnn_1fc_inference(const std::string &dataset); // encrypted inference protocol on SpO2 / MNIST data for the 1-layer nn
     int hhe_pktnn_2fc_inference(const std::string &dataset); // encrypted inference protocol on MNIST / FMNIST data for the 2fc layer nn with square activation
+
+    void print_vec_Ciphertext(std::vector<seal::Ciphertext> input, size_t size);
+    void print_Ciphertext(seal::Ciphertext input);
+
+    void symmetric_key_he_encryption_test(std::vector<seal::Ciphertext> enc_ssk,
+                                          std::vector<uint64_t> ssk,
+                                          bool USE_BATCH,
+                                          std::shared_ptr<seal::SEALContext> context,
+                                          const SecretKey &sk,
+                                          const PublicKey &pk,
+                                          const RelinKeys &rk,
+                                          const GaloisKeys &gk,
+                                          const BatchEncoder &he_benc,
+                                          const Encryptor &he_enc);
 
 } // end of hhe_pktnn_examples namespace

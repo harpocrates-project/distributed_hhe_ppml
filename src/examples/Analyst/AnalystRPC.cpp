@@ -69,10 +69,11 @@ int main(int argc,char** argv){
     cspClient = new CSPServiceAnalystClient(grpc::CreateCustomChannel(cspUrl, grpc::InsecureChannelCredentials(), args), analyst, url);
 
     analyst->generateHEKeys();
-    analystRPC->runServer();   
-
     analyst->setEncryptor();
     analyst->setDecryptor();
+
+    analystRPC->runServer();   
+
     analyst->func(
         analyst->getAnalystHePublicKey(),
         analyst->getBatchEncoder(),
@@ -82,6 +83,11 @@ int main(int argc,char** argv){
 
     // should send public keys to cloud provider
     cspClient->addPublicKeys();
+
+    // now send encrpyted model data to cloud provider
+    cspClient->addMLModel();
+
+    // wait for a reply in the RPC thread
 
     cout << "[Analyst Service] Press Enter to exit" << endl;
     std::cin.get();

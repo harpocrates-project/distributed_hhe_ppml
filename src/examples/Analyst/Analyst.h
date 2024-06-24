@@ -16,7 +16,8 @@ class BaseAnalyst
         void setAnalystHeSecretKey(KeyGenerator* keygen); // he_sk
         void setAnalystHePublicKey(KeyGenerator* keygen); // he_pk
         void setAnalystHeRelinKeys(KeyGenerator* keygen); // he_rk
-        void setAnalystHeGaloisKeys(BatchEncoder* he_benc, KeyGenerator* keygen);  // he_gk
+        //void setAnalystHeGaloisKeys(BatchEncoder* he_benc, KeyGenerator* keygen);  // he_gk
+        void setAnalystHeGaloisKeys(KeyGenerator* keygen);  // he_gk
         void setEncryptor(); // encryptor
         void setEvaluator(); // evaluator
         void setDecryptor(); // decryptor
@@ -41,6 +42,10 @@ class BaseAnalyst
         int getPublicKeyBytes(seal_byte* &);
         int getRelinKeysBytes(seal_byte* &);
         int getGaloisKeysBytes(seal_byte* &);
+        int getSecretKeyBytes(seal_byte* &);
+
+        vector<Ciphertext> getEncryptedWeights();
+        int getEncWeightsBytes(seal_byte* &, int index);
 
         // pure virtual function
         virtual void func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec) = 0;
@@ -54,12 +59,17 @@ class BaseAnalyst
         RelinKeys he_rk;
         GaloisKeys he_gk;
 
+        // vector<seal::Ciphertext> enc_weights_t;
+
         KeyGenerator* keygen;
         BatchEncoder* he_benc;
 
         Encryptor* he_enc;
         Evaluator* he_eval;
         Decryptor* he_dec;
+
+    protected:
+        vector<seal::Ciphertext> enc_weights_t; // the encrypted weight
 
 };
 

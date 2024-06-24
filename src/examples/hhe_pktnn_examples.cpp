@@ -2,6 +2,63 @@
 
 namespace hhe_pktnn_examples
 {
+    void print_vec_Ciphertext(std::vector<seal::Ciphertext> input, size_t size)
+    {
+        seal::seal_byte* buffer = nullptr;
+
+        for (int i = 0; i < size; i++)
+        {
+            int input_size = input[i].save_size();
+            buffer = new seal::seal_byte[input_size];
+            input[i].save(buffer, input_size); 
+            std::cout << "\n";
+            for (int j=0; j < 10; j++){
+                std::cout << (int)buffer[j] << " ";
+            }
+
+            cout << "input_size: " << input_size << endl;
+        }
+        std::cout << std::endl;
+    }
+
+    void print_Ciphertext(seal::Ciphertext input)
+    {
+        seal::seal_byte* buffer = nullptr;
+
+        int input_size = input.save_size();
+        buffer = new seal::seal_byte[input_size];
+        input.save(buffer, input_size); 
+
+        for (int j=0; j < 10; j++){
+                std::cout << (int)buffer[j] << " ";
+        }
+
+        std::cout << std::endl;
+    }
+
+    void symmetric_key_he_encryption_test(vector<Ciphertext> enc_ssk,
+                                          vector<uint64_t> ssk,
+                                          bool USE_BATCH,
+                                          std::shared_ptr<seal::SEALContext> context,
+                                          const SecretKey &sk,
+                                          const PublicKey &pk,
+                                          const RelinKeys &rk,
+                                          const GaloisKeys &gk,
+                                          const BatchEncoder &he_benc,
+                                          const Encryptor &he_enc)
+    {
+        pasta::PASTA_SEAL M1(context, pk, sk, rk, gk);
+        auto enc_ssk_pasta = M1.encrypt_key_2(ssk, USE_BATCH);
+        // vector<Ciphertext> enc_ssk = encrypt_symmetric_key(ssk, USE_BATCH, he_benc, he_enc);
+        vector<uint64_t> dec_ssk_pasta = M1.decrypt_result(enc_ssk_pasta, USE_BATCH);
+        vector<uint64_t> dec_ssk = M1.decrypt_result(enc_ssk, USE_BATCH);
+        // cout << "dec_ssk.size = " << dec_ssk.size() << endl;
+        // print_vec(dec_ssk_pasta, dec_ssk_pasta.size(), "dec_ssk_pasta");
+        // print_vec(dec_ssk, dec_ssk.size(), "dec_ssk");
+        if (dec_ssk != dec_ssk_pasta)
+            throw runtime_error("decrypted symmetric keys are different");
+        cout << "TEST: symmetric key encryption using HE test passed!" << endl;
+    }
 
     int hhe_pktnn_ecg_inference()
     {
@@ -390,6 +447,13 @@ namespace hhe_pktnn_examples
         size_t slot_count = analyst_he_benc.slot_count();
         std::cout << "Batch encoder slot count = " << slot_count << std::endl;
 
+        cout << "analyst_he_pk size: " << (analyst.he_pk).save_size() << endl;
+        cout << "analyst_he_rk size: " << (analyst.he_rk).save_size() << endl;
+        cout << "analyst_he_gk size: " << (analyst.he_gk).save_size() << endl;
+        cout << "analyst_he_sk size: " << (analyst.he_sk).save_size() << endl;
+
+
+
         utils::print_line(__LINE__);
         std::cout << "Analyst loads the pretrained weights"
                   << "\n";
@@ -420,6 +484,10 @@ namespace hhe_pktnn_examples
                                                                                      analyst.he_pk,
                                                                                      analyst_he_benc,
                                                                                      analyst_he_enc);
+        std::cout << "print encrypted weights size: " << std::endl;
+        print_vec_Ciphertext(enc_weights_t, enc_weights_t.size());
+        cout << "enc_weights_t size: " << enc_weights_t.size() << endl;
+
         utils::print_line(__LINE__);
         std::cout << "(Check) Analyst decrypts the encrypted weight" << std::endl;
         matrix::matrix dec_weights_t = sealhelper::decrypt_weight_mat(enc_weights_t,
@@ -469,15 +537,34 @@ namespace hhe_pktnn_examples
         pasta::PASTA SymmetricEncryptor(client_sym_key, config::plain_mod);
         std::vector<uint64_t> vi_se = pastahelper::symmetric_encrypt_vec(SymmetricEncryptor, vi); // the symmetric encrypted images
         utils::print_vec(vi_se, vi_se.size(), "vi_se");
+        cout << "encrypted data size: " << vi_se.size() << endl;
 
         std::cout << "(Check) Client decrypts symmetrically encrypted input" << std::endl;
         std::vector<uint64_t> vi_dec = pastahelper::symmetric_decrypt_vec(SymmetricEncryptor, vi_se); // the symmetric encrypted images
         utils::print_vec(vi_dec, vi_dec.size(), "vi_dec");
 
         utils::print_line(__LINE__);
+        seal::BatchEncoder analyst_he_benc_1111(*context);
         std::cout << "Client encrypts the symmetric key using HE (the HHE key)" << std::endl;
         std::vector<seal::Ciphertext> client_hhe_key = pastahelper::encrypt_symmetric_key(
-            client_sym_key, config::USE_BATCH, analyst_he_benc, analyst_he_enc);
+            client_sym_key, config::USE_BATCH, analyst_he_benc_1111, analyst_he_enc);
+
+        std::cout << "print client_hhe key: " << std::endl;
+        print_vec_Ciphertext(client_hhe_key, client_hhe_key.size());
+        cout << "client_hhe_key size: " << client_hhe_key.size() << endl; 
+
+        seal::BatchEncoder analyst_he_benc_2222(*context);
+        std::cout << "client_hhe_key test: " << std::endl;   
+        symmetric_key_he_encryption_test(client_hhe_key, 
+                                         client_sym_key, 
+                                         config::USE_BATCH, 
+                                         context,
+                                         analyst.he_sk, 
+                                         analyst.he_pk, 
+                                         analyst.he_rk, 
+                                         analyst.he_gk,
+                                         analyst_he_benc_2222, 
+                                         analyst_he_enc);
 
         // -------------------------- CSP ----------------------
         std::cout << "\n";
@@ -491,6 +578,8 @@ namespace hhe_pktnn_examples
         pasta::PASTA_SEAL HHE(context, analyst.he_pk, csp.he_sk, analyst.he_rk, analyst.he_gk);
         time_start = std::chrono::high_resolution_clock::now();
         std::vector<seal::Ciphertext> vi_he = HHE.decomposition(vi_se, client_hhe_key, config::USE_BATCH);
+        std::cout<< "print vi_he: " << std::endl;
+        print_vec_Ciphertext(vi_he, vi_he.size());
         time_end = std::chrono::high_resolution_clock::now();
         time_diff = std::chrono::duration_cast<std::chrono::milliseconds>(
             time_end - time_start);
@@ -515,7 +604,13 @@ namespace hhe_pktnn_examples
         {
             flatten_gks.push_back(-(int)(i * HHE.get_plain_size()));
         }
+
+        utils::print_vec(gk_indices, gk_indices.size(), "gk_indices");
+        utils::print_vec(flatten_gks, flatten_gks.size(), "flatten_gks");
+
         std::vector<int> csp_gk_indices = pastahelper::add_some_gk_indices(gk_indices, flatten_gks);
+        utils::print_vec(csp_gk_indices, csp_gk_indices.size(), "csp_gk_indices");
+        
         seal::GaloisKeys csp_gk;
         keygen.create_galois_keys(csp_gk_indices, csp_gk);
         seal::RelinKeys csp_rk;
@@ -529,6 +624,9 @@ namespace hhe_pktnn_examples
         }
         seal::Ciphertext vi_he_processed;
         HHE.flatten(vi_he, vi_he_processed, csp_gk);
+        std::cout<< "print vi_he_processed: " << std::endl;
+        print_Ciphertext(vi_he_processed);
+
         time_end = std::chrono::high_resolution_clock::now();
         time_diff = std::chrono::duration_cast<std::chrono::milliseconds>(
             time_end - time_start);
@@ -536,10 +634,11 @@ namespace hhe_pktnn_examples
                   << " = " << time_diff.count() / 1000 << " seconds" << std::endl;
 
         utils::print_line(__LINE__);
+        seal::BatchEncoder analyst_he_benc2(*context);
         std::cout << "(Check) Decrypts processed, decomposed HE input vector using Analyst's HE secret key\n";
         std::vector<int64_t> vi_he_processed_decrypted = sealhelper::decrypting(vi_he_processed,
                                                                                 analyst.he_sk,
-                                                                                analyst_he_benc,
+                                                                                analyst_he_benc2,
                                                                                 *context,
                                                                                 inputLen);
         utils::print_vec(vi_he_processed_decrypted, vi_he_processed_decrypted.size(), "vi_he_decrypted_processed");

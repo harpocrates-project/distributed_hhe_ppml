@@ -22,24 +22,27 @@ using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
 using hheproto::EncSymmetricKeysMsg;
-
+using hheproto::EncSymmetricDataMsg;
+using hheproto::MLModelMsg;
 
 
 
 class CSPServiceImpl final:public CSPService::Service{ 
     public:
-        CSPServiceImpl(string url, CSP* csp){
+        CSPServiceImpl(string url, BaseCSP* csp){
             this->url = url;
             this->csp = csp;
         }
 
         Status addPublicKeys(ServerContext* context, const PublicKeySetMsg* request, Empty* reply) override;
         Status addEncryptedKeys(ServerContext* context, const EncSymmetricKeysMsg* request, Empty* reply) override;
-        
+        Status addEncryptedData(ServerContext* context, const EncSymmetricDataMsg* request, Empty* reply) override;
+        Status addMLModel(ServerContext* context, const MLModelMsg* request, Empty* reply) override;
+
         void runServer();
 
     private:
-        CSP* csp;
+        BaseCSP* csp;
   	    string url; 
         thread* listener;
  

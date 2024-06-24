@@ -1,6 +1,5 @@
 #include "Analyst.h"
 
-
 // setter
 // keygen
 void BaseAnalyst::setKeyGenerator(){
@@ -16,17 +15,21 @@ void BaseAnalyst::setAnalystHeSecretKey(KeyGenerator* keygen){
 }
 // he_pk
 void BaseAnalyst::setAnalystHePublicKey(KeyGenerator* keygen){
-    keygen->create_public_key(he_pk); // HE_pk
+    keygen->create_public_key(he_pk); 
 }   
 // he_rk
 void BaseAnalyst::setAnalystHeRelinKeys(KeyGenerator* keygen){
     keygen->create_relin_keys(he_rk);
 }
 // he_gk
-void BaseAnalyst::setAnalystHeGaloisKeys(BatchEncoder* he_benc, KeyGenerator* keygen){
-    bool use_bsgs = false;
-    vector<int> gk_indices = add_gk_indices(use_bsgs, *he_benc);
-    keygen->create_galois_keys(gk_indices, he_gk);  // HE_gk
+// void BaseAnalyst::setAnalystHeGaloisKeys(BatchEncoder* he_benc, KeyGenerator* keygen){
+//     bool use_bsgs = false;
+//     vector<int> gk_indices = add_gk_indices(use_bsgs, *he_benc);
+//     keygen->create_galois_keys(gk_indices, he_gk);  // HE_gk
+// }
+// he_gk
+void BaseAnalyst::setAnalystHeGaloisKeys(KeyGenerator* keygen){
+    keygen->create_galois_keys(he_gk);  
 }
 // encryptor
 void BaseAnalyst::setEncryptor(){
@@ -116,7 +119,8 @@ void BaseAnalyst::generateHEKeys(){
     setAnalystHeSecretKey(keygen); // he_sk
     setAnalystHePublicKey(keygen); // he_pk
     setAnalystHeRelinKeys(keygen); // he_rk
-    setAnalystHeGaloisKeys(he_benc, keygen); // he_gk
+    //setAnalystHeGaloisKeys(he_benc, keygen); // he_gk
+    setAnalystHeGaloisKeys(keygen); // he_gk
 
     // he_enc = new Encryptor(*context, he_pk);   // HE_encryptor
     // he_dec = new Decryptor(*context, he_sk);
@@ -148,12 +152,12 @@ int BaseAnalyst::getRelinKeysBytes(seal_byte* &buffer)
 
     cout << "[Analyst] Serialising Relin Key (size=" << he_rk_size << ")" << endl;
 
-    /*
+    
     for (int i = 0; i < 10; i++) {
         std::cout << (int)buffer[i] << ' ';
     }
     cout << endl;
-    */
+    
 
     return he_rk_size;
 }
@@ -166,16 +170,53 @@ int BaseAnalyst::getGaloisKeysBytes(seal_byte* &buffer)
 
     cout << "[Analyst] Serialising Galois Key (size=" << he_gk_size << ")" << endl;
 
-    /*
+    
     for (int i = 0; i < 10; i++) {
         std::cout << (int)buffer[i] << ' ';
     }
     cout << endl;
-    */
+    
 
     return he_gk_size;
 }
 
+int BaseAnalyst::getSecretKeyBytes(seal_byte* &buffer){
+    int he_sk_size = he_sk.save_size();
+    buffer = new seal_byte[he_sk_size];
+    he_sk.save(buffer, he_sk_size); // write the he_pk to the buffer
+
+    cout << "[Analyst] Serialising Secret Key (size=" << he_sk_size << ")" << endl;
+
+    for (int i = 0; i < 10; i++) {
+        cout << (int)buffer[i] << ' ';
+    }
+    cout << endl;
+    
+    return he_sk_size;
+}
+
+vector<Ciphertext> BaseAnalyst::getEncryptedWeights() { 
+    return enc_weights_t; 
+}
+
+int BaseAnalyst::getEncWeightsBytes(seal_byte* &buffer, int index)
+{
+    Ciphertext enc_weights = enc_weights_t[index];
+    int enc_weights_t_size = enc_weights.save_size();
+    buffer = new seal_byte[enc_weights_t_size];
+    enc_weights.save(buffer, enc_weights_t_size);
+
+    cout << "[Analyst] Serialising Encrypted Weights (size=" << enc_weights_t_size << ")" << endl;
+
+    
+    for (int i = 0; i < 10; i++) {
+        std::cout << (int)buffer[i] << ' ';
+    }
+    cout << endl;
+    
+
+    return enc_weights_t_size;
+}
 
 
 void Analyst_hhe_pktnn_1fc::func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec) { 
@@ -201,10 +242,17 @@ void Analyst_hhe_pktnn_1fc::func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor
 
     utils::print_line(__LINE__);
     std::cout << "Analyst encrypts the weights using HE" << std::endl;
-    std::vector<seal::Ciphertext> enc_weights_t = sealhelper::encrypt_weight_mat(weights_t,
-                                                                                 he_pk,
-                                                                                 *he_benc,
-                                                                                 *he_enc);
+    // std::vector<seal::Ciphertext> enc_weights_t =  sealhelper::encrypt_weight_mat(weights_t,
+    //                                                he_pk,
+    //                                                *he_benc,
+    //                                                *he_enc);
+
+    enc_weights_t = sealhelper::encrypt_weight_mat(weights_t,
+                                                   he_pk,
+                                                   *he_benc,
+                                                   *he_enc);
+   
+    std::cout << "Encrypted Weights: " << enc_weights_t.size() << endl;
 
     int inputLen = 300; 
     utils::print_line(__LINE__);

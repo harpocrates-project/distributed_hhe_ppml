@@ -16,6 +16,7 @@ using grpc::ChannelArguments;
 using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::EncSymmetricKeysMsg;
+using hheproto::EncSymmetricDataMsg;
 
 
 class CSPServiceUserClient 
@@ -30,6 +31,7 @@ class CSPServiceUserClient
         }
 
         bool addEncryptedKeys(string analystId);
+        bool addEncryptedData(string analystId); 
 
     private:
         User* user;

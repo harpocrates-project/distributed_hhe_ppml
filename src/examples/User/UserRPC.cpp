@@ -32,11 +32,18 @@ int main(int argc,char** argv)
       grpc::CreateChannel(cspUrl, grpc::InsecureChannelCredentials()), user);  
 
    
+    cout<<"=============================="<<endl;
+    user->loadDataAndLabel();
+    // Create user's symmetric key which will be used for data encryption;
+    user->setUserSymmetricKey();
+    // Encrypt user data via symmetric key algorithm
+    user->encryptData(
+        user->getUserSymmetricKey());
+
     cout << "=====================" << endl;
-    
+    // Receive analyst's HE_pk  
     seal_byte* buffer = nullptr;
     int length = AnalystRPCClient.getPublicKey(buffer);
-
     
     for (int i = 0; i < 10; i++) {
         cout << (int)buffer[i] << ' ';
@@ -45,15 +52,6 @@ int main(int argc,char** argv)
     
     cout << "[UserRPC] Received Public Key from Analyst (size=" << length << ")" << endl;
 
-
-    cout<<"=============================="<<endl;
-    user->loadDataAndLabel();
-    // Create user's symmetric key which will be used for data encryption;
-    user->setUserSymmetricKey();
-    // Encrypt user data via symmetric key algorithm
-    user->encryptData(
-        user->getUserSymmetricKey()
-    );
     //  Encrypt user symmetric key via HE
     user->encryptSymmetricKey(user->getUserSymmetricKey(), buffer, length);
 
@@ -62,6 +60,8 @@ int main(int argc,char** argv)
 
     // User sends his encrypted symmetric key to the csp
     CSPRPCClient.addEncryptedKeys(analystUrl);
+    // User sends his encrypted data to the csp
+    CSPRPCClient.addEncryptedData(analystUrl);
 
    return 0;
 }

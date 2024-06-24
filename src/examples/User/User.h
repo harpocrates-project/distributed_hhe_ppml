@@ -22,9 +22,13 @@ class User{
    
         vector<Ciphertext> getEncryptedSymmetricKeys();
 
+        vector<uint64_t> getEncryptedData();
+
         int getEncSymmetricKeyBytes(seal_byte* &buffer, int index);
 
         void computingCheck();
+
+        void print_vec_Ciphertext(std::vector<seal::Ciphertext> input, size_t size);
     
     private:
         shared_ptr<SEALContext> context;

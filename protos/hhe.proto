@@ -12,6 +12,8 @@ service AnalystService{
 service CSPService{
     rpc addPublicKeys (PublicKeySetMsg) returns (Empty) { }
     rpc addEncryptedKeys(EncSymmetricKeysMsg) returns (Empty) { }
+    rpc addEncryptedData(EncSymmetricDataMsg) returns (Empty) { }
+    rpc addMLModel (MLModelMsg) returns (Empty) { }
 }
 
 message Empty{ }
@@ -25,13 +27,24 @@ message PublicKeySetMsg {
     PublicKeyMsg pk = 1;
     PublicKeyMsg rk = 2;
     PublicKeyMsg gk = 3;
-  }
+    PublicKeyMsg sk = 4;
+}
 
 message CiphertextMsg {
     bytes data = 1;
     int32 length = 2;
 }
 
+message MLModelMsg {
+    // CiphertextMsg weights = 1;
+    repeated CiphertextMsg weights = 1;
+}
+
 message EncSymmetricKeysMsg {
     repeated CiphertextMsg key = 1;
 }
+
+message EncSymmetricDataMsg {
+    repeated uint64 value = 1;
+}
+  

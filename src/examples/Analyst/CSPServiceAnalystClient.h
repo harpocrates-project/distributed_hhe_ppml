@@ -17,6 +17,7 @@ using grpc::ChannelArguments;
 using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
+using hheproto::MLModelMsg;
 
 
 class CSPServiceAnalystClient{
@@ -29,6 +30,7 @@ class CSPServiceAnalystClient{
         }
 
         bool addPublicKeys();
+        bool addMLModel(); 
 
     private:
         BaseAnalyst* analyst;

@@ -127,6 +127,8 @@ AnalystService::Service::~Service() {
 static const char* CSPService_method_names[] = {
   "/hheproto.CSPService/addPublicKeys",
   "/hheproto.CSPService/addEncryptedKeys",
+  "/hheproto.CSPService/addEncryptedData",
+  "/hheproto.CSPService/addMLModel",
 };
 
 std::unique_ptr< CSPService::Stub> CSPService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -138,6 +140,8 @@ std::unique_ptr< CSPService::Stub> CSPService::NewStub(const std::shared_ptr< ::
 CSPService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_addPublicKeys_(CSPService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_addEncryptedKeys_(CSPService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_addEncryptedData_(CSPService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_addMLModel_(CSPService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CSPService::Stub::addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::hheproto::Empty* response) {
@@ -186,6 +190,52 @@ void CSPService::Stub::async::addEncryptedKeys(::grpc::ClientContext* context, c
   return result;
 }
 
+::grpc::Status CSPService::Stub::addEncryptedData(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::EncSymmetricDataMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addEncryptedData_, context, request, response);
+}
+
+void CSPService::Stub::async::addEncryptedData(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::EncSymmetricDataMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedData_, context, request, response, std::move(f));
+}
+
+void CSPService::Stub::async::addEncryptedData(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::PrepareAsyncaddEncryptedDataRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::EncSymmetricDataMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addEncryptedData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::AsyncaddEncryptedDataRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncaddEncryptedDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status CSPService::Stub::addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::MLModelMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addMLModel_, context, request, response);
+}
+
+void CSPService::Stub::async::addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::MLModelMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addMLModel_, context, request, response, std::move(f));
+}
+
+void CSPService::Stub::async::addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addMLModel_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::PrepareAsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::MLModelMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addMLModel_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::AsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncaddMLModelRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 CSPService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CSPService_method_names[0],
@@ -207,6 +257,26 @@ CSPService::Service::Service() {
              ::hheproto::Empty* resp) {
                return service->addEncryptedKeys(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CSPService_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CSPService::Service, ::hheproto::EncSymmetricDataMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CSPService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::hheproto::EncSymmetricDataMsg* req,
+             ::hheproto::Empty* resp) {
+               return service->addEncryptedData(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CSPService_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CSPService::Service, ::hheproto::MLModelMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CSPService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::hheproto::MLModelMsg* req,
+             ::hheproto::Empty* resp) {
+               return service->addMLModel(ctx, req, resp);
+             }, this)));
 }
 
 CSPService::Service::~Service() {
@@ -220,6 +290,20 @@ CSPService::Service::~Service() {
 }
 
 ::grpc::Status CSPService::Service::addEncryptedKeys(::grpc::ServerContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CSPService::Service::addEncryptedData(::grpc::ServerContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CSPService::Service::addMLModel(::grpc::ServerContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response) {
   (void) context;
   (void) request;
   (void) response;
