@@ -23,19 +23,29 @@ using grpc::Status;
 using hheproto::AnalystService;
 using hheproto::Empty;
 using hheproto::PublicKeyMsg;
+using hheproto::CiphertextMsg;
 
 using namespace hheproto;
-using namespace std;
 
 
-class AnalystServiceImpl final:public AnalystService::Service{
+class AnalystServiceImpl final:public AnalystService::Service
+{
     public:
-        AnalystServiceImpl(string url, BaseAnalyst* a){
+        AnalystServiceImpl(string url, BaseAnalyst* a)
+        {
             this->url = url;
             analyst = a;
         }
 
+        /**
+        rpc service - get the public key
+        */
         Status getPublicKey(ServerContext* context, const Empty* request, PublicKeyMsg* reply) override; 
+        
+        /**
+        rpc service - get the encrypted result from CSP
+        */
+        Status addEncryptedResult(ServerContext* context, const CiphertextMsg* request, Empty* reply) override;    
 
         void runServer();
         void stopServer();
@@ -43,7 +53,6 @@ class AnalystServiceImpl final:public AnalystService::Service{
     private:
         BaseAnalyst* analyst;
         string url;
-
         thread* listener;
 
         void startRPCService();

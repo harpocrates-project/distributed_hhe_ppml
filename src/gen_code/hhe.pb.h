@@ -487,7 +487,8 @@ class PublicKeySetMsg final :
     kPkFieldNumber = 1,
     kRkFieldNumber = 2,
     kGkFieldNumber = 3,
-    kSkFieldNumber = 4,
+    kCspRkFieldNumber = 4,
+    kCspGkFieldNumber = 5,
   };
   // .hheproto.PublicKeyMsg pk = 1;
   bool has_pk() const;
@@ -543,23 +544,41 @@ class PublicKeySetMsg final :
       ::hheproto::PublicKeyMsg* gk);
   ::hheproto::PublicKeyMsg* unsafe_arena_release_gk();
 
-  // .hheproto.PublicKeyMsg sk = 4;
-  bool has_sk() const;
+  // .hheproto.PublicKeyMsg csp_rk = 4;
+  bool has_csp_rk() const;
   private:
-  bool _internal_has_sk() const;
+  bool _internal_has_csp_rk() const;
   public:
-  void clear_sk();
-  const ::hheproto::PublicKeyMsg& sk() const;
-  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_sk();
-  ::hheproto::PublicKeyMsg* mutable_sk();
-  void set_allocated_sk(::hheproto::PublicKeyMsg* sk);
+  void clear_csp_rk();
+  const ::hheproto::PublicKeyMsg& csp_rk() const;
+  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_csp_rk();
+  ::hheproto::PublicKeyMsg* mutable_csp_rk();
+  void set_allocated_csp_rk(::hheproto::PublicKeyMsg* csp_rk);
   private:
-  const ::hheproto::PublicKeyMsg& _internal_sk() const;
-  ::hheproto::PublicKeyMsg* _internal_mutable_sk();
+  const ::hheproto::PublicKeyMsg& _internal_csp_rk() const;
+  ::hheproto::PublicKeyMsg* _internal_mutable_csp_rk();
   public:
-  void unsafe_arena_set_allocated_sk(
-      ::hheproto::PublicKeyMsg* sk);
-  ::hheproto::PublicKeyMsg* unsafe_arena_release_sk();
+  void unsafe_arena_set_allocated_csp_rk(
+      ::hheproto::PublicKeyMsg* csp_rk);
+  ::hheproto::PublicKeyMsg* unsafe_arena_release_csp_rk();
+
+  // .hheproto.PublicKeyMsg csp_gk = 5;
+  bool has_csp_gk() const;
+  private:
+  bool _internal_has_csp_gk() const;
+  public:
+  void clear_csp_gk();
+  const ::hheproto::PublicKeyMsg& csp_gk() const;
+  PROTOBUF_NODISCARD ::hheproto::PublicKeyMsg* release_csp_gk();
+  ::hheproto::PublicKeyMsg* mutable_csp_gk();
+  void set_allocated_csp_gk(::hheproto::PublicKeyMsg* csp_gk);
+  private:
+  const ::hheproto::PublicKeyMsg& _internal_csp_gk() const;
+  ::hheproto::PublicKeyMsg* _internal_mutable_csp_gk();
+  public:
+  void unsafe_arena_set_allocated_csp_gk(
+      ::hheproto::PublicKeyMsg* csp_gk);
+  ::hheproto::PublicKeyMsg* unsafe_arena_release_csp_gk();
 
   // @@protoc_insertion_point(class_scope:hheproto.PublicKeySetMsg)
  private:
@@ -572,7 +591,8 @@ class PublicKeySetMsg final :
     ::hheproto::PublicKeyMsg* pk_;
     ::hheproto::PublicKeyMsg* rk_;
     ::hheproto::PublicKeyMsg* gk_;
-    ::hheproto::PublicKeyMsg* sk_;
+    ::hheproto::PublicKeyMsg* csp_rk_;
+    ::hheproto::PublicKeyMsg* csp_gk_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1577,45 +1597,45 @@ inline void PublicKeySetMsg::set_allocated_gk(::hheproto::PublicKeyMsg* gk) {
   // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.gk)
 }
 
-// .hheproto.PublicKeyMsg sk = 4;
-inline bool PublicKeySetMsg::_internal_has_sk() const {
-  return this != internal_default_instance() && _impl_.sk_ != nullptr;
+// .hheproto.PublicKeyMsg csp_rk = 4;
+inline bool PublicKeySetMsg::_internal_has_csp_rk() const {
+  return this != internal_default_instance() && _impl_.csp_rk_ != nullptr;
 }
-inline bool PublicKeySetMsg::has_sk() const {
-  return _internal_has_sk();
+inline bool PublicKeySetMsg::has_csp_rk() const {
+  return _internal_has_csp_rk();
 }
-inline void PublicKeySetMsg::clear_sk() {
-  if (GetArenaForAllocation() == nullptr && _impl_.sk_ != nullptr) {
-    delete _impl_.sk_;
+inline void PublicKeySetMsg::clear_csp_rk() {
+  if (GetArenaForAllocation() == nullptr && _impl_.csp_rk_ != nullptr) {
+    delete _impl_.csp_rk_;
   }
-  _impl_.sk_ = nullptr;
+  _impl_.csp_rk_ = nullptr;
 }
-inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_sk() const {
-  const ::hheproto::PublicKeyMsg* p = _impl_.sk_;
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_csp_rk() const {
+  const ::hheproto::PublicKeyMsg* p = _impl_.csp_rk_;
   return p != nullptr ? *p : reinterpret_cast<const ::hheproto::PublicKeyMsg&>(
       ::hheproto::_PublicKeyMsg_default_instance_);
 }
-inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::sk() const {
-  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.sk)
-  return _internal_sk();
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::csp_rk() const {
+  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.csp_rk)
+  return _internal_csp_rk();
 }
-inline void PublicKeySetMsg::unsafe_arena_set_allocated_sk(
-    ::hheproto::PublicKeyMsg* sk) {
+inline void PublicKeySetMsg::unsafe_arena_set_allocated_csp_rk(
+    ::hheproto::PublicKeyMsg* csp_rk) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.sk_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.csp_rk_);
   }
-  _impl_.sk_ = sk;
-  if (sk) {
+  _impl_.csp_rk_ = csp_rk;
+  if (csp_rk) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.sk)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.csp_rk)
 }
-inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_sk() {
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_csp_rk() {
   
-  ::hheproto::PublicKeyMsg* temp = _impl_.sk_;
-  _impl_.sk_ = nullptr;
+  ::hheproto::PublicKeyMsg* temp = _impl_.csp_rk_;
+  _impl_.csp_rk_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -1627,44 +1647,134 @@ inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_sk() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_sk() {
-  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.sk)
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_csp_rk() {
+  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.csp_rk)
   
-  ::hheproto::PublicKeyMsg* temp = _impl_.sk_;
-  _impl_.sk_ = nullptr;
+  ::hheproto::PublicKeyMsg* temp = _impl_.csp_rk_;
+  _impl_.csp_rk_ = nullptr;
   return temp;
 }
-inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_sk() {
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_csp_rk() {
   
-  if (_impl_.sk_ == nullptr) {
+  if (_impl_.csp_rk_ == nullptr) {
     auto* p = CreateMaybeMessage<::hheproto::PublicKeyMsg>(GetArenaForAllocation());
-    _impl_.sk_ = p;
+    _impl_.csp_rk_ = p;
   }
-  return _impl_.sk_;
+  return _impl_.csp_rk_;
 }
-inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_sk() {
-  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_sk();
-  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.sk)
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_csp_rk() {
+  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_csp_rk();
+  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.csp_rk)
   return _msg;
 }
-inline void PublicKeySetMsg::set_allocated_sk(::hheproto::PublicKeyMsg* sk) {
+inline void PublicKeySetMsg::set_allocated_csp_rk(::hheproto::PublicKeyMsg* csp_rk) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.sk_;
+    delete _impl_.csp_rk_;
   }
-  if (sk) {
+  if (csp_rk) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(sk);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(csp_rk);
     if (message_arena != submessage_arena) {
-      sk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, sk, submessage_arena);
+      csp_rk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, csp_rk, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.sk_ = sk;
-  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.sk)
+  _impl_.csp_rk_ = csp_rk;
+  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.csp_rk)
+}
+
+// .hheproto.PublicKeyMsg csp_gk = 5;
+inline bool PublicKeySetMsg::_internal_has_csp_gk() const {
+  return this != internal_default_instance() && _impl_.csp_gk_ != nullptr;
+}
+inline bool PublicKeySetMsg::has_csp_gk() const {
+  return _internal_has_csp_gk();
+}
+inline void PublicKeySetMsg::clear_csp_gk() {
+  if (GetArenaForAllocation() == nullptr && _impl_.csp_gk_ != nullptr) {
+    delete _impl_.csp_gk_;
+  }
+  _impl_.csp_gk_ = nullptr;
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::_internal_csp_gk() const {
+  const ::hheproto::PublicKeyMsg* p = _impl_.csp_gk_;
+  return p != nullptr ? *p : reinterpret_cast<const ::hheproto::PublicKeyMsg&>(
+      ::hheproto::_PublicKeyMsg_default_instance_);
+}
+inline const ::hheproto::PublicKeyMsg& PublicKeySetMsg::csp_gk() const {
+  // @@protoc_insertion_point(field_get:hheproto.PublicKeySetMsg.csp_gk)
+  return _internal_csp_gk();
+}
+inline void PublicKeySetMsg::unsafe_arena_set_allocated_csp_gk(
+    ::hheproto::PublicKeyMsg* csp_gk) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.csp_gk_);
+  }
+  _impl_.csp_gk_ = csp_gk;
+  if (csp_gk) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:hheproto.PublicKeySetMsg.csp_gk)
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::release_csp_gk() {
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.csp_gk_;
+  _impl_.csp_gk_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::unsafe_arena_release_csp_gk() {
+  // @@protoc_insertion_point(field_release:hheproto.PublicKeySetMsg.csp_gk)
+  
+  ::hheproto::PublicKeyMsg* temp = _impl_.csp_gk_;
+  _impl_.csp_gk_ = nullptr;
+  return temp;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::_internal_mutable_csp_gk() {
+  
+  if (_impl_.csp_gk_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hheproto::PublicKeyMsg>(GetArenaForAllocation());
+    _impl_.csp_gk_ = p;
+  }
+  return _impl_.csp_gk_;
+}
+inline ::hheproto::PublicKeyMsg* PublicKeySetMsg::mutable_csp_gk() {
+  ::hheproto::PublicKeyMsg* _msg = _internal_mutable_csp_gk();
+  // @@protoc_insertion_point(field_mutable:hheproto.PublicKeySetMsg.csp_gk)
+  return _msg;
+}
+inline void PublicKeySetMsg::set_allocated_csp_gk(::hheproto::PublicKeyMsg* csp_gk) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.csp_gk_;
+  }
+  if (csp_gk) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(csp_gk);
+    if (message_arena != submessage_arena) {
+      csp_gk = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, csp_gk, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.csp_gk_ = csp_gk;
+  // @@protoc_insertion_point(field_set_allocated:hheproto.PublicKeySetMsg.csp_gk)
 }
 
 // -------------------------------------------------------------------

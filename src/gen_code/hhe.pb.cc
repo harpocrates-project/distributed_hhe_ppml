@@ -51,7 +51,8 @@ PROTOBUF_CONSTEXPR PublicKeySetMsg::PublicKeySetMsg(
     /*decltype(_impl_.pk_)*/nullptr
   , /*decltype(_impl_.rk_)*/nullptr
   , /*decltype(_impl_.gk_)*/nullptr
-  , /*decltype(_impl_.sk_)*/nullptr
+  , /*decltype(_impl_.csp_rk_)*/nullptr
+  , /*decltype(_impl_.csp_gk_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PublicKeySetMsgDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PublicKeySetMsgDefaultTypeInternal()
@@ -145,7 +146,8 @@ const uint32_t TableStruct_hhe_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.pk_),
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.rk_),
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.gk_),
-  PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.sk_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.csp_rk_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.csp_gk_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextMsg, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -180,10 +182,10 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 0, -1, -1, sizeof(::hheproto::Empty)},
   { 6, -1, -1, sizeof(::hheproto::PublicKeyMsg)},
   { 14, -1, -1, sizeof(::hheproto::PublicKeySetMsg)},
-  { 24, -1, -1, sizeof(::hheproto::CiphertextMsg)},
-  { 32, -1, -1, sizeof(::hheproto::MLModelMsg)},
-  { 39, -1, -1, sizeof(::hheproto::EncSymmetricKeysMsg)},
-  { 46, -1, -1, sizeof(::hheproto::EncSymmetricDataMsg)},
+  { 25, -1, -1, sizeof(::hheproto::CiphertextMsg)},
+  { 33, -1, -1, sizeof(::hheproto::MLModelMsg)},
+  { 40, -1, -1, sizeof(::hheproto::EncSymmetricKeysMsg)},
+  { 47, -1, -1, sizeof(::hheproto::EncSymmetricDataMsg)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -198,31 +200,32 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_hhe_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\thhe.proto\022\010hheproto\"\007\n\005Empty\",\n\014Public"
-  "KeyMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006length\030\002 \001(\005\"\241\001\n"
+  "KeyMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006length\030\002 \001(\005\"\315\001\n"
   "\017PublicKeySetMsg\022\"\n\002pk\030\001 \001(\0132\026.hheproto."
   "PublicKeyMsg\022\"\n\002rk\030\002 \001(\0132\026.hheproto.Publ"
   "icKeyMsg\022\"\n\002gk\030\003 \001(\0132\026.hheproto.PublicKe"
-  "yMsg\022\"\n\002sk\030\004 \001(\0132\026.hheproto.PublicKeyMsg"
-  "\"-\n\rCiphertextMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006lengt"
-  "h\030\002 \001(\005\"6\n\nMLModelMsg\022(\n\007weights\030\001 \003(\0132\027"
-  ".hheproto.CiphertextMsg\";\n\023EncSymmetricK"
-  "eysMsg\022$\n\003key\030\001 \003(\0132\027.hheproto.Ciphertex"
-  "tMsg\"$\n\023EncSymmetricDataMsg\022\r\n\005value\030\001 \003"
-  "(\0042\215\001\n\016AnalystService\0229\n\014getPublicKey\022\017."
-  "hheproto.Empty\032\026.hheproto.PublicKeyMsg\"\000"
-  "\022@\n\022addEncryptedResult\022\027.hheproto.Cipher"
-  "textMsg\032\017.hheproto.Empty\"\0002\216\002\n\nCSPServic"
-  "e\022=\n\raddPublicKeys\022\031.hheproto.PublicKeyS"
-  "etMsg\032\017.hheproto.Empty\"\000\022D\n\020addEncrypted"
-  "Keys\022\035.hheproto.EncSymmetricKeysMsg\032\017.hh"
-  "eproto.Empty\"\000\022D\n\020addEncryptedData\022\035.hhe"
-  "proto.EncSymmetricDataMsg\032\017.hheproto.Emp"
-  "ty\"\000\0225\n\naddMLModel\022\024.hheproto.MLModelMsg"
-  "\032\017.hheproto.Empty\"\000B\006\242\002\003HHEb\006proto3"
+  "yMsg\022&\n\006csp_rk\030\004 \001(\0132\026.hheproto.PublicKe"
+  "yMsg\022&\n\006csp_gk\030\005 \001(\0132\026.hheproto.PublicKe"
+  "yMsg\"-\n\rCiphertextMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006l"
+  "ength\030\002 \001(\005\"6\n\nMLModelMsg\022(\n\007weights\030\001 \003"
+  "(\0132\027.hheproto.CiphertextMsg\";\n\023EncSymmet"
+  "ricKeysMsg\022$\n\003key\030\001 \003(\0132\027.hheproto.Ciphe"
+  "rtextMsg\"$\n\023EncSymmetricDataMsg\022\r\n\005value"
+  "\030\001 \003(\0042\215\001\n\016AnalystService\0229\n\014getPublicKe"
+  "y\022\017.hheproto.Empty\032\026.hheproto.PublicKeyM"
+  "sg\"\000\022@\n\022addEncryptedResult\022\027.hheproto.Ci"
+  "phertextMsg\032\017.hheproto.Empty\"\0002\216\002\n\nCSPSe"
+  "rvice\022=\n\raddPublicKeys\022\031.hheproto.Public"
+  "KeySetMsg\032\017.hheproto.Empty\"\000\022D\n\020addEncry"
+  "ptedKeys\022\035.hheproto.EncSymmetricKeysMsg\032"
+  "\017.hheproto.Empty\"\000\022D\n\020addEncryptedData\022\035"
+  ".hheproto.EncSymmetricDataMsg\032\017.hheproto"
+  ".Empty\"\000\0225\n\naddMLModel\022\024.hheproto.MLMode"
+  "lMsg\032\017.hheproto.Empty\"\000B\006\242\002\003HHEb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_hhe_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_hhe_2eproto = {
-    false, false, 875, descriptor_table_protodef_hhe_2eproto,
+    false, false, 919, descriptor_table_protodef_hhe_2eproto,
     "hhe.proto",
     &descriptor_table_hhe_2eproto_once, nullptr, 0, 7,
     schemas, file_default_instances, TableStruct_hhe_2eproto::offsets,
@@ -509,7 +512,8 @@ class PublicKeySetMsg::_Internal {
   static const ::hheproto::PublicKeyMsg& pk(const PublicKeySetMsg* msg);
   static const ::hheproto::PublicKeyMsg& rk(const PublicKeySetMsg* msg);
   static const ::hheproto::PublicKeyMsg& gk(const PublicKeySetMsg* msg);
-  static const ::hheproto::PublicKeyMsg& sk(const PublicKeySetMsg* msg);
+  static const ::hheproto::PublicKeyMsg& csp_rk(const PublicKeySetMsg* msg);
+  static const ::hheproto::PublicKeyMsg& csp_gk(const PublicKeySetMsg* msg);
 };
 
 const ::hheproto::PublicKeyMsg&
@@ -525,8 +529,12 @@ PublicKeySetMsg::_Internal::gk(const PublicKeySetMsg* msg) {
   return *msg->_impl_.gk_;
 }
 const ::hheproto::PublicKeyMsg&
-PublicKeySetMsg::_Internal::sk(const PublicKeySetMsg* msg) {
-  return *msg->_impl_.sk_;
+PublicKeySetMsg::_Internal::csp_rk(const PublicKeySetMsg* msg) {
+  return *msg->_impl_.csp_rk_;
+}
+const ::hheproto::PublicKeyMsg&
+PublicKeySetMsg::_Internal::csp_gk(const PublicKeySetMsg* msg) {
+  return *msg->_impl_.csp_gk_;
 }
 PublicKeySetMsg::PublicKeySetMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -541,7 +549,8 @@ PublicKeySetMsg::PublicKeySetMsg(const PublicKeySetMsg& from)
       decltype(_impl_.pk_){nullptr}
     , decltype(_impl_.rk_){nullptr}
     , decltype(_impl_.gk_){nullptr}
-    , decltype(_impl_.sk_){nullptr}
+    , decltype(_impl_.csp_rk_){nullptr}
+    , decltype(_impl_.csp_gk_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -554,8 +563,11 @@ PublicKeySetMsg::PublicKeySetMsg(const PublicKeySetMsg& from)
   if (from._internal_has_gk()) {
     _this->_impl_.gk_ = new ::hheproto::PublicKeyMsg(*from._impl_.gk_);
   }
-  if (from._internal_has_sk()) {
-    _this->_impl_.sk_ = new ::hheproto::PublicKeyMsg(*from._impl_.sk_);
+  if (from._internal_has_csp_rk()) {
+    _this->_impl_.csp_rk_ = new ::hheproto::PublicKeyMsg(*from._impl_.csp_rk_);
+  }
+  if (from._internal_has_csp_gk()) {
+    _this->_impl_.csp_gk_ = new ::hheproto::PublicKeyMsg(*from._impl_.csp_gk_);
   }
   // @@protoc_insertion_point(copy_constructor:hheproto.PublicKeySetMsg)
 }
@@ -568,7 +580,8 @@ inline void PublicKeySetMsg::SharedCtor(
       decltype(_impl_.pk_){nullptr}
     , decltype(_impl_.rk_){nullptr}
     , decltype(_impl_.gk_){nullptr}
-    , decltype(_impl_.sk_){nullptr}
+    , decltype(_impl_.csp_rk_){nullptr}
+    , decltype(_impl_.csp_gk_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -587,7 +600,8 @@ inline void PublicKeySetMsg::SharedDtor() {
   if (this != internal_default_instance()) delete _impl_.pk_;
   if (this != internal_default_instance()) delete _impl_.rk_;
   if (this != internal_default_instance()) delete _impl_.gk_;
-  if (this != internal_default_instance()) delete _impl_.sk_;
+  if (this != internal_default_instance()) delete _impl_.csp_rk_;
+  if (this != internal_default_instance()) delete _impl_.csp_gk_;
 }
 
 void PublicKeySetMsg::SetCachedSize(int size) const {
@@ -612,10 +626,14 @@ void PublicKeySetMsg::Clear() {
     delete _impl_.gk_;
   }
   _impl_.gk_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.sk_ != nullptr) {
-    delete _impl_.sk_;
+  if (GetArenaForAllocation() == nullptr && _impl_.csp_rk_ != nullptr) {
+    delete _impl_.csp_rk_;
   }
-  _impl_.sk_ = nullptr;
+  _impl_.csp_rk_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.csp_gk_ != nullptr) {
+    delete _impl_.csp_gk_;
+  }
+  _impl_.csp_gk_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -649,10 +667,18 @@ const char* PublicKeySetMsg::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // .hheproto.PublicKeyMsg sk = 4;
+      // .hheproto.PublicKeyMsg csp_rk = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_sk(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_csp_rk(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .hheproto.PublicKeyMsg csp_gk = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ctx->ParseMessage(_internal_mutable_csp_gk(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -707,11 +733,18 @@ uint8_t* PublicKeySetMsg::_InternalSerialize(
         _Internal::gk(this).GetCachedSize(), target, stream);
   }
 
-  // .hheproto.PublicKeyMsg sk = 4;
-  if (this->_internal_has_sk()) {
+  // .hheproto.PublicKeyMsg csp_rk = 4;
+  if (this->_internal_has_csp_rk()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::sk(this),
-        _Internal::sk(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(4, _Internal::csp_rk(this),
+        _Internal::csp_rk(this).GetCachedSize(), target, stream);
+  }
+
+  // .hheproto.PublicKeyMsg csp_gk = 5;
+  if (this->_internal_has_csp_gk()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(5, _Internal::csp_gk(this),
+        _Internal::csp_gk(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -751,11 +784,18 @@ size_t PublicKeySetMsg::ByteSizeLong() const {
         *_impl_.gk_);
   }
 
-  // .hheproto.PublicKeyMsg sk = 4;
-  if (this->_internal_has_sk()) {
+  // .hheproto.PublicKeyMsg csp_rk = 4;
+  if (this->_internal_has_csp_rk()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.sk_);
+        *_impl_.csp_rk_);
+  }
+
+  // .hheproto.PublicKeyMsg csp_gk = 5;
+  if (this->_internal_has_csp_gk()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.csp_gk_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -788,9 +828,13 @@ void PublicKeySetMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
     _this->_internal_mutable_gk()->::hheproto::PublicKeyMsg::MergeFrom(
         from._internal_gk());
   }
-  if (from._internal_has_sk()) {
-    _this->_internal_mutable_sk()->::hheproto::PublicKeyMsg::MergeFrom(
-        from._internal_sk());
+  if (from._internal_has_csp_rk()) {
+    _this->_internal_mutable_csp_rk()->::hheproto::PublicKeyMsg::MergeFrom(
+        from._internal_csp_rk());
+  }
+  if (from._internal_has_csp_gk()) {
+    _this->_internal_mutable_csp_gk()->::hheproto::PublicKeyMsg::MergeFrom(
+        from._internal_csp_gk());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -810,8 +854,8 @@ void PublicKeySetMsg::InternalSwap(PublicKeySetMsg* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(PublicKeySetMsg, _impl_.sk_)
-      + sizeof(PublicKeySetMsg::_impl_.sk_)
+      PROTOBUF_FIELD_OFFSET(PublicKeySetMsg, _impl_.csp_gk_)
+      + sizeof(PublicKeySetMsg::_impl_.csp_gk_)
       - PROTOBUF_FIELD_OFFSET(PublicKeySetMsg, _impl_.pk_)>(
           reinterpret_cast<char*>(&_impl_.pk_),
           reinterpret_cast<char*>(&other->_impl_.pk_));

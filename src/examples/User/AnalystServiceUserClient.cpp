@@ -1,14 +1,15 @@
 #include "AnalystServiceUserClient.h"
 
-
+/**
+rpc service - get Analyst HE Public key
+*/
 int AnalystServiceUserClient::getPublicKey (seal_byte* &buffer) 
 {
     Empty request;
-
     PublicKeyMsg reply;
-
     ClientContext context;
     
+    // Send the request to Analyst server to obtain Analyst HE Public key
     Status status = stub_->getPublicKey(&context, request, &reply);
 
     if (status.ok()) 
@@ -21,7 +22,6 @@ int AnalystServiceUserClient::getPublicKey (seal_byte* &buffer)
 
       return pk_length;
     } 
-
     else 
     {
       cout << status.error_code() << ": " << status.error_message()

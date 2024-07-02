@@ -27,7 +27,8 @@ message PublicKeySetMsg {
     PublicKeyMsg pk = 1;
     PublicKeyMsg rk = 2;
     PublicKeyMsg gk = 3;
-    PublicKeyMsg sk = 4;
+    PublicKeyMsg csp_rk = 4;
+    PublicKeyMsg csp_gk = 5;
 }
 
 message CiphertextMsg {

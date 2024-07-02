@@ -1,167 +1,200 @@
 #include "CSPRPC.h"
 
+/** 
+rpc service - Add HE Public keys
+*/
 Status CSPServiceImpl::addPublicKeys(ServerContext* context, const PublicKeySetMsg* request, Empty* reply)
 {
     string analystId = getAnalystId(context->client_metadata());
 
     reply = new Empty();
 
-    cout << "[CSP Service] adding public keys for analyst" << endl;
+    cout << "[CSP Service] Adding Analyst HE keys" << endl;
 
-    std::string strBuffer;
+    string strBuffer;
     seal_byte* buffer = nullptr;
     int length;
    
     // Analyst HE Public key
     strBuffer = request->pk().data();
     length = request->pk().length();
- 
+
     buffer = new seal_byte[length];
 
-    std::memcpy(buffer, strBuffer.data(), strBuffer.length());
-    csp->addPublicKey(analystId, buffer, length);
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    csp->addAnalystHEPublicKey(analystId, buffer, length);
 
-    // Analyst HE Relin key
+    // Analyst HE Relins key
     strBuffer = request->rk().data();
     length = request->rk().length();
    
     buffer = new seal_byte[length];
 
-    std::memcpy(buffer, strBuffer.data(), strBuffer.length());
-    csp->addRelinKey(analystId, buffer, length);
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    csp->addAnalystHERelinKeys(analystId, buffer, length);
 
     // Analyst Galois key
     strBuffer = request->gk().data();
     length = request->gk().length();
+
+    buffer = new seal_byte[length];
+
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    csp->addAnalystHEGaloisKeys(analystId, buffer, length);
+
+    // CSP HE Relins key
+    strBuffer = request->csp_rk().data();
+    length = request->csp_rk().length();
+   
+    buffer = new seal_byte[length];
+
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    csp->addHERelinKeys(analystId, buffer, length);
+
+    // CSP HE Galois key
+    strBuffer = request->csp_gk().data();
+    length = request->csp_gk().length();
     
     buffer = new seal_byte[length];
 
-    std::memcpy(buffer, strBuffer.data(), strBuffer.length());
-    csp->addGaloisKey(analystId, buffer, length);
-
-    // Analyst HE Secret key
-    strBuffer = request->sk().data();
-    length = request->sk().length();
- 
-    buffer = new seal_byte[length];
-
-    std::memcpy(buffer, strBuffer.data(), strBuffer.length());
-    csp->addSecretKey(analystId, buffer, length);
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    csp->addHEGaloisKeys(analystId, buffer, length);
 
     return Status::OK;
 }
 
-
+/**
+rpc service - Add NN encrypted params (weights)
+*/
 Status CSPServiceImpl::addMLModel(ServerContext* context, const MLModelMsg* request, Empty* reply)
 {
     string analystId = getAnalystId(context->client_metadata());
 
     reply = new Empty();
 
-    cout << "[CSP Service] adding new ML Model for analyst" << endl;
+    cout << "[CSP Service] Adding Analyst ML model" << endl;
 
-    std::string strBuffer;
+    string strBuffer;
     seal_byte* buffer = nullptr;
     
     vector<seal_byte*> wBytes;
     vector<int> wLengths;
 
-
+    int len;
     for (int i=0, length; i<request->weights_size(); i++)
     {
         strBuffer = request->weights(i).data();
         length = request->weights(i).length();
 	    buffer = new seal_byte[length];
-        std::memcpy(buffer, strBuffer.data(), strBuffer.length());
+        memcpy(buffer, strBuffer.data(), strBuffer.length());
         wBytes.push_back(buffer);
         wLengths.push_back(length);
-
-        cout << "weights length: " << length << endl;
+        len = length;
     }
 
-    cout<<"[CSP Service] Analyst's encrypted weights" << endl;
-    for (int i = 0; i < 10; i++) {
-        std::cout << (int)buffer[i] << ' ';
+    cout<<"[CSP Service] ML model encrypted weights and size (" << len << ")" << endl;
+    for (int i = 0; i < 10; i++) 
+    {
+        cout << (int)buffer[i] << ' ';
     }
-    cout << endl;
+    cout << "... ..." << endl;
 
-    // cout<<"[CSP Service] weights size"<< request->weights_size()<< endl;
-    csp->addEncWeights(analystId, wBytes, wLengths);
+    csp->addAnalystEncryptedWeights(analystId, wBytes, wLengths);
     
     return Status::OK;
 } 
 
-
+/**
+rpc service - Add User encrypted symmetric key
+*/
 Status CSPServiceImpl::addEncryptedKeys(ServerContext* context, const EncSymmetricKeysMsg* request, Empty* reply)
 {
     string analystId = getAnalystId(context->client_metadata());
  
     reply = new Empty();
 
-    cout << "[CSP Service] adding new User Enc Sym keys for Analyst" << endl;
+    cout << "[CSP Service] Adding User encrypted symmetric key" << endl;
     
-    std::string strBuffer;
+    string strBuffer;
     seal_byte* buffer = nullptr;
 
     vector<seal_byte*> keysBytes;
     vector<int> keysLengths;
 
-    cout << "[CSP Service] keysNumbers: " << request->key_size() << endl;
+    int len;
     for (int i=0, length; i<request->key_size(); i++)
     {
         strBuffer = request->key(i).data();
         length = request->key(i).length();
 	    buffer = new seal_byte[length];
-        std::memcpy(buffer, strBuffer.data(), strBuffer.length());
+        memcpy(buffer, strBuffer.data(), strBuffer.length());
         keysBytes.push_back(buffer);
         keysLengths.push_back(length);
 
-        cout<<"[CSP Service] User's encrypted symmetric key length: " << length << endl;
+        len = length;
     }
     
-    cout<<"[CSP Service] User's encrypted symmetric key"<<endl;
-    for (int i = 0; i < 10; i++) {
-        std::cout << (int)buffer[i] << ' ';
+    cout<<"[CSP Service] User's encrypted symmetric key and size (" << len << ")" << endl;;
+    for (int i = 0; i < 10; i++) 
+    {
+        cout << (int)buffer[i] << ' ';
     }
-    cout << endl;
+    cout << "... ..." << endl;
 
     //cout << "bytes size: " << keysBytes.size() << endl;
     //cout << "lengths size: " << keysLengths.size() << endl;
 
-    csp->addEncSymKeys(analystId, keysBytes, keysLengths);
+    csp->addUserEncryptedSymmetricKey(analystId, keysBytes, keysLengths);
     
     return Status::OK;
 }
 
+/**
+rpc service - Add User encrypted data for NN calculation
+*/
 Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetricDataMsg* request, Empty* reply)
 {
     string analystId = getAnalystId(context->client_metadata());
 
     reply = new Empty();
 
-    cout << "[CSP Service] adding new User Enc Sym data for Analyst" << endl;
-
+    cout << "[CSP Service] Adding User encrypted data" << endl;
     vector<uint64_t> values(request->value().begin(), request->value().end());
+    utils::print_vec(values, values.size(), "vi_se"); //vi_se
     
-    cout << "[CSP Service] encrypted data via symmetric key algorithm" << endl;   
-    utils::print_vec(values, values.size(), "vi_se");
-    cout << "User's encrypted data size: " << values.size() << endl;
-
-    csp->addEncSymData(analystId, values); 
-
+    csp->addUserEncryptedData(analystId, values); 
+  
     // TODO: should be done in a separate thread
     csp->decompose(analystId);
-    // csp->evaluateModel(analystId);
+    csp->evaluateModel(analystId);
+
+    // creates an object that is used to callback the Analyst
+    AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
+    analystRPCClient->addEncryptedResult(analystId);    
 
     return Status::OK;
 }
 
+/**
+Get Analyst IP Addr
+*/
+string CSPServiceImpl::getAnalystId(multimap<grpc::string_ref, grpc::string_ref> metadata)
+{
+    multimap<grpc::string_ref, grpc::string_ref>::const_iterator metadataIterator = metadata.find("analystid");
+
+    if (metadataIterator != metadata.end())
+    {
+        string analystId(metadataIterator->second.data(), metadataIterator->second.length());
+        return analystId;
+    }
+
+    return "notFound";
+}
 
 void CSPServiceImpl::runServer()
 {   
     listener = new thread(&CSPServiceImpl::startRPCService, this);
 }
-
 
 void CSPServiceImpl::startRPCService()
 {
@@ -178,41 +211,31 @@ void CSPServiceImpl::startRPCService()
     builder.RegisterService(this);
 
     // Finally assemble the server.
-    std::unique_ptr<Server> server(builder.BuildAndStart());
-    std::cout << endl << "[CSP Service] RPC Server listening on " << url << std::endl;
+    unique_ptr<Server> server(builder.BuildAndStart());
+    cout << endl << "[CSP Service] RPC Server listening on " << url << endl;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
     server->Wait();
 }
 
-
-string CSPServiceImpl::getAnalystId(std::multimap<grpc::string_ref, grpc::string_ref> metadata)
+int main(int argc,char** argv)
 {
-    std::multimap<grpc::string_ref, grpc::string_ref>::const_iterator metadataIterator = metadata.find("analystid");
-
-    if (metadataIterator != metadata.end())
-    {
-        string analystId(metadataIterator->second.data(), metadataIterator->second.length());
-        return analystId;
-    }
-
-    return "notFound";
-}
-
-
-int main(int argc,char** argv){
     BaseCSP* csp;
     CSPServiceImpl* cspRPC;	
 
     string url;
-
-    if (argc == 2){
+    if (argc == 2)
+    {
         url = argv[1];
-    } else if (argc != 1) {
+    } 
+    else if (argc != 1) 
+    {
         cout << "[CSP Service] Wrong number of arguments provided – using default values" << endl;
         url = "localhost:50052";
-    } else {
+    } 
+    else 
+    {
         cout << "[CSP Service] No arguments provided – using default values" << endl;
         url = "localhost:50052";
     }
@@ -220,8 +243,10 @@ int main(int argc,char** argv){
     csp = new BaseCSP();
     cspRPC = new CSPServiceImpl(url, csp);
 
-    csp->heInitialization();   
+    // Set up HE params
+    csp->hEInitialization();   
     
+    // Start the csp rpc service
     cspRPC->runServer();
 
     cout << "[CSP Service] Press Enter to exit";

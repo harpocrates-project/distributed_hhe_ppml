@@ -14,26 +14,35 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using grpc::ChannelArguments;
+
 using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
 using hheproto::MLModelMsg;
 
 
-class CSPServiceAnalystClient{
+class CSPServiceAnalystClient
+{
     public:
-        CSPServiceAnalystClient(std::shared_ptr<Channel> channel, BaseAnalyst* a, string analystURL)
+        CSPServiceAnalystClient(shared_ptr<Channel> channel, BaseAnalyst* a, string analystURL)
         {
             stub_ = CSPService::NewStub(channel);
             analyst = a;
             analystId = analystURL;
         }
 
+        /**
+        rpc service - Send HE Public keys to CSP
+        */
         bool addPublicKeys();
+        
+        /** 
+        rpc service - Send NN encrypted params to CSP
+        */
         bool addMLModel(); 
 
     private:
         BaseAnalyst* analyst;
         string analystId;
-        std::unique_ptr<CSPService::Stub> stub_;
+        unique_ptr<CSPService::Stub> stub_;
 };

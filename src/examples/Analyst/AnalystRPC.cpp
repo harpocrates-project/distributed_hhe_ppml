@@ -1,12 +1,16 @@
 #include "AnalystRPC.h"
 #include "CSPServiceAnalystClient.h"
 
-
-Status AnalystServiceImpl::getPublicKey(ServerContext* context, const Empty* request, PublicKeyMsg* reply){
+/**
+rpc service - get the public key
+*/
+Status AnalystServiceImpl::getPublicKey(ServerContext* context, const Empty* request, PublicKeyMsg* reply)
+{
     seal_byte* buffer = nullptr;
- 
-    cout << "[Analyst Service] Sending Public Key to the User"<< endl;
 
+    cout << "[Analyst Service] Sending HE Public key to User"<< endl;
+
+    // get the analyst HE Public key size
     int size = analyst->getPublicKeyBytes(buffer);
 
     reply->set_data(buffer, size);
@@ -15,11 +19,39 @@ Status AnalystServiceImpl::getPublicKey(ServerContext* context, const Empty* req
     return Status::OK;
 } 
 
-void AnalystServiceImpl::runServer(){
+/**
+rpc service - get the encrypted result from CSP
+*/
+Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const CiphertextMsg* request, Empty* reply)
+{
+    reply = new Empty();
+
+    cout << "[Analyst Service] Adding and decrypting the result from CSP "<< endl;
+
+    std::string strBuffer;
+    seal_byte* buffer = nullptr;
+    int length;
+   
+    strBuffer = request->data();
+    length = request->length();
+
+    buffer = new seal_byte[length];
+
+    // Receive the encrypted result from CSP
+    memcpy(buffer, strBuffer.data(), strBuffer.length());
+    // Analyst calls decryptData() to decrypt the encrypted result
+    analyst->decryptData(buffer, length);
+
+    return Status::OK;
+} 
+
+void AnalystServiceImpl::runServer()
+{
     listener = new thread(&AnalystServiceImpl::startRPCService, this);
 }
 
-void AnalystServiceImpl::startRPCService(){
+void AnalystServiceImpl::startRPCService()
+{
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
 
@@ -40,7 +72,8 @@ void AnalystServiceImpl::startRPCService(){
     server->Wait();
 }
 
-int main(int argc,char** argv){
+int main(int argc,char** argv)
+{
     BaseAnalyst* analyst;
     AnalystServiceImpl* analystRPC; 
     CSPServiceAnalystClient* cspClient;	
@@ -48,19 +81,25 @@ int main(int argc,char** argv){
     string url;
     string cspUrl;
 
-    if (argc == 3){
+    if (argc == 3)
+    {
         url = argv[1];
         cspUrl = argv[2];
-    } else if (argc != 1){
+    } 
+    else if (argc != 1)
+    {
         cout << "[Analyst Service] Wrong number of arguments provided – using default values" << endl;
         url = "localhost:50051";
         cspUrl = "localhost:50052";
-    } else {
+    } 
+    else 
+    {
         cout << "[Analyst Service] Wrong number of arguments provided – using default values" << endl;
         url = "localhost:50051";
         cspUrl = "localhost:50052";
     }
 
+    // Create objs of analyst and analystRPC
     analyst = new Analyst_hhe_pktnn_1fc();
     analystRPC = new AnalystServiceImpl(url, analyst);
 
@@ -68,26 +107,30 @@ int main(int argc,char** argv){
     args.SetMaxSendMessageSize(-1);
     cspClient = new CSPServiceAnalystClient(grpc::CreateCustomChannel(cspUrl, grpc::InsecureChannelCredentials(), args), analyst, url);
 
-    analyst->generateHEKeys();
-    analyst->setEncryptor();
-    analyst->setDecryptor();
+    string dataset = "SpO2"; // dataset must be either "SpO2" or "ECG"
+    analyst->setDataSet(dataset);
+    analyst->generateHEKeys();  // Set up HE key 
+    analyst->setEncryptor();    // Set up HE encryptor
+    analyst->setDecryptor();    // set up HE decryptor
 
-    analystRPC->runServer();   
+    analystRPC->runServer();    // Start Analyst server
 
+    // For HHE_PocketNN_1FC calculation
     analyst->func(
-        analyst->getAnalystHePublicKey(),
+        analyst->getDataSet(),
+        analyst->getHEPublicKey(),
         analyst->getBatchEncoder(),
         analyst->getEncryptor(),
         analyst->getDecryptor()
     );
 
-    // should send public keys to cloud provider
+    // Should send public keys to cloud provider
     cspClient->addPublicKeys();
 
-    // now send encrpyted model data to cloud provider
+    // Now send encrpyted model data to cloud provider
     cspClient->addMLModel();
 
-    // wait for a reply in the RPC thread
+    // Wait for a reply in the RPC thread
 
     cout << "[Analyst Service] Press Enter to exit" << endl;
     std::cin.get();

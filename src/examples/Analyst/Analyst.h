@@ -5,76 +5,234 @@
 class BaseAnalyst
 {
     public:
-
-        BaseAnalyst(){
+        BaseAnalyst()
+        {
 		    context = get_seal_context(config::plain_mod, config::mod_degree, config::seclevel);	
 	    }
 
         // setter
-        void setKeyGenerator(); // keygen
-        void setBatchEncoder(); // he_benc
-        void setAnalystHeSecretKey(KeyGenerator* keygen); // he_sk
-        void setAnalystHePublicKey(KeyGenerator* keygen); // he_pk
-        void setAnalystHeRelinKeys(KeyGenerator* keygen); // he_rk
-        //void setAnalystHeGaloisKeys(BatchEncoder* he_benc, KeyGenerator* keygen);  // he_gk
-        void setAnalystHeGaloisKeys(KeyGenerator* keygen);  // he_gk
+        /** 
+        Create a HE key generator 
+        */
+        void setKeyGenerator(); // analyst_keygen
+       
+        /**
+        Create a batch encoder
+        */
+        void setBatchEncoder(); // analyst_he_benc
+       
+        /** 
+        Create a HE Secret key
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setHESecretKey(KeyGenerator* analyst_keygen); // analyst_he_sk
+       
+        /**
+        Create a HE Public key
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setHEPublicKey(KeyGenerator* analyst_keygen); // analyst_he_pk
+       
+        /** 
+        Create HE Relin keys
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setHERelinKeys(KeyGenerator* analyst_keygen); // analyst_he_rk
+       
+        /** 
+        Create HE Galois keys
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setHEGaloisKeys(KeyGenerator* analyst_keygen);  // analyst_he_gk
+       
+        /**
+        Create a HE encryptor
+        */
         void setEncryptor(); // encryptor
+       
+        /** 
+        Create a HE evaluator
+        */
         void setEvaluator(); // evaluator
+       
+        /** 
+        Create a HE decryptor
+        */
         void setDecryptor(); // decryptor
+      
+        /** 
+        Create HE Relin keys for CSP
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setCSPHERelinKeys(KeyGenerator* analyst_keygen); // csp_he_rk
+       
+        /** 
+        Create HE Galois keys for CSP
+        @param[in] analyst_he_benc The bench encoder of Analyst
+        @param[in] analyst_keygen The key generator of Analyst
+        */
+        void setCSPHEGaloisKeys(BatchEncoder* analyst_he_benc, KeyGenerator* analyst_keygen);  // csp_he_gk
+        
+        /**
+        Set up a data set name for NN calculation
+        @param[in] data_set The data set name for NN calculation
+        */
+        void setDataSet(string data_set); // data_set
+
 
         // getter
-        KeyGenerator* getKeyGenerator(); // keygen
-        BatchEncoder* getBatchEncoder(); // he_benc
-        SecretKey getAnalystHeSecretKey(); // he_sk
-        PublicKey getAnalystHePublicKey(); // he_pk
-        RelinKeys getAnalystHeRelinKeys(); // he_rk
-        GaloisKeys getAnalystHeGaloisKeys(); // he_gk    
-        Encryptor* getEncryptor(); // he_enc
-        Evaluator* getEvaluator(); // he_eval
-        Decryptor* getDecryptor(); // he_dec
+        /**
+        Return a HE key generator 
+        */
+        KeyGenerator* getKeyGenerator(); // analyst_keygen
+       
+        /** 
+        Return a batch encoder
+        */
+        BatchEncoder* getBatchEncoder(); // analyst_he_benc
+     
+        /** 
+        Return a HE Secret key
+        */
+        SecretKey getHESecretKey(); // analyst_he_sk
+     
+        /** 
+        Return a HE Public key
+        */
+        PublicKey getHEPublicKey(); // analyst_he_pk
+      
+        /** 
+        Return a HE Relin keys
+        */
+        RelinKeys getHERelinKeys(); // analyst_he_rk
+      
+        /** 
+        Return a HE Galois keys
+        */
+        GaloisKeys getHEGaloisKeys(); // analyst_he_gk   
+      
+        /** 
+        Return a HE encryptor
+        */ 
+        Encryptor* getEncryptor(); // analyst_he_enc
+       
+        /**
+        Return a HE evaluator
+        */
+        Evaluator* getEvaluator(); // analyst_he_eval
+      
+        /**
+        Return a HE decryptor
+        */
+        Decryptor* getDecryptor(); // analyst_he_dec
+       
+        /**
+        Return the seal context
+        */
         shared_ptr<SEALContext> getContext();
+       
+        /**
+        Return a data set name for NN calculation
+        */
+        string getDataSet(); // data_set
+
 
         // functions
-        void heInitialization();
-
+        /**
+        Set up HE parameters
+        */
+        void hEInitialization();
+       
+        /**
+        Create HE keys
+        */
         void generateHEKeys();
-
+       
+        /**
+        Return the byte size for HE Public key
+        */
         int getPublicKeyBytes(seal_byte* &);
+       
+        /**
+        Return the byte size for HE Relin keys
+        */
         int getRelinKeysBytes(seal_byte* &);
+       
+        /**
+        Return the byte size for HE Galois keys
+        */
         int getGaloisKeysBytes(seal_byte* &);
-        int getSecretKeyBytes(seal_byte* &);
-
+      
+        /**
+        Return the byte size for HE Relin keys of CSP
+        */
+        int getCSPRelinKeysBytes(seal_byte* &);
+       
+        /**
+        Return the byte size for HE Galois keys of CSP
+        */
+        int getCSPGaloisKeysBytes(seal_byte* &);
+       
+        /**
+        Return the result for HE encryption of ML weights
+        */
         vector<Ciphertext> getEncryptedWeights();
-        int getEncWeightsBytes(seal_byte* &, int index);
+       
+        /**
+        Return the byte size for encrypted ML weights
+        */
+        int getEncryptedWeightsBytes(seal_byte* &, int index);
+       
+        /**
+        Decrypt the Ciphertext from CSP and obtains the plaintext result
+        */
+        void decryptData(seal_byte* bytes, int size);
+       
+        /** 
+        Helper function to print the first ten bytes of the seal_byte input
+        */
+        void print_seal_bytes(seal_byte* buffer);
+
 
         // pure virtual function
-        virtual void func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec) = 0;
+        /**
+        Create an abstract layer for NN calculation
+        */
+        virtual void func(string dataset, PublicKey analyst_he_pk, BatchEncoder* analyst_he_benc, Encryptor* analyst_he_enc, Decryptor* analyst_he_dec) = 0;
 
     private:
-
         shared_ptr<SEALContext> context;
 
-        PublicKey he_pk;
-        SecretKey he_sk;
-        RelinKeys he_rk;
-        GaloisKeys he_gk;
+        PublicKey analyst_he_pk;   // Analyst HE Public key
+        SecretKey analyst_he_sk;   // Analyst HE Secret key
+        RelinKeys analyst_he_rk;   // Analyst HE Relin keys
+        GaloisKeys analyst_he_gk;  // Analyst HE Galois keys
+        RelinKeys csp_he_rk;       // CSP HE Relin keys
+        GaloisKeys csp_he_gk;      // CSP HE Galois keys
 
-        // vector<seal::Ciphertext> enc_weights_t;
+        KeyGenerator* analyst_keygen;    // Analyst HE key generator
+        BatchEncoder* analyst_he_benc;   // Analyst HE batch encoder
+        Encryptor* analyst_he_enc;       // Analyst HE encryptor
+        Evaluator* analyst_he_eval;      // Analyst HE evaluator
+        Decryptor* analyst_he_dec;       // Analyst HE decryptor
 
-        KeyGenerator* keygen;
-        BatchEncoder* he_benc;
-
-        Encryptor* he_enc;
-        Evaluator* he_eval;
-        Decryptor* he_dec;
+        string dataset;   // The data set name for NN calculation
 
     protected:
-        vector<seal::Ciphertext> enc_weights_t; // the encrypted weight
-
+        vector<Ciphertext> enc_weights_t; // The encrypted weight
+        vector<int64_t> decrypted_result; // The decrypted result 
 };
 
-class Analyst_hhe_pktnn_1fc : public BaseAnalyst {
+class Analyst_hhe_pktnn_1fc : public BaseAnalyst 
+{
     public:
-        // implementation of the pure virtual function
-        void func(PublicKey he_pk,BatchEncoder* he_benc,Encryptor* he_enc,Decryptor* he_dec);
+        /**
+        The implementation of the pure virtual function 
+        @param[in] dataset The data set name for ML
+        @param[in] analyst_he_pk The Analyst HE Public key
+        @param[in] analyst_he_benc The Analyst HE batch encoder
+        @param[in] analyst_he_enc The Analyst HE encryptor
+        @param[in] analyst_he_dec The Analyst HE decryptor 
+        */
+        void func(string dataset, PublicKey analyst_he_pk, BatchEncoder* analyst_he_benc, Encryptor* analyst_he_enc, Decryptor* analyst_he_dec);
 };

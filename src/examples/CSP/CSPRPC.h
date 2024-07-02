@@ -12,12 +12,13 @@
 #include "../../gen_code/hhe.grpc.pb.h"
 
 #include "CSP.h"
-
+#include "AnalystServiceCSPClient.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
+
 using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
@@ -26,17 +27,33 @@ using hheproto::EncSymmetricDataMsg;
 using hheproto::MLModelMsg;
 
 
-
-class CSPServiceImpl final:public CSPService::Service{ 
+class CSPServiceImpl final:public CSPService::Service
+{ 
     public:
-        CSPServiceImpl(string url, BaseCSP* csp){
+        CSPServiceImpl(string url, BaseCSP* csp)
+        {
             this->url = url;
             this->csp = csp;
         }
 
+        /** 
+        rpc service - Add HE Public keys
+        */
         Status addPublicKeys(ServerContext* context, const PublicKeySetMsg* request, Empty* reply) override;
+        
+        /**
+        rpc service - Add User encrypted symmetric key
+        */
         Status addEncryptedKeys(ServerContext* context, const EncSymmetricKeysMsg* request, Empty* reply) override;
+        
+        /**
+        rpc service - Add User encrypted data for NN calculation
+        */
         Status addEncryptedData(ServerContext* context, const EncSymmetricDataMsg* request, Empty* reply) override;
+       
+        /**
+        rpc service - Add NN encrypted params (weights)
+        */
         Status addMLModel(ServerContext* context, const MLModelMsg* request, Empty* reply) override;
 
         void runServer();
@@ -47,7 +64,10 @@ class CSPServiceImpl final:public CSPService::Service{
         thread* listener;
  
         void startRPCService();
-        string getAnalystId(std::multimap<grpc::string_ref, grpc::string_ref> metadata);
 
+        /**
+        Get Analyst IP Addr
+        */
+        string getAnalystId(multimap<grpc::string_ref, grpc::string_ref> metadata);
 };
 

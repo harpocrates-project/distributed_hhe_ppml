@@ -13,29 +13,31 @@
 
 #include "../../Common.h"
 
+#include "CSP.h"
+
 using grpc::Channel;
 using grpc::ClientContext;
-using grpc::ClientReader;
-using grpc::ClientReaderWriter;
-using grpc::ClientWriter;
 using grpc::Status;
 
 using hheproto::AnalystService;
 using hheproto::Empty;
-using hheproto::PublicKeyMsg;
+using hheproto::CiphertextMsg;
 
-
-class AnalystServiceUserClient 
+class AnalystServiceCSPClient 
 {
     public:
-        AnalystServiceUserClient(shared_ptr<Channel> channel)
-            : stub_(AnalystService::NewStub(channel)) { }
+        AnalystServiceCSPClient(shared_ptr<Channel> channel, BaseCSP* csp)                    
+        {
+            stub_ = AnalystService::NewStub(channel);
+            this->csp = csp;
+        }
 
         /**
-        rpc service - get Analyst HE Public key
+        rpc service - Send encrypted result to Analyst
         */
-        int getPublicKey (seal_byte* &buffer);
+        bool addEncryptedResult(string analystId);
 
     private:
         unique_ptr<AnalystService::Stub> stub_;
+        BaseCSP* csp;
 };

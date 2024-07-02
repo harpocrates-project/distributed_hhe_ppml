@@ -193,6 +193,7 @@ set(USER_SOURCE
 set(CSP_SOURCE
     ${SOURCE_DIR}/examples/CSP/CSP.cpp
     ${SOURCE_DIR}/examples/CSP/CSPRPC.cpp
+    ${SOURCE_DIR}/examples/CSP/AnalystServiceCSPClient.cpp
     ${SOURCE_DIR}/util/sealhelper.cpp
     ${SOURCE_DIR}/util/pastahelper.cpp
     ${SOURCE_DIR}/util/utils.cpp
