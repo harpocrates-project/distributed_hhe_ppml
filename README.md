@@ -68,3 +68,7 @@ The User component can be started via the command
 ./build/user <analystAddress>:<analystPort> <cspAddress>:<cspPort>
 ```
 Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively.
+
+### gRPC callback for Middleware
+FunctionName: evaluateModel
+Parameters: HHEDecomp (The data stored in the database) and analystID (The analyst's IP Address)
