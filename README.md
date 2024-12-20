@@ -70,8 +70,9 @@ The User component can be started via the command
 Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively.
 
 ### gRPC callback for Middleware
-i. FunctionName: evaluateModel <br />
-ii. Parameters: HHEDecomp (a repeated byte with the data stored in the database) and analystID (that was specified in the file name from where the data was retrieved).
+i. FunctionName: evaluateModel. <br />
+ii. Parameters: HHEDecomp (a repeated byte with the data stored in the database) and analystID (that was specified in the file name from where the data was retrieved). <br />
+iii. Return value: empty.
 ```
 // a gRPC callback for Middleware
 rpc evaluateModel (CiphertextBytes) returns (Empty) { }
