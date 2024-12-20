@@ -71,4 +71,14 @@ Where `analystAddress` and `analystPort` are the IP address and port number of t
 
 ### gRPC callback for Middleware
 i. FunctionName: evaluateModel <br />
-ii. Parameters: HHEDecomp (The data stored in the database) and analystID (The analyst's IP Address)
+ii. Parameters: HHEDecomp (a repeated byte with the data stored in the database) and analystID (that was specified in the file name from where the data was retrieved).
+```
+// a gRPC callback for Middleware
+rpc evaluateModel (CiphertextBytes) returns (Empty) { }
+
+// Parameters required for the gRPC callback
+message CiphertextBytes {
+    repeated bytes HHEDecomp = 1;
+    string analystID = 2;
+}
+```
