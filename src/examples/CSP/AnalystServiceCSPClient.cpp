@@ -5,24 +5,23 @@ rpc service - Send encrypted result to Analyst
 */
 bool AnalystServiceCSPClient::addEncryptedResult(string analystId) 
 {
-    CiphertextMsg request;
+    CiphertextResult request;
     Empty reply;
     ClientContext context;
     
     cout << "[AnalystServiceCSPClient] Sending the encrypted result to Analyst (AnalystId: " << analystId << ")" << endl;
 
-    seal_byte* buffer = nullptr;
-    // Get the encrypted result bytes
-    int size = csp->getEncryptedResultBytes(analystId, buffer);
-    
-    /*for (int i = 0; i < 10; i++) 
-    {
-        std::cout << (int)buffer[i] << ' ';
-    }
-    cout << endl;*/
+    // get encrypted results
+    int resultsNumber = csp->getHESumEncProduct(analystId).size();
+    seal_byte* buffer;
 
-    request.set_data(buffer, size);
-    request.set_length(size);
+    for (int i=0; i<resultsNumber; i++)
+    {
+      int size = csp->getEncryptedResultBytes(analystId, buffer, i);
+      hheproto::CiphertextMsg* result = request.add_result();
+      result->set_data(buffer, size);
+      result->set_length(size);
+    }
 
     // Send the encrypted result to Analyst
     Status status = stub_->addEncryptedResult(&context, request, &reply);
@@ -34,6 +33,7 @@ bool AnalystServiceCSPClient::addEncryptedResult(string analystId)
     } 
     else 
     {
+      cout << status.error_code() << ": " << status.error_message() << endl;
       return false;
-    }
+    }   
 }

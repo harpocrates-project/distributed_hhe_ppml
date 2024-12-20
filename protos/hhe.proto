@@ -6,7 +6,7 @@ package hheproto;
 
 service AnalystService{
     rpc getPublicKey (Empty) returns (PublicKeyMsg) { }
-    rpc addEncryptedResult(CiphertextMsg) returns (Empty) { }
+    rpc addEncryptedResult(CiphertextResult) returns (Empty) { }
 }
 
 service CSPService{
@@ -14,6 +14,12 @@ service CSPService{
     rpc addEncryptedKeys(EncSymmetricKeysMsg) returns (Empty) { }
     rpc addEncryptedData(EncSymmetricDataMsg) returns (Empty) { }
     rpc addMLModel (MLModelMsg) returns (Empty) { }
+    rpc evaluateModel (CiphertextBytes) returns (Empty) { }
+}
+
+message CiphertextBytes {
+    repeated bytes HHEDecomp = 1;
+    string analystID = 2;
 }
 
 message Empty{ }
@@ -29,6 +35,11 @@ message PublicKeySetMsg {
     PublicKeyMsg gk = 3;
     PublicKeyMsg csp_rk = 4;
     PublicKeyMsg csp_gk = 5;
+    string analystUUID = 6;
+}
+
+message CiphertextResult{
+    repeated CiphertextMsg result = 1;
 }
 
 message CiphertextMsg {
@@ -46,6 +57,11 @@ message EncSymmetricKeysMsg {
 }
 
 message EncSymmetricDataMsg {
+    repeated EncSymmetricDataRecord record = 1;
+    string patientID= 2;
+}
+
+message EncSymmetricDataRecord {
     repeated uint64 value = 1;
 }
   

@@ -18,6 +18,7 @@ using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::EncSymmetricKeysMsg;
 using hheproto::EncSymmetricDataMsg;
+using hheproto::EncSymmetricDataRecord;
 
 
 class CSPServiceUserClient 
@@ -38,7 +39,7 @@ class CSPServiceUserClient
         /**
         rpc service - Send the encrypted data to CSP
         */
-        bool addEncryptedData(string analystId); 
+        bool addEncryptedData(string analystId, string data_set); 
 
     private:
         User* user;

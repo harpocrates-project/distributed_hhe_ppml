@@ -24,6 +24,7 @@ using hheproto::AnalystService;
 using hheproto::Empty;
 using hheproto::PublicKeyMsg;
 using hheproto::CiphertextMsg;
+using hheproto::CiphertextResult;
 
 using namespace hheproto;
 
@@ -45,7 +46,7 @@ class AnalystServiceImpl final:public AnalystService::Service
         /**
         rpc service - get the encrypted result from CSP
         */
-        Status addEncryptedResult(ServerContext* context, const CiphertextMsg* request, Empty* reply) override;    
+        Status addEncryptedResult(ServerContext* context, const CiphertextResult* request, Empty* reply) override;    
 
         void runServer();
         void stopServer();

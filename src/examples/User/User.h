@@ -16,6 +16,11 @@ class User
         Create a symmetric key
         */
         void setSymmetricKey(); // client_sym_key
+
+        /**
+        Set up a data set name for NN calculation
+        */
+        void setDataSet(string data_set); // dataset name
         
 
         // getter
@@ -25,6 +30,11 @@ class User
         vector<uint64_t> getSymmetricKey(); // client_sym_key
         
         /**
+        Return the datas set name for NN calculation
+        */
+        string getDataSet();
+
+        /**
         Return the encrypted symmetric key
         */
         vector<Ciphertext> getEncryptedSymmetricKey();
@@ -32,7 +42,7 @@ class User
         /**
         Return the encrypted data
         */
-        vector<uint64_t> getEncryptedData();
+        vector <vector<uint64_t>> getEncryptedData();
         
         /**
         Return the byte size for encrypted symmetric key
@@ -44,7 +54,7 @@ class User
         /**
         Load data and label for NN calculation
         */
-        void loadDataAndLabel();
+        void loadDataAndLabel(string dataSet);
        
         /**
         Encrypt the plaintext data
@@ -80,6 +90,9 @@ class User
         matrix::matrix labels; 
         matrix::vector vi; // plaintext data
         vector<uint64_t> vi_se; // symmetric encrypted vi
+        vector <vector<uint64_t>> array; // the vector of vi_se
         vector<uint64_t> client_sym_key; // User's symmetric key
         vector<Ciphertext> client_hhe_key; // User's encrypted symmetric key (c_k)
+
+        string dataSet;
 };

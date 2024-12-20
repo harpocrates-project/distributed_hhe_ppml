@@ -196,9 +196,9 @@ class BaseAnalyst
 
         // pure virtual function
         /**
-        Create an abstract layer for NN calculation
+        Create an abstract layer for NN model encryption
         */
-        virtual void func(string dataset, PublicKey analyst_he_pk, BatchEncoder* analyst_he_benc, Encryptor* analyst_he_enc, Decryptor* analyst_he_dec) = 0;
+        virtual void NNModelEncryption(string dataset) = 0;
 
     private:
         shared_ptr<SEALContext> context;
@@ -221,6 +221,7 @@ class BaseAnalyst
     protected:
         vector<Ciphertext> enc_weights_t; // The encrypted weight
         vector<int64_t> decrypted_result; // The decrypted result 
+        int inputLen;
 };
 
 class Analyst_hhe_pktnn_1fc : public BaseAnalyst 
@@ -229,10 +230,6 @@ class Analyst_hhe_pktnn_1fc : public BaseAnalyst
         /**
         The implementation of the pure virtual function 
         @param[in] dataset The data set name for ML
-        @param[in] analyst_he_pk The Analyst HE Public key
-        @param[in] analyst_he_benc The Analyst HE batch encoder
-        @param[in] analyst_he_enc The Analyst HE encryptor
-        @param[in] analyst_he_dec The Analyst HE decryptor 
         */
-        void func(string dataset, PublicKey analyst_he_pk, BatchEncoder* analyst_he_benc, Encryptor* analyst_he_enc, Decryptor* analyst_he_dec);
+        void NNModelEncryption(string dataset);
 };

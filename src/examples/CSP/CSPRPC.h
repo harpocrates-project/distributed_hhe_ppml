@@ -24,7 +24,9 @@ using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
 using hheproto::EncSymmetricKeysMsg;
 using hheproto::EncSymmetricDataMsg;
+using hheproto::EncSymmetricDataRecord;
 using hheproto::MLModelMsg;
+using hheproto::CiphertextBytes;
 
 
 class CSPServiceImpl final:public CSPService::Service
@@ -56,6 +58,11 @@ class CSPServiceImpl final:public CSPService::Service
         */
         Status addMLModel(ServerContext* context, const MLModelMsg* request, Empty* reply) override;
 
+        /**
+        rpc service - Receive data and evaluate date under NN model
+        */
+        Status evaluateModel(ServerContext* context, const CiphertextBytes* request, Empty* reply) override;
+        
         void runServer();
 
     private:
@@ -64,6 +71,8 @@ class CSPServiceImpl final:public CSPService::Service
         thread* listener;
  
         void startRPCService();
+        
+        vector <vector<uint64_t>> values;
 
         /**
         Get Analyst IP Addr

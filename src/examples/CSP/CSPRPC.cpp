@@ -1,4 +1,5 @@
 #include "CSPRPC.h"
+using grpc::StatusCode;
 
 /** 
 rpc service - Add HE Public keys
@@ -59,6 +60,11 @@ Status CSPServiceImpl::addPublicKeys(ServerContext* context, const PublicKeySetM
 
     memcpy(buffer, strBuffer.data(), strBuffer.length());
     csp->addHEGaloisKeys(analystId, buffer, length);
+
+    // Analyst's UUID
+    string analystUUID = request->analystuuid();
+    cout << "analyst's UUID: " << analystUUID << endl;
+    csp->addAnalystUUID(analystId, analystUUID);
 
     return Status::OK;
 }
@@ -159,14 +165,103 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
     reply = new Empty();
 
     cout << "[CSP Service] Adding User encrypted data" << endl;
-    vector<uint64_t> values(request->value().begin(), request->value().end());
-    utils::print_vec(values, values.size(), "vi_se"); //vi_se
+    for (EncSymmetricDataRecord record: request->record())
+    {
+        vector<uint64_t> record_values(record.value().begin(), record.value().end());
+        values.push_back(std::move(record_values));
+        //utils::print_vec(record_values, record_values.size(), "record");
+    }   
+    
+    // Receive the patientID from the User 
+    string patientID = request->patientid();
+    cout << "patientID: " << patientID << endl;
+
+
+    // transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
+    // if (lowerStr != "spo2" && lowerStr != "ecg")
+    // {
+    //     throw std::runtime_error("Dataset must be either SpO2 or ECG");
+    // }
+    // int inputLen = 0;
+    // if (lowerStr == "spo2")
+    // {
+    //     inputLen = 300;
+    // }
+    // if (lowerStr == "ecg")
+    // {
+    //     inputLen = 128;
+    // }
+        // }
+    int inputLen = 300;
+
     
     csp->addUserEncryptedData(analystId, values); 
   
     // TODO: should be done in a separate thread
-    csp->decompose(analystId);
-    csp->evaluateModel(analystId);
+    // HHE docomposition
+    csp->decompose(analystId, inputLen);
+
+    // Write HHE decomposition data from memory to a file
+    string analystUUID = csp->getAnalystUUID(analystId);
+    string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
+    csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(analystId));
+   
+    // Read HHE decomposition data from a file
+    // csp->readHHEDecompositionDataFromFile(fileName);
+
+    // Needs to be done in the new gRPC call
+    // HHE evaluation
+    // csp->evaluateModel(analystId, inputLen);
+
+    // creates an object that is used to callback the Analyst
+    // AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
+    // analystRPCClient->addEncryptedResult(analystId);    
+
+    return Status::OK;
+}
+
+/**
+rpc service - Receive data and evaluate date under NN model
+*/
+Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextBytes* request, Empty* reply)
+{
+    // Analyst's ID
+    string analystId = request->analystid();
+    cout << "analyst's ID: " << analystId << endl;
+
+    reply = new Empty();
+
+    // Retrieve and deserialize the HHEDecomp data
+    vector<Ciphertext> ciphertexts; // HHEDecomp data
+    string errorMessage;
+    if (!csp->deserializeCiphertexts(request->hhedecomp(), ciphertexts, errorMessage)) {
+            cerr << "Deserialization failed: " << errorMessage << endl;
+            return Status(StatusCode::DATA_LOSS, errorMessage);
+        }
+
+    cout << "Successfully deserialized " << ciphertexts.size() << " ciphertexts." << endl;
+    csp->setHHEEncDataProcessedMap(analystId, ciphertexts);
+
+
+    // transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
+    // if (lowerStr != "spo2" && lowerStr != "ecg")
+    // {
+    //     throw std::runtime_error("Dataset must be either SpO2 or ECG");
+    // }
+    // int inputLen = 0;
+    // if (lowerStr == "spo2")
+    // {
+    //     inputLen = 300;
+    // }
+    // if (lowerStr == "ecg")
+    // {
+    //     inputLen = 128;
+    // }
+        // }
+    int inputLen = 300;
+
+    // HHE evaluation
+    csp->evaluateModel(analystId, inputLen);
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
@@ -203,6 +298,7 @@ void CSPServiceImpl::startRPCService()
 
     ServerBuilder builder;
     builder.SetMaxReceiveMessageSize(-1);
+
     // Listen on the given address without any authentication mechanism.
     builder.AddListeningPort(url, grpc::InsecureServerCredentials());
     
@@ -240,7 +336,7 @@ int main(int argc,char** argv)
         url = "localhost:50052";
     }
 
-    csp = new BaseCSP();
+    csp = new CSP_hhe_pktnn_1fc();
     cspRPC = new CSPServiceImpl(url, csp);
 
     // Set up HE params

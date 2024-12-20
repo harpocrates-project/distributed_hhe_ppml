@@ -49,25 +49,38 @@ bool CSPServiceUserClient::addEncryptedKeys(string analystId)
 /**
 rpc service - Send the encrypted data to CSP
 */
-bool CSPServiceUserClient::addEncryptedData(string analystId) 
+bool CSPServiceUserClient::addEncryptedData(string analystId, string patientID) 
 {
     EncSymmetricDataMsg request;
+    vector<EncSymmetricDataRecord*> records;
     Empty reply;
     ClientContext context;
-
+ 
     cout << "[CSPServiceUserClient] Sending encrypted data to CSP" << endl;
-
+ 
     context.AddMetadata("analystid", analystId);
-
+ 
     // get the encrypted data
-    vector<uint64_t> data = user->getEncryptedData();   
+    // vector<uint64_t> data = user->getEncryptedData();
+    vector <vector<uint64_t>> data = user->getEncryptedData();
+ 
+    for (vector<uint64_t> record : data) 
+    {
+ 
+      EncSymmetricDataRecord* record_p = request.add_record();
+ 
+      for (int64_t value : record) {
+        record_p->add_value(value);
+      }
+      records.push_back(record_p);
+    }
     
-    for (uint64_t v : data)
-        request.add_value(v);
+    // Set patient ID
+    request.set_patientid(patientID);
 
     // Send the encrypted data to CSP
     Status status = stub_->addEncryptedData(&context, request, &reply);
-    
+        
     if (status.ok()) 
     {
       cout << "[CSPServiceUserClient] Successfully uploaded encrypted data to CSP" << endl;
@@ -75,7 +88,10 @@ bool CSPServiceUserClient::addEncryptedData(string analystId)
     } 
     else 
     {
-      cout << status.error_code() << ": " << status.error_message() << endl;
+      cout << status.error_code() << ": " << status.error_message() << endl;    
       return false;
     }
+  
+
+
 }

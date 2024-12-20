@@ -22,6 +22,7 @@ using grpc::Status;
 using hheproto::AnalystService;
 using hheproto::Empty;
 using hheproto::CiphertextMsg;
+using hheproto::CiphertextResult;
 
 class AnalystServiceCSPClient 
 {

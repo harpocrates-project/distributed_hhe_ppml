@@ -3,18 +3,28 @@
 /**
 Load data and label for NN calculation
 */
-void User::loadDataAndLabel()
+void User::loadDataAndLabel(string dataSet)
 {
+
+    cout << "[User] Loading his input data" << dataSet << endl;
+    data = matrix::read_from_csv(dataSet);
+    // matrix::print_matrix(data);
+    matrix::print_matrix_shape(data);
+    matrix::print_matrix_stats(data);
+
+    /*
     cout << "[User] Loading his input data from " << config::dataset_input_path << endl;
     data = matrix::read_from_csv(config::dataset_input_path);
     // matrix::print_matrix(data);
     matrix::print_matrix_shape(data);
     matrix::print_matrix_stats(data);
+    
     cout << "[User] Loading his labels data from " << config::dataset_output_path << endl;
     labels = matrix::read_from_csv(config::dataset_output_path);
     // matrix::print_matrix(labels);
     matrix::print_matrix_shape(labels);
     matrix::print_matrix_stats(labels);
+    */
 }
 
 /**
@@ -26,11 +36,25 @@ void User::setSymmetricKey()
 }
 
 /**
+Set up a data set name for NN calculation
+*/
+void User::setDataSet(string data_set){
+    dataSet = data_set;
+}
+
+/**
 Return the symmetric key
 */      
 vector<uint64_t> User::getSymmetricKey()
 {
     return client_sym_key;
+}
+
+/**
+Return the datas set name for NN calculation
+*/
+string User::getDataSet(){
+    return dataSet;
 }
 
 /**
@@ -65,20 +89,31 @@ void User::print_vec_Ciphertext(vector<Ciphertext> input, size_t size)
 Encrypt the plaintext data
 */
 void User::encryptData(vector<uint64_t> client_sym_key)
-{
-    size_t data_index = 5;
-    vi = data[data_index];
-    cout << "[User] Symmetrically encrypting input" << endl;   
+{ 
     pasta::PASTA SymmetricEncryptor(client_sym_key, config::plain_mod);
-    vi_se = pastahelper::symmetric_encrypt_vec(SymmetricEncryptor, vi); // the symmetric encrypted images
-    utils::print_vec(vi_se, vi_se.size(), "vi_se");
 
-    cout << "(Check) [User] Decrypting symmetrically encrypted input" << endl;
-    vector<uint64_t> vi_dec = pastahelper::symmetric_decrypt_vec(SymmetricEncryptor, vi_se); // the symmetric encrypted images
-    utils::print_vec(vi_dec, vi_dec.size(), "vi_dec");
 
-    cout << "[User] Plaintext input" << endl;
-    utils::print_vec(vi, vi.size(), "vi");
+    for (size_t i = 1; i < 3; i++)
+    {
+        cout << "[User] Symmetrically encrypting input" << endl; 
+        vi = data[i]; 
+        vi_se = pastahelper::symmetric_encrypt_vec(SymmetricEncryptor, vi); // the symmetric encrypted images
+        utils::print_vec(vi_se, vi_se.size(), "vi_se");
+
+        array.push_back(vi_se);
+
+        cout << "(Check) [User] Decrypting symmetrically encrypted input" << endl;
+        vector<uint64_t> vi_dec = pastahelper::symmetric_decrypt_vec(SymmetricEncryptor, vi_se); // the symmetric encrypted images
+        utils::print_vec(vi_dec, vi_dec.size(), "vi_dec");
+
+        cout << "[User] Plaintext input" << endl;
+        utils::print_vec(vi, vi.size(), "vi");
+    }
+
+    for (int i = 0; i < array.size(); i++)
+    {
+        utils::print_vec(array[i], array[i].size(), "array[i]");
+    }
 }
 
 /**
@@ -113,9 +148,10 @@ vector<Ciphertext> User::getEncryptedSymmetricKey()
 /**
 Return the encrypted data
 */
-vector<uint64_t> User::getEncryptedData() 
+vector <vector<uint64_t>> User::getEncryptedData() 
 { 
-    return vi_se; 
+    // return vi_se; 
+    return array;
 }
 
 /**
@@ -137,36 +173,6 @@ int User::getEncryptedSymmetricKeyBytes(seal_byte* &buffer, int index)
     return keySize;
 }
 
-/*void User::computingCheck()
-{
-    utils::print_line(__LINE__);
-    cout << "(Check) Computing in plain on 1 input vector" << endl;
-    matrix::vector vo_p_1(1);
-    size_t data_index_1 = 5;
-    matrix::vector vi_1 = data[data_index_1];
-    int64_t gt_out_1 = labels[data_index_1][0];
-    cout << "input vector vi.size() = " << vi_1.size() << ";\n";
-    utils::print_vec(vi_1, vi_1.size(), "vi");
-
-    // copy codes from Analyst
-    matrix::matrix weights;
-    if (config::debugging)
-    {
-        weights = matrix::read_from_csv("../../../" + config::save_weight_path);
-    } 
-    else 
-    {
-        weights = matrix::read_from_csv(config::save_weight_path);
-    }
-    matrix::matrix weights_t = matrix::transpose(weights);
-
-    matrix::matMulVecNoModulus(vo_p_1, weights_t, vi_1);  // vo_p = weight * data
-    cout << "plain output vector vo.size() = " << vo_p_1.size() << ";\n";
-    utils::print_vec(vo_p_1, vo_p_1.size(), "vo_p");
-    int64_t plain_pred = utils::int_sigmoid(vo_p_1[0]);  // activation function (sigmod)
-    cout << "plain prediction = " << plain_pred << " | ";
-    cout << "groundtruth label = " << gt_out_1 << ";\n";
-}*/
     
 
 

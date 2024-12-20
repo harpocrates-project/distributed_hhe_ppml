@@ -3,7 +3,7 @@
 /**
 rpc service - Send HE Public keys to CSP
 */
-bool CSPServiceAnalystClient::addPublicKeys() 
+bool CSPServiceAnalystClient::addPublicKeys(string analystUUID) 
 {
     PublicKeySetMsg request;
     Empty reply;
@@ -38,6 +38,9 @@ bool CSPServiceAnalystClient::addPublicKeys()
     size = analyst->getCSPGaloisKeysBytes(buffer);
     request.mutable_csp_gk()->set_data(buffer, size);
     request.mutable_csp_gk()->set_length(size);
+
+    // Analyst's UUID
+    request.set_analystuuid(analystUUID);
 
     // Sends the HE Public keys to CSP
     Status status = stub_->addPublicKeys(&context, request, &reply);

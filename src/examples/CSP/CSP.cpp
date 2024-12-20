@@ -1,4 +1,6 @@
 #include "CSP.h"
+#include <iostream>
+#include <fstream>
 
 // setter
 /** 
@@ -24,6 +26,14 @@ void BaseCSP::setHESecretKey(KeyGenerator* csp_keygen)
 {
     cout << "[CSP] Creating a new HE secret key from the context" << endl;
     csp_he_sk = csp_keygen->secret_key();
+}
+
+/**
+Set he_enc_data_processed_map
+*/
+void BaseCSP::setHHEEncDataProcessedMap(string analystId, vector<Ciphertext> ciphertexts)
+{
+    he_enc_data_processed_map[analystId] = ciphertexts;
 }
 
 // getter
@@ -95,17 +105,26 @@ Return the User encrypted data
 /**
 Return the HE encrypted data
 */
-vector<Ciphertext> BaseCSP::getHEEncryptedData(string analystId)
+vector<vector<Ciphertext>> BaseCSP::getHEEncryptedData(string analystId)
 {
     return he_enc_data_map[analystId];   
+}
+
+/** 
+Return the Sum of the HE_ENC_Product
+*/
+vector<Ciphertext> BaseCSP::getHESumEncProduct(string analystId)
+{
+    return he_sum_enc_product_map[analystId];
 }
 
 /**
 Return the encrypted result calculated by CSP via HHE decomposition and evaluation
 */
-int BaseCSP::getEncryptedResultBytes(string analystId, seal_byte* &buffer)
+
+int BaseCSP::getEncryptedResultBytes(string analystId, seal_byte* &buffer, int index)
 {
-    Ciphertext encrypted_sum_vec = he_sum_enc_product_map[analystId];
+    Ciphertext encrypted_sum_vec = he_sum_enc_product_map[analystId].at(index);
 
     int encrypted_sum_vec_size = encrypted_sum_vec.save_size();
     buffer = new seal_byte[encrypted_sum_vec_size];
@@ -115,6 +134,46 @@ int BaseCSP::getEncryptedResultBytes(string analystId, seal_byte* &buffer)
     print_seal_bytes(buffer);
     
     return encrypted_sum_vec_size; 
+}
+
+/** 
+Return the HE encrypted processed data 
+*/
+vector<Ciphertext> BaseCSP::getHEEncDataProcessedMapValue(string analystId)
+{
+    return he_enc_data_processed_map[analystId];
+}
+
+/** 
+Return the first value of encrypted weights map
+*/
+Ciphertext BaseCSP::getEncWeightsMapFirstValue(string analystId)
+{
+    return enc_weights_map[analystId][0];
+}
+
+/** 
+Return the CSP Relin keys value
+*/
+RelinKeys BaseCSP::getCSPHERelinKeysMapValue(string analystId)
+{
+    return *csp_he_rk_map[analystId];
+}
+
+/** 
+Return the CSP Galois keys value
+*/
+GaloisKeys BaseCSP::getCSPHEGaloisKeysMapValue(string analystId)
+{
+    return *csp_he_gk_map[analystId];
+}
+
+/** 
+Return the HE encrypted processed data 
+*/
+vector<Ciphertext> BaseCSP::getHEEncDataProcessedMap(string analystId)
+{
+    return he_enc_data_processed_map[analystId];
 }
 
 // functions
@@ -173,7 +232,7 @@ void BaseCSP::hEInitialization(){
 /**
 HHE decomposition
 */
-void BaseCSP::decompose(string analystId)
+void BaseCSP::decompose(string analystId, int inputLen)
 {
     cout << "[CSP] Making a PASTA_SEAL HHE object based on the CSP's HE sk and Analyst's HE pk, rk, gk (Analyst Id: " << analystId << ")" << endl;
     pasta::PASTA_SEAL HHE(context, 
@@ -183,84 +242,83 @@ void BaseCSP::decompose(string analystId)
                           getAnalystHEGaloisKeys(analystId));
 
     cout << "[CSP] Decomposition: CSP does HHE decomposition to turn User's symmetric input into HE input" << endl;
-    he_enc_data_map[analystId] = HHE.decomposition(enc_data_map[analystId],
+    // enc_data_map[analystId] ---> enc_data_map[userId]
+
+    for (vector<uint64_t> record : enc_data_map[analystId])
+    {
+            he_enc_data_map[analystId].push_back(HHE.decomposition(record,
                                                 getUserEncryptedSymmetricKey(analystId), 
-                                                config::USE_BATCH);
+                                                config::USE_BATCH));
+    }
 
-    print_vec_Ciphertext(he_enc_data_map[analystId], he_enc_data_map[analystId].size());
+    for (vector<Ciphertext> record : he_enc_data_map[analystId])
+        print_vec_Ciphertext(record, record.size());
 
+    
     cout << "[CSP] Decomposition completed" << endl;
 
     cout << "[CSP] Executing HHE decomposition postprocessing on the HE encrypted input" << endl;
-    int inputLen = 300;
     // size_t num_block = inputLen / HHE.get_plain_size();
     size_t rem = inputLen % HHE.get_plain_size();
-    // if (rem)
-    // { 
-    //     num_block++;
-    // }
-    // cout << "There are " << heEncDataMap[analystId].size() << " decomposed HE ciphertexts\n";
-    // cout << "HHE cipher one block's plain size " << HHE.get_plain_size() << endl;
-    // cout << "num_block = " << num_block << endl;
-    // cout << "rem = " << rem << endl;
-    // cout << "Preparing necessary things to do postprocessing (creating new Galois key, masking, flattening)" << endl;
-    // vector<int> flatten_gks;
-    // for (int i = 1; i < num_block; i++)
-    // {
-    //     flatten_gks.push_back(-(int)(i * HHE.get_plain_size()));
-    // }
 
-  
-    // bool use_bsgs = false;
-    // seal::BatchEncoder analyst_he_benc111(*context);
-    // // gk_indices = pastahelper::add_gk_indices(use_bsgs, *he_benc);
-    // vector<int> gk_indices = pastahelper::add_gk_indices(use_bsgs, analyst_he_benc111);
-    // utils::print_vec(gk_indices, gk_indices.size(), "gk_indices");
-    // utils::print_vec(flatten_gks, flatten_gks.size(), "flatten_gks");
-
-    // vector<int> csp_gk_indices = pastahelper::add_some_gk_indices(gk_indices, flatten_gks);
-    // utils::print_vec(csp_gk_indices, csp_gk_indices.size(), "csp_gk_indices");
-
-    // keygen->create_galois_keys(csp_gk_indices, csp_gk);
-    // keygen->create_relin_keys(csp_rk);
     if (rem != 0)
     {
         vector<uint64_t> mask(rem, 1);
-        HHE.mask(he_enc_data_map[analystId].back(), mask);
+        for (vector<Ciphertext> record : he_enc_data_map[analystId])
+            HHE.mask(record.back(), mask);
     }
 
-    HHE.flatten(he_enc_data_map[analystId], 
-                he_enc_data_processed_map[analystId], 
-                *csp_he_gk_map[analystId]);  // vi_he_processed = hhe_decomposition = C_prime
+    Ciphertext tmp;
+    for (vector<Ciphertext> record : he_enc_data_map[analystId])
+    {
+        HHE.flatten(record, 
+                    tmp, 
+                    getCSPHEGaloisKeysMapValue(analystId));  // vi_he_processed = hhe_decomposition = C_prime
+        he_enc_data_processed_map[analystId].push_back(tmp);
+    }
 
     cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
-    print_Ciphertext(he_enc_data_processed_map[analystId]);
+    for (Ciphertext record : he_enc_data_processed_map[analystId])
+            print_Ciphertext(record);
 } 
 
 /**
 HHE evaluation
 */
-void BaseCSP::evaluateModel(string analystId)
+void CSP_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
 {
         cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << endl;
-        sealhelper::packed_enc_multiply(he_enc_data_processed_map[analystId], 
-                                        enc_weights_map[analystId][0],
-                                        he_enc_product_map[analystId], 
-                                        *csp_he_eval); 
 
-        cout << "encrypted_product size before relinearization = " << he_enc_product_map[analystId].size() << endl;
-        csp_he_eval->relinearize_inplace(he_enc_product_map[analystId], *csp_he_rk_map[analystId]);
-        cout << "encrypted_product size after relinearization = " << he_enc_product_map[analystId].size() << endl;
+        Ciphertext tmp;
+        for (Ciphertext record : getHEEncDataProcessedMapValue(analystId))
+        {
+            sealhelper::packed_enc_multiply(record, 
+                                            getEncWeightsMapFirstValue(analystId),
+                                            tmp, 
+                                            *getEvaluator()); 
+            he_enc_product_map[analystId].push_back(tmp);
+        }
+
+        Ciphertext tmp1;
+        for (Ciphertext record : he_enc_product_map[analystId]) 
+        {
+            cout << "encrypted_product size before relinearization = " << record.size() << endl;
+            getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
+            cout << "encrypted_product size after relinearization = " << record.size() << endl;
 
         // Do encrypted sum on the resulting product vector
-        cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
-        int inputLen = 300;
+            cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
 
-        sealhelper::encrypted_vec_sum(he_enc_product_map[analystId], 
-                                      he_sum_enc_product_map[analystId], 
-                                      *csp_he_eval, 
-                                      *analyst_he_gk_map[analystId], 
-                                      inputLen);
+            sealhelper::encrypted_vec_sum(record, 
+                                        tmp1, 
+                                        *getEvaluator(), 
+                                        getAnalystHEGaloisKeys(analystId), 
+                                        inputLen);
+            he_sum_enc_product_map[analystId].push_back(tmp1);                            
+        }
+
+        print_vec_Ciphertext(he_sum_enc_product_map[analystId], he_sum_enc_product_map[analystId].size());
+
         cout << "[CSP] Evaluation completed" << endl;
 } 
 
@@ -368,12 +426,32 @@ bool BaseCSP::addUserEncryptedSymmetricKey(string analystId, vector<seal_byte*> 
 /**
 Add User encrypted data on CSP
 */
-bool BaseCSP::addUserEncryptedData(string analystId, vector<uint64_t> values)
+bool BaseCSP::addUserEncryptedData(string analystId, vector <vector<uint64_t>> values)
 {
     cout << "[CSP] Adding User encrypted data (AnalystId: " << analystId << ")" << endl;
 
     enc_data_map[analystId] = values;
     return true;
+}
+
+/**
+Add Analyst UUID
+*/
+bool BaseCSP::addAnalystUUID(string analystId, string analystUUID)
+{
+    cout << "[CSP] Adding Analyst's UUID (AnalystId: " << analystId << ")" << endl;
+
+    analyst_uuid_map[analystId] = analystUUID;
+
+    return true;
+}
+
+/**
+Return the Analyst's UUID
+*/
+string BaseCSP::getAnalystUUID(string analystId)
+{
+    return analyst_uuid_map[analystId];
 }
 
 /**
@@ -395,6 +473,121 @@ bool BaseCSP::addAnalystEncryptedWeights(string analystId, vector<seal_byte*> by
     enc_weights_map[analystId] = weights;
 
     return true;
+}
+
+/** 
+Write HHE Decomposition data from memory to a file
+*/
+bool BaseCSP::writeHHEDecompositionDataToFile(string fileName, vector<Ciphertext> input)
+{
+    //fileName = fileName;
+    ofstream out(fileName, ios::binary);
+    if (!out.is_open()) {
+        throw ios_base::failure("Failed to open file for writing");
+    }
+
+    // Save the size of the vector
+    size_t size = input.size();
+    out.write(reinterpret_cast<const char*>(&size), sizeof(size));
+
+    // Save each ciphertext
+    for (const auto &ciphertext : input) {
+        ciphertext.save(out);
+    }
+
+    out.close();
+
+    cout << "The HHE decomposition data has been written to a file" << endl; 
+
+    return true;
+}
+
+/** 
+Read HHE Decomposition data from a file
+*/
+bool BaseCSP::readHHEDecompositionDataFromFile(string fileName)
+{
+    ifstream in(fileName, ios::binary);
+    if (!in.is_open()) {
+        throw ios_base::failure("Failed to open file for reading");
+    }
+
+    // Read the size of the vector
+    size_t size;
+    in.read(reinterpret_cast<char*>(&size), sizeof(size));
+
+    // Resize the vector and load each ciphertext
+    vector<Ciphertext> ciphertexts;
+    ciphertexts.resize(size);
+    for (size_t i = 0; i < size; ++i) {
+        ciphertexts[i].load(*context, in);
+    }
+
+    in.close();
+
+    cout << "Read HHE decomposition data from a file" << endl; 
+    for (Ciphertext t : ciphertexts)
+        print_Ciphertext(t);
+
+    return true;
+}
+
+/** 
+Convert HHEDecomp data from bytes to Ciphertext
+*/
+bool BaseCSP::deserializeCiphertexts(const google::protobuf::RepeatedPtrField<std::string>& serializedDataList, 
+                            std::vector<Ciphertext>& ciphertexts, 
+                            std::string& errorMessage)
+{
+    try {
+        // Check if serialized data list is empty
+        if (serializedDataList.empty()) {
+            errorMessage = "Received empty HHE decomposition data.";
+            return false;
+        }
+
+        // Concatenate all strings in the RepeatedPtrField into one continuous string
+        std::ostringstream concatenatedData;
+        for (const auto& data : serializedDataList) {
+            concatenatedData << data;
+        }
+
+        std::istringstream inputStream(concatenatedData.str());
+
+        // Read the size of the ciphertext array
+        size_t arraySize;
+        inputStream.read(reinterpret_cast<char*>(&arraySize), sizeof(arraySize));
+        if (!inputStream.good()) {
+            errorMessage = "Failed to read the size of the ciphertext array.";
+            return false;
+        }
+
+        std::cout << "Array size: " << arraySize << std::endl;
+
+        // Resize the vector to hold the ciphertexts
+        ciphertexts.resize(arraySize);
+
+        // Deserialize each ciphertext
+        for (size_t i = 0; i < arraySize; ++i) {
+            try {
+                ciphertexts[i].load(*context, inputStream);
+                if (!inputStream.good()) {
+                    errorMessage = "Failed to load a ciphertext from the stream.";
+                    return false;
+                }
+            } catch (const std::exception& e) {
+                errorMessage = "Error deserializing ciphertext: " + std::string(e.what());
+                return false;
+            }
+        }
+
+        return true;
+
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in deserializeCiphertexts: " << e.what() << std::endl;
+        errorMessage = e.what();
+        return false;
+    } 
 }
 
 

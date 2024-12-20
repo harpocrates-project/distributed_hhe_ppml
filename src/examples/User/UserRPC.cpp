@@ -7,23 +7,29 @@ int main(int argc,char** argv)
 {
     string analystUrl;
     string cspUrl;
+    string dataSet;
 
-    if (argc == 3) 
+    if (argc == 4) 
     {
         analystUrl = argv[1];
         cspUrl = argv[2];
+        dataSet = argv[3];
     } 
     else if (argc != 1) 
     {
         cout << "[UserRPC] Wrong number of arguments provided – using default values" << endl;
         analystUrl = "localhost:50051";
         cspUrl = "localhost:50052";
+        dataSet = "data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt";
+        //dataSet = "data/arc/SpO2/SpO2_input_cleaned4%.csv";
     } 
     else 
     {
         cout << "[UserRPC] No arguments provided – using default values" << endl;
         analystUrl = "localhost:50051";
         cspUrl = "localhost:50052";
+        dataSet = "data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt";
+        //dataSet = "data/arc/SpO2/SpO2_input_cleaned4%.csv";
     }
     
     User* user = new User();
@@ -36,9 +42,23 @@ int main(int argc,char** argv)
     CSPServiceUserClient CSPRPCClient(
       grpc::CreateChannel(cspUrl, grpc::InsecureChannelCredentials()), user);  
 
+
+    // Find Patient ID
+    cout<<"=============================="<<endl;
+    size_t found = dataSet.find_last_of("/");
+    string fileName = dataSet.substr(found+1);
+    cout << "file: " << fileName << endl;
+    // Find the patient id
+    size_t found1 = fileName.find("_");
+    string patientID = fileName.substr(0,found1);
+    cout << "patientID: " << patientID << endl;
    
     cout<<"=============================="<<endl;
-    user->loadDataAndLabel();
+    // Set up a data set name for NN calculation
+    //string dataset = "SpO2"; // dataset must be either "SpO2" or "ECG"
+    user->setDataSet(dataSet);
+    // Load the data set and label for NN calculation
+    user->loadDataAndLabel(dataSet);
     // Create user's symmetric key which will be used for data encryption;
     user->setSymmetricKey();
     // Encrypt user data via symmetric key algorithm
@@ -67,7 +87,7 @@ int main(int argc,char** argv)
     CSPRPCClient.addEncryptedKeys(analystUrl);
     
     // User sends his encrypted data to the csp
-    CSPRPCClient.addEncryptedData(analystUrl);
+    CSPRPCClient.addEncryptedData(analystUrl, patientID);
 
     return 0;
 }

@@ -357,12 +357,11 @@ void BaseAnalyst::decryptData(seal_byte* bytes, int size)
     Ciphertext* encrypted_sum_vec = new Ciphertext();
     encrypted_sum_vec->load(*context, bytes, size);
 
-    int inputLen = 300;
     decrypted_result = decrypting(*encrypted_sum_vec, 
-                                   getHESecretKey(), 
-                                   *analyst_he_benc, 
-                                   *context, 
-                                    inputLen);
+                                  getHESecretKey(), 
+                                  *getBatchEncoder(), 
+                                  *getContext(), 
+                                  inputLen);
 
     utils::print_vec(decrypted_result, decrypted_result.size(), "[Analyst] decrypted result");
 
@@ -382,9 +381,9 @@ void BaseAnalyst::decryptData(seal_byte* bytes, int size)
 }
 
 /**
-The implementation of the pure virtual function, which will be used for HHE PocketNN 1FC model. 
+The implementation of the pure virtual function, which will be used for HHE PocketNN 1FC model encryption. 
 */
-void Analyst_hhe_pktnn_1fc::func(string dataset, PublicKey analyst_he_pk, BatchEncoder* analyst_he_benc, Encryptor* analyst_he_enc, Decryptor* analyst_he_dec) 
+void Analyst_hhe_pktnn_1fc::NNModelEncryption(string dataset)
 { 
     // check if the lowercase of the `dataset` string is either "spo2" or "mnist"
     string lowerStr = dataset;
@@ -393,7 +392,7 @@ void Analyst_hhe_pktnn_1fc::func(string dataset, PublicKey analyst_he_pk, BatchE
     {
             throw runtime_error("Dataset must be either SpO2 or ECG");
     }   
-    int inputLen = 0;
+    inputLen = 0;
     if (lowerStr == "spo2")
     {
         inputLen = 300;
@@ -407,7 +406,7 @@ void Analyst_hhe_pktnn_1fc::func(string dataset, PublicKey analyst_he_pk, BatchE
     matrix::matrix weights;
     if (config::debugging)
     {
-        weights = matrix::read_from_csv("../../../" + config::save_weight_path);
+        weights = matrix::read_from_csv("../" + config::save_weight_path);
     } 
     else 
     {
@@ -427,14 +426,14 @@ void Analyst_hhe_pktnn_1fc::func(string dataset, PublicKey analyst_he_pk, BatchE
 
     cout << "[Analyst] Encrypting the weights using HE" << endl;
     enc_weights_t = sealhelper::encrypt_weight_mat(weights_t,
-                                                   analyst_he_pk,
-                                                   *analyst_he_benc,
-                                                   *analyst_he_enc);
-   
+                                                   getHEPublicKey(),
+                                                   *getBatchEncoder(),
+                                                   *getEncryptor());
+
     cout << "(Check) [Analyst] Decrypting the encrypted weights" << endl;
     matrix::matrix dec_weights_t = sealhelper::decrypt_weight_mat(enc_weights_t,
-                                                                  *analyst_he_benc,
-                                                                  *analyst_he_dec,
+                                                                  *getBatchEncoder(),
+                                                                  *getDecryptor(),
                                                                   inputLen);
     cout << "Decrypted Weights: ";
     matrix::print_matrix_shape(dec_weights_t);

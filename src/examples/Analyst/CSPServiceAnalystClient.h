@@ -19,6 +19,8 @@ using hheproto::CSPService;
 using hheproto::Empty;
 using hheproto::PublicKeySetMsg;
 using hheproto::MLModelMsg;
+using hheproto::CiphertextResult;
+using hheproto::CiphertextMsg;
 
 
 class CSPServiceAnalystClient
@@ -34,7 +36,7 @@ class CSPServiceAnalystClient
         /**
         rpc service - Send HE Public keys to CSP
         */
-        bool addPublicKeys();
+        bool addPublicKeys(string analystUUID);
         
         /** 
         rpc service - Send NN encrypted params to CSP

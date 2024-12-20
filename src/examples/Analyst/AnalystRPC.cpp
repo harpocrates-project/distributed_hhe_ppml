@@ -1,5 +1,6 @@
 #include "AnalystRPC.h"
 #include "CSPServiceAnalystClient.h"
+#include "uuid.h"
 
 /**
 rpc service - get the public key
@@ -22,7 +23,7 @@ Status AnalystServiceImpl::getPublicKey(ServerContext* context, const Empty* req
 /**
 rpc service - get the encrypted result from CSP
 */
-Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const CiphertextMsg* request, Empty* reply)
+Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const CiphertextResult* request, Empty* reply)
 {
     reply = new Empty();
 
@@ -30,17 +31,31 @@ Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const Ciph
 
     std::string strBuffer;
     seal_byte* buffer = nullptr;
-    int length;
+    // int length;
+    vector<seal_byte*> resultsBytes;
+    vector<int> resultsLengths;
    
-    strBuffer = request->data();
-    length = request->length();
+    int len;
+    for (int i=0, length; i < request->result_size(); i++)
+    {
+        strBuffer = request->result(i).data();
+        length = request->result(i).length();
 
-    buffer = new seal_byte[length];
+        buffer = new seal_byte[length];
 
-    // Receive the encrypted result from CSP
-    memcpy(buffer, strBuffer.data(), strBuffer.length());
-    // Analyst calls decryptData() to decrypt the encrypted result
-    analyst->decryptData(buffer, length);
+        // Receive the encrypted result from CSP
+        memcpy(buffer, strBuffer.data(), strBuffer.length());
+        resultsBytes.push_back(buffer);
+        resultsLengths.push_back(length);
+        
+        len = length;
+
+        // Analyst calls decryptData() to decrypt the encrypted result
+        analyst->decryptData(buffer, length);
+    }
+    
+    //cout << "bytes size: " << resultsBytes.size() << endl;
+    //cout << "lengths size: " << resultsLengths.size() << endl;
 
     return Status::OK;
 } 
@@ -57,6 +72,7 @@ void AnalystServiceImpl::startRPCService()
 
     // Create an instance of factory ServerBuilder class
     ServerBuilder builder;
+    builder.SetMaxReceiveMessageSize(-1);
 
     // Specify the address and port we want to use to listen for client requests using the builder’s AddListeningPort() method.
     builder.AddListeningPort(url,grpc::InsecureServerCredentials());
@@ -99,6 +115,10 @@ int main(int argc,char** argv)
         cspUrl = "localhost:50052";
     }
 
+    // Generate uuid for analyst
+    string analystUUID = uuid::generate_uuid_v4();
+    cout << "Analyst's UUID: " << analystUUID << endl;
+
     // Create objs of analyst and analystRPC
     analyst = new Analyst_hhe_pktnn_1fc();
     analystRPC = new AnalystServiceImpl(url, analyst);
@@ -116,16 +136,10 @@ int main(int argc,char** argv)
     analystRPC->runServer();    // Start Analyst server
 
     // For HHE_PocketNN_1FC calculation
-    analyst->func(
-        analyst->getDataSet(),
-        analyst->getHEPublicKey(),
-        analyst->getBatchEncoder(),
-        analyst->getEncryptor(),
-        analyst->getDecryptor()
-    );
+    analyst->NNModelEncryption(analyst->getDataSet());
 
     // Should send public keys to cloud provider
-    cspClient->addPublicKeys();
+    cspClient->addPublicKeys(analystUUID);
 
     // Now send encrpyted model data to cloud provider
     cspClient->addMLModel();

@@ -21,6 +21,20 @@ namespace _pb = ::PROTOBUF_NAMESPACE_ID;
 namespace _pbi = _pb::internal;
 
 namespace hheproto {
+PROTOBUF_CONSTEXPR CiphertextBytes::CiphertextBytes(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.hhedecomp_)*/{}
+  , /*decltype(_impl_.analystid_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CiphertextBytesDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CiphertextBytesDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CiphertextBytesDefaultTypeInternal() {}
+  union {
+    CiphertextBytes _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CiphertextBytesDefaultTypeInternal _CiphertextBytes_default_instance_;
 PROTOBUF_CONSTEXPR Empty::Empty(
     ::_pbi::ConstantInitialized) {}
 struct EmptyDefaultTypeInternal {
@@ -48,7 +62,8 @@ struct PublicKeyMsgDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PublicKeyMsgDefaultTypeInternal _PublicKeyMsg_default_instance_;
 PROTOBUF_CONSTEXPR PublicKeySetMsg::PublicKeySetMsg(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.pk_)*/nullptr
+    /*decltype(_impl_.analystuuid_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.pk_)*/nullptr
   , /*decltype(_impl_.rk_)*/nullptr
   , /*decltype(_impl_.gk_)*/nullptr
   , /*decltype(_impl_.csp_rk_)*/nullptr
@@ -63,6 +78,19 @@ struct PublicKeySetMsgDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PublicKeySetMsgDefaultTypeInternal _PublicKeySetMsg_default_instance_;
+PROTOBUF_CONSTEXPR CiphertextResult::CiphertextResult(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.result_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CiphertextResultDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CiphertextResultDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CiphertextResultDefaultTypeInternal() {}
+  union {
+    CiphertextResult _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CiphertextResultDefaultTypeInternal _CiphertextResult_default_instance_;
 PROTOBUF_CONSTEXPR CiphertextMsg::CiphertextMsg(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -105,8 +133,8 @@ struct EncSymmetricKeysMsgDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EncSymmetricKeysMsgDefaultTypeInternal _EncSymmetricKeysMsg_default_instance_;
 PROTOBUF_CONSTEXPR EncSymmetricDataMsg::EncSymmetricDataMsg(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.value_)*/{}
-  , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+    /*decltype(_impl_.record_)*/{}
+  , /*decltype(_impl_.patientid_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct EncSymmetricDataMsgDefaultTypeInternal {
   PROTOBUF_CONSTEXPR EncSymmetricDataMsgDefaultTypeInternal()
@@ -117,12 +145,34 @@ struct EncSymmetricDataMsgDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EncSymmetricDataMsgDefaultTypeInternal _EncSymmetricDataMsg_default_instance_;
+PROTOBUF_CONSTEXPR EncSymmetricDataRecord::EncSymmetricDataRecord(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.value_)*/{}
+  , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EncSymmetricDataRecordDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EncSymmetricDataRecordDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EncSymmetricDataRecordDefaultTypeInternal() {}
+  union {
+    EncSymmetricDataRecord _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EncSymmetricDataRecordDefaultTypeInternal _EncSymmetricDataRecord_default_instance_;
 }  // namespace hheproto
-static ::_pb::Metadata file_level_metadata_hhe_2eproto[7];
+static ::_pb::Metadata file_level_metadata_hhe_2eproto[10];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_hhe_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_hhe_2eproto = nullptr;
 
 const uint32_t TableStruct_hhe_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextBytes, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextBytes, _impl_.hhedecomp_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextBytes, _impl_.analystid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::hheproto::Empty, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -148,6 +198,14 @@ const uint32_t TableStruct_hhe_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.gk_),
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.csp_rk_),
   PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.csp_gk_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::PublicKeySetMsg, _impl_.analystuuid_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextResult, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextResult, _impl_.result_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::hheproto::CiphertextMsg, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -176,58 +234,80 @@ const uint32_t TableStruct_hhe_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::hheproto::EncSymmetricDataMsg, _impl_.value_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::EncSymmetricDataMsg, _impl_.record_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::EncSymmetricDataMsg, _impl_.patientid_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::hheproto::EncSymmetricDataRecord, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::hheproto::EncSymmetricDataRecord, _impl_.value_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::hheproto::Empty)},
-  { 6, -1, -1, sizeof(::hheproto::PublicKeyMsg)},
-  { 14, -1, -1, sizeof(::hheproto::PublicKeySetMsg)},
-  { 25, -1, -1, sizeof(::hheproto::CiphertextMsg)},
-  { 33, -1, -1, sizeof(::hheproto::MLModelMsg)},
-  { 40, -1, -1, sizeof(::hheproto::EncSymmetricKeysMsg)},
-  { 47, -1, -1, sizeof(::hheproto::EncSymmetricDataMsg)},
+  { 0, -1, -1, sizeof(::hheproto::CiphertextBytes)},
+  { 8, -1, -1, sizeof(::hheproto::Empty)},
+  { 14, -1, -1, sizeof(::hheproto::PublicKeyMsg)},
+  { 22, -1, -1, sizeof(::hheproto::PublicKeySetMsg)},
+  { 34, -1, -1, sizeof(::hheproto::CiphertextResult)},
+  { 41, -1, -1, sizeof(::hheproto::CiphertextMsg)},
+  { 49, -1, -1, sizeof(::hheproto::MLModelMsg)},
+  { 56, -1, -1, sizeof(::hheproto::EncSymmetricKeysMsg)},
+  { 63, -1, -1, sizeof(::hheproto::EncSymmetricDataMsg)},
+  { 71, -1, -1, sizeof(::hheproto::EncSymmetricDataRecord)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
+  &::hheproto::_CiphertextBytes_default_instance_._instance,
   &::hheproto::_Empty_default_instance_._instance,
   &::hheproto::_PublicKeyMsg_default_instance_._instance,
   &::hheproto::_PublicKeySetMsg_default_instance_._instance,
+  &::hheproto::_CiphertextResult_default_instance_._instance,
   &::hheproto::_CiphertextMsg_default_instance_._instance,
   &::hheproto::_MLModelMsg_default_instance_._instance,
   &::hheproto::_EncSymmetricKeysMsg_default_instance_._instance,
   &::hheproto::_EncSymmetricDataMsg_default_instance_._instance,
+  &::hheproto::_EncSymmetricDataRecord_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_hhe_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\thhe.proto\022\010hheproto\"\007\n\005Empty\",\n\014Public"
-  "KeyMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006length\030\002 \001(\005\"\315\001\n"
-  "\017PublicKeySetMsg\022\"\n\002pk\030\001 \001(\0132\026.hheproto."
-  "PublicKeyMsg\022\"\n\002rk\030\002 \001(\0132\026.hheproto.Publ"
-  "icKeyMsg\022\"\n\002gk\030\003 \001(\0132\026.hheproto.PublicKe"
-  "yMsg\022&\n\006csp_rk\030\004 \001(\0132\026.hheproto.PublicKe"
-  "yMsg\022&\n\006csp_gk\030\005 \001(\0132\026.hheproto.PublicKe"
-  "yMsg\"-\n\rCiphertextMsg\022\014\n\004data\030\001 \001(\014\022\016\n\006l"
-  "ength\030\002 \001(\005\"6\n\nMLModelMsg\022(\n\007weights\030\001 \003"
-  "(\0132\027.hheproto.CiphertextMsg\";\n\023EncSymmet"
-  "ricKeysMsg\022$\n\003key\030\001 \003(\0132\027.hheproto.Ciphe"
-  "rtextMsg\"$\n\023EncSymmetricDataMsg\022\r\n\005value"
-  "\030\001 \003(\0042\215\001\n\016AnalystService\0229\n\014getPublicKe"
-  "y\022\017.hheproto.Empty\032\026.hheproto.PublicKeyM"
-  "sg\"\000\022@\n\022addEncryptedResult\022\027.hheproto.Ci"
-  "phertextMsg\032\017.hheproto.Empty\"\0002\216\002\n\nCSPSe"
-  "rvice\022=\n\raddPublicKeys\022\031.hheproto.Public"
-  "KeySetMsg\032\017.hheproto.Empty\"\000\022D\n\020addEncry"
-  "ptedKeys\022\035.hheproto.EncSymmetricKeysMsg\032"
-  "\017.hheproto.Empty\"\000\022D\n\020addEncryptedData\022\035"
-  ".hheproto.EncSymmetricDataMsg\032\017.hheproto"
-  ".Empty\"\000\0225\n\naddMLModel\022\024.hheproto.MLMode"
-  "lMsg\032\017.hheproto.Empty\"\000B\006\242\002\003HHEb\006proto3"
+  "\n\thhe.proto\022\010hheproto\"7\n\017CiphertextBytes"
+  "\022\021\n\tHHEDecomp\030\001 \003(\014\022\021\n\tanalystID\030\002 \001(\t\"\007"
+  "\n\005Empty\",\n\014PublicKeyMsg\022\014\n\004data\030\001 \001(\014\022\016\n"
+  "\006length\030\002 \001(\005\"\342\001\n\017PublicKeySetMsg\022\"\n\002pk\030"
+  "\001 \001(\0132\026.hheproto.PublicKeyMsg\022\"\n\002rk\030\002 \001("
+  "\0132\026.hheproto.PublicKeyMsg\022\"\n\002gk\030\003 \001(\0132\026."
+  "hheproto.PublicKeyMsg\022&\n\006csp_rk\030\004 \001(\0132\026."
+  "hheproto.PublicKeyMsg\022&\n\006csp_gk\030\005 \001(\0132\026."
+  "hheproto.PublicKeyMsg\022\023\n\013analystUUID\030\006 \001"
+  "(\t\";\n\020CiphertextResult\022\'\n\006result\030\001 \003(\0132\027"
+  ".hheproto.CiphertextMsg\"-\n\rCiphertextMsg"
+  "\022\014\n\004data\030\001 \001(\014\022\016\n\006length\030\002 \001(\005\"6\n\nMLMode"
+  "lMsg\022(\n\007weights\030\001 \003(\0132\027.hheproto.Ciphert"
+  "extMsg\";\n\023EncSymmetricKeysMsg\022$\n\003key\030\001 \003"
+  "(\0132\027.hheproto.CiphertextMsg\"Z\n\023EncSymmet"
+  "ricDataMsg\0220\n\006record\030\001 \003(\0132 .hheproto.En"
+  "cSymmetricDataRecord\022\021\n\tpatientID\030\002 \001(\t\""
+  "\'\n\026EncSymmetricDataRecord\022\r\n\005value\030\001 \003(\004"
+  "2\220\001\n\016AnalystService\0229\n\014getPublicKey\022\017.hh"
+  "eproto.Empty\032\026.hheproto.PublicKeyMsg\"\000\022C"
+  "\n\022addEncryptedResult\022\032.hheproto.Cipherte"
+  "xtResult\032\017.hheproto.Empty\"\0002\315\002\n\nCSPServi"
+  "ce\022=\n\raddPublicKeys\022\031.hheproto.PublicKey"
+  "SetMsg\032\017.hheproto.Empty\"\000\022D\n\020addEncrypte"
+  "dKeys\022\035.hheproto.EncSymmetricKeysMsg\032\017.h"
+  "heproto.Empty\"\000\022D\n\020addEncryptedData\022\035.hh"
+  "eproto.EncSymmetricDataMsg\032\017.hheproto.Em"
+  "pty\"\000\0225\n\naddMLModel\022\024.hheproto.MLModelMs"
+  "g\032\017.hheproto.Empty\"\000\022=\n\revaluateModel\022\031."
+  "hheproto.CiphertextBytes\032\017.hheproto.Empt"
+  "y\"\000B\006\242\002\003HHEb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_hhe_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_hhe_2eproto = {
-    false, false, 919, descriptor_table_protodef_hhe_2eproto,
+    false, false, 1219, descriptor_table_protodef_hhe_2eproto,
     "hhe.proto",
-    &descriptor_table_hhe_2eproto_once, nullptr, 0, 7,
+    &descriptor_table_hhe_2eproto_once, nullptr, 0, 10,
     schemas, file_default_instances, TableStruct_hhe_2eproto::offsets,
     file_level_metadata_hhe_2eproto, file_level_enum_descriptors_hhe_2eproto,
     file_level_service_descriptors_hhe_2eproto,
@@ -239,6 +319,243 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_hhe_2epr
 // Force running AddDescriptors() at dynamic initialization time.
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_hhe_2eproto(&descriptor_table_hhe_2eproto);
 namespace hheproto {
+
+// ===================================================================
+
+class CiphertextBytes::_Internal {
+ public:
+};
+
+CiphertextBytes::CiphertextBytes(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:hheproto.CiphertextBytes)
+}
+CiphertextBytes::CiphertextBytes(const CiphertextBytes& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CiphertextBytes* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.hhedecomp_){from._impl_.hhedecomp_}
+    , decltype(_impl_.analystid_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.analystid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.analystid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_analystid().empty()) {
+    _this->_impl_.analystid_.Set(from._internal_analystid(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:hheproto.CiphertextBytes)
+}
+
+inline void CiphertextBytes::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.hhedecomp_){arena}
+    , decltype(_impl_.analystid_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.analystid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.analystid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+CiphertextBytes::~CiphertextBytes() {
+  // @@protoc_insertion_point(destructor:hheproto.CiphertextBytes)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CiphertextBytes::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.hhedecomp_.~RepeatedPtrField();
+  _impl_.analystid_.Destroy();
+}
+
+void CiphertextBytes::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CiphertextBytes::Clear() {
+// @@protoc_insertion_point(message_clear_start:hheproto.CiphertextBytes)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.hhedecomp_.Clear();
+  _impl_.analystid_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CiphertextBytes::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated bytes HHEDecomp = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_hhedecomp();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // string analystID = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_analystid();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "hheproto.CiphertextBytes.analystID"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CiphertextBytes::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.CiphertextBytes)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated bytes HHEDecomp = 1;
+  for (int i = 0, n = this->_internal_hhedecomp_size(); i < n; i++) {
+    const auto& s = this->_internal_hhedecomp(i);
+    target = stream->WriteBytes(1, s, target);
+  }
+
+  // string analystID = 2;
+  if (!this->_internal_analystid().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_analystid().data(), static_cast<int>(this->_internal_analystid().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "hheproto.CiphertextBytes.analystID");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_analystid(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.CiphertextBytes)
+  return target;
+}
+
+size_t CiphertextBytes::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.CiphertextBytes)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated bytes HHEDecomp = 1;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.hhedecomp_.size());
+  for (int i = 0, n = _impl_.hhedecomp_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+      _impl_.hhedecomp_.Get(i));
+  }
+
+  // string analystID = 2;
+  if (!this->_internal_analystid().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_analystid());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CiphertextBytes::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CiphertextBytes::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CiphertextBytes::GetClassData() const { return &_class_data_; }
+
+
+void CiphertextBytes::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CiphertextBytes*>(&to_msg);
+  auto& from = static_cast<const CiphertextBytes&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.CiphertextBytes)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.hhedecomp_.MergeFrom(from._impl_.hhedecomp_);
+  if (!from._internal_analystid().empty()) {
+    _this->_internal_set_analystid(from._internal_analystid());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CiphertextBytes::CopyFrom(const CiphertextBytes& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.CiphertextBytes)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CiphertextBytes::IsInitialized() const {
+  return true;
+}
+
+void CiphertextBytes::InternalSwap(CiphertextBytes* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.hhedecomp_.InternalSwap(&other->_impl_.hhedecomp_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.analystid_, lhs_arena,
+      &other->_impl_.analystid_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CiphertextBytes::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
+      file_level_metadata_hhe_2eproto[0]);
+}
 
 // ===================================================================
 
@@ -277,7 +594,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Empty::GetClassData() const { 
 ::PROTOBUF_NAMESPACE_ID::Metadata Empty::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[0]);
+      file_level_metadata_hhe_2eproto[1]);
 }
 
 // ===================================================================
@@ -502,7 +819,7 @@ void PublicKeyMsg::InternalSwap(PublicKeyMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PublicKeyMsg::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[1]);
+      file_level_metadata_hhe_2eproto[2]);
 }
 
 // ===================================================================
@@ -546,7 +863,8 @@ PublicKeySetMsg::PublicKeySetMsg(const PublicKeySetMsg& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   PublicKeySetMsg* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.pk_){nullptr}
+      decltype(_impl_.analystuuid_){}
+    , decltype(_impl_.pk_){nullptr}
     , decltype(_impl_.rk_){nullptr}
     , decltype(_impl_.gk_){nullptr}
     , decltype(_impl_.csp_rk_){nullptr}
@@ -554,6 +872,14 @@ PublicKeySetMsg::PublicKeySetMsg(const PublicKeySetMsg& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.analystuuid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.analystuuid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_analystuuid().empty()) {
+    _this->_impl_.analystuuid_.Set(from._internal_analystuuid(), 
+      _this->GetArenaForAllocation());
+  }
   if (from._internal_has_pk()) {
     _this->_impl_.pk_ = new ::hheproto::PublicKeyMsg(*from._impl_.pk_);
   }
@@ -577,13 +903,18 @@ inline void PublicKeySetMsg::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.pk_){nullptr}
+      decltype(_impl_.analystuuid_){}
+    , decltype(_impl_.pk_){nullptr}
     , decltype(_impl_.rk_){nullptr}
     , decltype(_impl_.gk_){nullptr}
     , decltype(_impl_.csp_rk_){nullptr}
     , decltype(_impl_.csp_gk_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.analystuuid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.analystuuid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 PublicKeySetMsg::~PublicKeySetMsg() {
@@ -597,6 +928,7 @@ PublicKeySetMsg::~PublicKeySetMsg() {
 
 inline void PublicKeySetMsg::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.analystuuid_.Destroy();
   if (this != internal_default_instance()) delete _impl_.pk_;
   if (this != internal_default_instance()) delete _impl_.rk_;
   if (this != internal_default_instance()) delete _impl_.gk_;
@@ -614,6 +946,7 @@ void PublicKeySetMsg::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.analystuuid_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.pk_ != nullptr) {
     delete _impl_.pk_;
   }
@@ -683,6 +1016,16 @@ const char* PublicKeySetMsg::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
+      // string analystUUID = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_analystuuid();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "hheproto.PublicKeySetMsg.analystUUID"));
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -747,6 +1090,16 @@ uint8_t* PublicKeySetMsg::_InternalSerialize(
         _Internal::csp_gk(this).GetCachedSize(), target, stream);
   }
 
+  // string analystUUID = 6;
+  if (!this->_internal_analystuuid().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_analystuuid().data(), static_cast<int>(this->_internal_analystuuid().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "hheproto.PublicKeySetMsg.analystUUID");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_analystuuid(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -762,6 +1115,13 @@ size_t PublicKeySetMsg::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // string analystUUID = 6;
+  if (!this->_internal_analystuuid().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_analystuuid());
+  }
 
   // .hheproto.PublicKeyMsg pk = 1;
   if (this->_internal_has_pk()) {
@@ -816,6 +1176,9 @@ void PublicKeySetMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_analystuuid().empty()) {
+    _this->_internal_set_analystuuid(from._internal_analystuuid());
+  }
   if (from._internal_has_pk()) {
     _this->_internal_mutable_pk()->::hheproto::PublicKeyMsg::MergeFrom(
         from._internal_pk());
@@ -852,7 +1215,13 @@ bool PublicKeySetMsg::IsInitialized() const {
 
 void PublicKeySetMsg::InternalSwap(PublicKeySetMsg* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.analystuuid_, lhs_arena,
+      &other->_impl_.analystuuid_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(PublicKeySetMsg, _impl_.csp_gk_)
       + sizeof(PublicKeySetMsg::_impl_.csp_gk_)
@@ -864,7 +1233,192 @@ void PublicKeySetMsg::InternalSwap(PublicKeySetMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PublicKeySetMsg::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[2]);
+      file_level_metadata_hhe_2eproto[3]);
+}
+
+// ===================================================================
+
+class CiphertextResult::_Internal {
+ public:
+};
+
+CiphertextResult::CiphertextResult(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:hheproto.CiphertextResult)
+}
+CiphertextResult::CiphertextResult(const CiphertextResult& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CiphertextResult* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){from._impl_.result_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:hheproto.CiphertextResult)
+}
+
+inline void CiphertextResult::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+CiphertextResult::~CiphertextResult() {
+  // @@protoc_insertion_point(destructor:hheproto.CiphertextResult)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CiphertextResult::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.result_.~RepeatedPtrField();
+}
+
+void CiphertextResult::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CiphertextResult::Clear() {
+// @@protoc_insertion_point(message_clear_start:hheproto.CiphertextResult)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.result_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CiphertextResult::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .hheproto.CiphertextMsg result = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_result(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CiphertextResult::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.CiphertextResult)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .hheproto.CiphertextMsg result = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_result_size()); i < n; i++) {
+    const auto& repfield = this->_internal_result(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.CiphertextResult)
+  return target;
+}
+
+size_t CiphertextResult::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.CiphertextResult)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .hheproto.CiphertextMsg result = 1;
+  total_size += 1UL * this->_internal_result_size();
+  for (const auto& msg : this->_impl_.result_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CiphertextResult::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CiphertextResult::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CiphertextResult::GetClassData() const { return &_class_data_; }
+
+
+void CiphertextResult::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CiphertextResult*>(&to_msg);
+  auto& from = static_cast<const CiphertextResult&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.CiphertextResult)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.result_.MergeFrom(from._impl_.result_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CiphertextResult::CopyFrom(const CiphertextResult& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.CiphertextResult)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CiphertextResult::IsInitialized() const {
+  return true;
+}
+
+void CiphertextResult::InternalSwap(CiphertextResult* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.result_.InternalSwap(&other->_impl_.result_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CiphertextResult::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
+      file_level_metadata_hhe_2eproto[4]);
 }
 
 // ===================================================================
@@ -1089,7 +1643,7 @@ void CiphertextMsg::InternalSwap(CiphertextMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CiphertextMsg::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[3]);
+      file_level_metadata_hhe_2eproto[5]);
 }
 
 // ===================================================================
@@ -1274,7 +1828,7 @@ void MLModelMsg::InternalSwap(MLModelMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MLModelMsg::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[4]);
+      file_level_metadata_hhe_2eproto[6]);
 }
 
 // ===================================================================
@@ -1459,7 +2013,7 @@ void EncSymmetricKeysMsg::InternalSwap(EncSymmetricKeysMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EncSymmetricKeysMsg::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[5]);
+      file_level_metadata_hhe_2eproto[7]);
 }
 
 // ===================================================================
@@ -1478,11 +2032,19 @@ EncSymmetricDataMsg::EncSymmetricDataMsg(const EncSymmetricDataMsg& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   EncSymmetricDataMsg* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.value_){from._impl_.value_}
-    , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+      decltype(_impl_.record_){from._impl_.record_}
+    , decltype(_impl_.patientid_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.patientid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.patientid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_patientid().empty()) {
+    _this->_impl_.patientid_.Set(from._internal_patientid(), 
+      _this->GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:hheproto.EncSymmetricDataMsg)
 }
 
@@ -1491,10 +2053,14 @@ inline void EncSymmetricDataMsg::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.value_){arena}
-    , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+      decltype(_impl_.record_){arena}
+    , decltype(_impl_.patientid_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.patientid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.patientid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 EncSymmetricDataMsg::~EncSymmetricDataMsg() {
@@ -1508,7 +2074,8 @@ EncSymmetricDataMsg::~EncSymmetricDataMsg() {
 
 inline void EncSymmetricDataMsg::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.value_.~RepeatedField();
+  _impl_.record_.~RepeatedPtrField();
+  _impl_.patientid_.Destroy();
 }
 
 void EncSymmetricDataMsg::SetCachedSize(int size) const {
@@ -1521,11 +2088,235 @@ void EncSymmetricDataMsg::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.value_.Clear();
+  _impl_.record_.Clear();
+  _impl_.patientid_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* EncSymmetricDataMsg::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .hheproto.EncSymmetricDataRecord record = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_record(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // string patientID = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_patientid();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "hheproto.EncSymmetricDataMsg.patientID"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* EncSymmetricDataMsg::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.EncSymmetricDataMsg)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .hheproto.EncSymmetricDataRecord record = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_record_size()); i < n; i++) {
+    const auto& repfield = this->_internal_record(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // string patientID = 2;
+  if (!this->_internal_patientid().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_patientid().data(), static_cast<int>(this->_internal_patientid().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "hheproto.EncSymmetricDataMsg.patientID");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_patientid(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.EncSymmetricDataMsg)
+  return target;
+}
+
+size_t EncSymmetricDataMsg::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.EncSymmetricDataMsg)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .hheproto.EncSymmetricDataRecord record = 1;
+  total_size += 1UL * this->_internal_record_size();
+  for (const auto& msg : this->_impl_.record_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string patientID = 2;
+  if (!this->_internal_patientid().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_patientid());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EncSymmetricDataMsg::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EncSymmetricDataMsg::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EncSymmetricDataMsg::GetClassData() const { return &_class_data_; }
+
+
+void EncSymmetricDataMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EncSymmetricDataMsg*>(&to_msg);
+  auto& from = static_cast<const EncSymmetricDataMsg&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.EncSymmetricDataMsg)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.record_.MergeFrom(from._impl_.record_);
+  if (!from._internal_patientid().empty()) {
+    _this->_internal_set_patientid(from._internal_patientid());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void EncSymmetricDataMsg::CopyFrom(const EncSymmetricDataMsg& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.EncSymmetricDataMsg)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EncSymmetricDataMsg::IsInitialized() const {
+  return true;
+}
+
+void EncSymmetricDataMsg::InternalSwap(EncSymmetricDataMsg* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.record_.InternalSwap(&other->_impl_.record_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.patientid_, lhs_arena,
+      &other->_impl_.patientid_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EncSymmetricDataMsg::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
+      file_level_metadata_hhe_2eproto[8]);
+}
+
+// ===================================================================
+
+class EncSymmetricDataRecord::_Internal {
+ public:
+};
+
+EncSymmetricDataRecord::EncSymmetricDataRecord(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:hheproto.EncSymmetricDataRecord)
+}
+EncSymmetricDataRecord::EncSymmetricDataRecord(const EncSymmetricDataRecord& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EncSymmetricDataRecord* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.value_){from._impl_.value_}
+    , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:hheproto.EncSymmetricDataRecord)
+}
+
+inline void EncSymmetricDataRecord::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.value_){arena}
+    , /*decltype(_impl_._value_cached_byte_size_)*/{0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+EncSymmetricDataRecord::~EncSymmetricDataRecord() {
+  // @@protoc_insertion_point(destructor:hheproto.EncSymmetricDataRecord)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void EncSymmetricDataRecord::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.value_.~RepeatedField();
+}
+
+void EncSymmetricDataRecord::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void EncSymmetricDataRecord::Clear() {
+// @@protoc_insertion_point(message_clear_start:hheproto.EncSymmetricDataRecord)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.value_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* EncSymmetricDataRecord::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -1565,9 +2356,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* EncSymmetricDataMsg::_InternalSerialize(
+uint8_t* EncSymmetricDataRecord::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hheproto.EncSymmetricDataMsg)
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.EncSymmetricDataRecord)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1584,12 +2375,12 @@ uint8_t* EncSymmetricDataMsg::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hheproto.EncSymmetricDataMsg)
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.EncSymmetricDataRecord)
   return target;
 }
 
-size_t EncSymmetricDataMsg::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hheproto.EncSymmetricDataMsg)
+size_t EncSymmetricDataRecord::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.EncSymmetricDataRecord)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1613,17 +2404,17 @@ size_t EncSymmetricDataMsg::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EncSymmetricDataMsg::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EncSymmetricDataRecord::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    EncSymmetricDataMsg::MergeImpl
+    EncSymmetricDataRecord::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EncSymmetricDataMsg::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EncSymmetricDataRecord::GetClassData() const { return &_class_data_; }
 
 
-void EncSymmetricDataMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<EncSymmetricDataMsg*>(&to_msg);
-  auto& from = static_cast<const EncSymmetricDataMsg&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.EncSymmetricDataMsg)
+void EncSymmetricDataRecord::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EncSymmetricDataRecord*>(&to_msg);
+  auto& from = static_cast<const EncSymmetricDataRecord&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.EncSymmetricDataRecord)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1632,32 +2423,36 @@ void EncSymmetricDataMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void EncSymmetricDataMsg::CopyFrom(const EncSymmetricDataMsg& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.EncSymmetricDataMsg)
+void EncSymmetricDataRecord::CopyFrom(const EncSymmetricDataRecord& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.EncSymmetricDataRecord)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool EncSymmetricDataMsg::IsInitialized() const {
+bool EncSymmetricDataRecord::IsInitialized() const {
   return true;
 }
 
-void EncSymmetricDataMsg::InternalSwap(EncSymmetricDataMsg* other) {
+void EncSymmetricDataRecord::InternalSwap(EncSymmetricDataRecord* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.value_.InternalSwap(&other->_impl_.value_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata EncSymmetricDataMsg::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata EncSymmetricDataRecord::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
-      file_level_metadata_hhe_2eproto[6]);
+      file_level_metadata_hhe_2eproto[9]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace hheproto
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::hheproto::CiphertextBytes*
+Arena::CreateMaybeMessage< ::hheproto::CiphertextBytes >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::hheproto::CiphertextBytes >(arena);
+}
 template<> PROTOBUF_NOINLINE ::hheproto::Empty*
 Arena::CreateMaybeMessage< ::hheproto::Empty >(Arena* arena) {
   return Arena::CreateMessageInternal< ::hheproto::Empty >(arena);
@@ -1669,6 +2464,10 @@ Arena::CreateMaybeMessage< ::hheproto::PublicKeyMsg >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::hheproto::PublicKeySetMsg*
 Arena::CreateMaybeMessage< ::hheproto::PublicKeySetMsg >(Arena* arena) {
   return Arena::CreateMessageInternal< ::hheproto::PublicKeySetMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::hheproto::CiphertextResult*
+Arena::CreateMaybeMessage< ::hheproto::CiphertextResult >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::hheproto::CiphertextResult >(arena);
 }
 template<> PROTOBUF_NOINLINE ::hheproto::CiphertextMsg*
 Arena::CreateMaybeMessage< ::hheproto::CiphertextMsg >(Arena* arena) {
@@ -1685,6 +2484,10 @@ Arena::CreateMaybeMessage< ::hheproto::EncSymmetricKeysMsg >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::hheproto::EncSymmetricDataMsg*
 Arena::CreateMaybeMessage< ::hheproto::EncSymmetricDataMsg >(Arena* arena) {
   return Arena::CreateMessageInternal< ::hheproto::EncSymmetricDataMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::hheproto::EncSymmetricDataRecord*
+Arena::CreateMaybeMessage< ::hheproto::EncSymmetricDataRecord >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::hheproto::EncSymmetricDataRecord >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

@@ -42,11 +42,11 @@ class AnalystService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::PublicKeyMsg>> PrepareAsyncgetPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::PublicKeyMsg>>(PrepareAsyncgetPublicKeyRaw(context, request, cq));
     }
-    virtual ::grpc::Status addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::hheproto::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> AsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::hheproto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> AsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(AsyncaddEncryptedResultRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(PrepareAsyncaddEncryptedResultRaw(context, request, cq));
     }
     class async_interface {
@@ -54,8 +54,8 @@ class AnalystService final {
       virtual ~async_interface() {}
       virtual void getPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty* request, ::hheproto::PublicKeyMsg* response, std::function<void(::grpc::Status)>) = 0;
       virtual void getPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty* request, ::hheproto::PublicKeyMsg* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -63,8 +63,8 @@ class AnalystService final {
    private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::PublicKeyMsg>* AsyncgetPublicKeyRaw(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::PublicKeyMsg>* PrepareAsyncgetPublicKeyRaw(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -76,11 +76,11 @@ class AnalystService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::PublicKeyMsg>> PrepareAsyncgetPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::PublicKeyMsg>>(PrepareAsyncgetPublicKeyRaw(context, request, cq));
     }
-    ::grpc::Status addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::hheproto::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> AsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::hheproto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> AsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(AsyncaddEncryptedResultRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncaddEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(PrepareAsyncaddEncryptedResultRaw(context, request, cq));
     }
     class async final :
@@ -88,8 +88,8 @@ class AnalystService final {
      public:
       void getPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty* request, ::hheproto::PublicKeyMsg* response, std::function<void(::grpc::Status)>) override;
       void getPublicKey(::grpc::ClientContext* context, const ::hheproto::Empty* request, ::hheproto::PublicKeyMsg* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
-      void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -103,8 +103,8 @@ class AnalystService final {
     class async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::hheproto::PublicKeyMsg>* AsyncgetPublicKeyRaw(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::hheproto::PublicKeyMsg>* PrepareAsyncgetPublicKeyRaw(::grpc::ClientContext* context, const ::hheproto::Empty& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_getPublicKey_;
     const ::grpc::internal::RpcMethod rpcmethod_addEncryptedResult_;
   };
@@ -115,7 +115,7 @@ class AnalystService final {
     Service();
     virtual ~Service();
     virtual ::grpc::Status getPublicKey(::grpc::ServerContext* context, const ::hheproto::Empty* request, ::hheproto::PublicKeyMsg* response);
-    virtual ::grpc::Status addEncryptedResult(::grpc::ServerContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response);
+    virtual ::grpc::Status addEncryptedResult(::grpc::ServerContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_getPublicKey : public BaseClass {
@@ -149,11 +149,11 @@ class AnalystService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestaddEncryptedResult(::grpc::ServerContext* context, ::hheproto::CiphertextMsg* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestaddEncryptedResult(::grpc::ServerContext* context, ::hheproto::CiphertextResult* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -192,25 +192,25 @@ class AnalystService final {
    public:
     WithCallbackMethod_addEncryptedResult() {
       ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextMsg, ::hheproto::Empty>(
+          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextResult, ::hheproto::Empty>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response) { return this->addEncryptedResult(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response) { return this->addEncryptedResult(context, request, response); }));}
     void SetMessageAllocatorFor_addEncryptedResult(
-        ::grpc::MessageAllocator< ::hheproto::CiphertextMsg, ::hheproto::Empty>* allocator) {
+        ::grpc::MessageAllocator< ::hheproto::CiphertextResult, ::hheproto::Empty>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextMsg, ::hheproto::Empty>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextResult, ::hheproto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_addEncryptedResult() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* addEncryptedResult(
-      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
   };
   typedef WithCallbackMethod_getPublicKey<WithCallbackMethod_addEncryptedResult<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
@@ -243,7 +243,7 @@ class AnalystService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -280,7 +280,7 @@ class AnalystService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -325,7 +325,7 @@ class AnalystService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -367,10 +367,10 @@ class AnalystService final {
     WithStreamedUnaryMethod_addEncryptedResult() {
       ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::hheproto::CiphertextMsg, ::hheproto::Empty>(
+          ::hheproto::CiphertextResult, ::hheproto::Empty>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::hheproto::CiphertextMsg, ::hheproto::Empty>* streamer) {
+                     ::hheproto::CiphertextResult, ::hheproto::Empty>* streamer) {
                        return this->StreamedaddEncryptedResult(context,
                          streamer);
                   }));
@@ -379,12 +379,12 @@ class AnalystService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+    ::grpc::Status addEncryptedResult(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextResult* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedaddEncryptedResult(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::CiphertextMsg,::hheproto::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedaddEncryptedResult(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::CiphertextResult,::hheproto::Empty>* server_unary_streamer) = 0;
   };
   typedef WithStreamedUnaryMethod_getPublicKey<WithStreamedUnaryMethod_addEncryptedResult<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
@@ -427,6 +427,13 @@ class CSPService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncaddMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(PrepareAsyncaddMLModelRaw(context, request, cq));
     }
+    virtual ::grpc::Status evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::hheproto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> AsyncevaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(AsyncevaluateModelRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>> PrepareAsyncevaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>>(PrepareAsyncevaluateModelRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -438,6 +445,8 @@ class CSPService final {
       virtual void addEncryptedData(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
       virtual void addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -451,6 +460,8 @@ class CSPService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddEncryptedDataRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* AsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::Empty>* PrepareAsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -483,6 +494,13 @@ class CSPService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncaddMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(PrepareAsyncaddMLModelRaw(context, request, cq));
     }
+    ::grpc::Status evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::hheproto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> AsyncevaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(AsyncevaluateModelRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>> PrepareAsyncevaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>>(PrepareAsyncevaluateModelRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -494,6 +512,8 @@ class CSPService final {
       void addEncryptedData(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
       void addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
       void addMLModel(::grpc::ClientContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -513,10 +533,13 @@ class CSPService final {
     ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddEncryptedDataRaw(::grpc::ClientContext* context, const ::hheproto::EncSymmetricDataMsg& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncaddMLModelRaw(::grpc::ClientContext* context, const ::hheproto::MLModelMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* PrepareAsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_addPublicKeys_;
     const ::grpc::internal::RpcMethod rpcmethod_addEncryptedKeys_;
     const ::grpc::internal::RpcMethod rpcmethod_addEncryptedData_;
     const ::grpc::internal::RpcMethod rpcmethod_addMLModel_;
+    const ::grpc::internal::RpcMethod rpcmethod_evaluateModel_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -528,6 +551,7 @@ class CSPService final {
     virtual ::grpc::Status addEncryptedKeys(::grpc::ServerContext* context, const ::hheproto::EncSymmetricKeysMsg* request, ::hheproto::Empty* response);
     virtual ::grpc::Status addEncryptedData(::grpc::ServerContext* context, const ::hheproto::EncSymmetricDataMsg* request, ::hheproto::Empty* response);
     virtual ::grpc::Status addMLModel(::grpc::ServerContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response);
+    virtual ::grpc::Status evaluateModel(::grpc::ServerContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_addPublicKeys : public BaseClass {
@@ -609,7 +633,27 @@ class CSPService final {
       ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_addPublicKeys<WithAsyncMethod_addEncryptedKeys<WithAsyncMethod_addEncryptedData<WithAsyncMethod_addMLModel<Service > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestevaluateModel(::grpc::ServerContext* context, ::hheproto::CiphertextBytes* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_addPublicKeys<WithAsyncMethod_addEncryptedKeys<WithAsyncMethod_addEncryptedData<WithAsyncMethod_addMLModel<WithAsyncMethod_evaluateModel<Service > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_addPublicKeys : public BaseClass {
    private:
@@ -718,7 +762,34 @@ class CSPService final {
     virtual ::grpc::ServerUnaryReactor* addMLModel(
       ::grpc::CallbackServerContext* /*context*/, const ::hheproto::MLModelMsg* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_addPublicKeys<WithCallbackMethod_addEncryptedKeys<WithCallbackMethod_addEncryptedData<WithCallbackMethod_addMLModel<Service > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextBytes, ::hheproto::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response) { return this->evaluateModel(context, request, response); }));}
+    void SetMessageAllocatorFor_evaluateModel(
+        ::grpc::MessageAllocator< ::hheproto::CiphertextBytes, ::hheproto::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::CiphertextBytes, ::hheproto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* evaluateModel(
+      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_addPublicKeys<WithCallbackMethod_addEncryptedKeys<WithCallbackMethod_addEncryptedData<WithCallbackMethod_addMLModel<WithCallbackMethod_evaluateModel<Service > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_addPublicKeys : public BaseClass {
@@ -784,6 +855,23 @@ class CSPService final {
     }
     // disable synchronous version of this method
     ::grpc::Status addMLModel(::grpc::ServerContext* /*context*/, const ::hheproto::MLModelMsg* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -866,6 +954,26 @@ class CSPService final {
     }
     void RequestaddMLModel(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestevaluateModel(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -954,6 +1062,28 @@ class CSPService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* addMLModel(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodRawCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->evaluateModel(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* evaluateModel(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -1064,9 +1194,36 @@ class CSPService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedaddMLModel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::MLModelMsg,::hheproto::Empty>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<WithStreamedUnaryMethod_addEncryptedData<WithStreamedUnaryMethod_addMLModel<Service > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_evaluateModel : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_evaluateModel() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::hheproto::CiphertextBytes, ::hheproto::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::hheproto::CiphertextBytes, ::hheproto::Empty>* streamer) {
+                       return this->StreamedevaluateModel(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_evaluateModel() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status evaluateModel(::grpc::ServerContext* /*context*/, const ::hheproto::CiphertextBytes* /*request*/, ::hheproto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedevaluateModel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::CiphertextBytes,::hheproto::Empty>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<WithStreamedUnaryMethod_addEncryptedData<WithStreamedUnaryMethod_addMLModel<WithStreamedUnaryMethod_evaluateModel<Service > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<WithStreamedUnaryMethod_addEncryptedData<WithStreamedUnaryMethod_addMLModel<Service > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<WithStreamedUnaryMethod_addEncryptedData<WithStreamedUnaryMethod_addMLModel<WithStreamedUnaryMethod_evaluateModel<Service > > > > > StreamedService;
 };
 
 }  // namespace hheproto

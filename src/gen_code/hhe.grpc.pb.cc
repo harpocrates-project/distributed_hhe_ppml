@@ -60,23 +60,23 @@ void AnalystService::Stub::async::getPublicKey(::grpc::ClientContext* context, c
   return result;
 }
 
-::grpc::Status AnalystService::Stub::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::hheproto::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::hheproto::CiphertextMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addEncryptedResult_, context, request, response);
+::grpc::Status AnalystService::Stub::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::CiphertextResult, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_addEncryptedResult_, context, request, response);
 }
 
-void AnalystService::Stub::async::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::hheproto::CiphertextMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedResult_, context, request, response, std::move(f));
+void AnalystService::Stub::async::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::CiphertextResult, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedResult_, context, request, response, std::move(f));
 }
 
-void AnalystService::Stub::async::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void AnalystService::Stub::async::addEncryptedResult(::grpc::ClientContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_addEncryptedResult_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AnalystService::Stub::PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::CiphertextMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addEncryptedResult_, context, request);
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AnalystService::Stub::PrepareAsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::CiphertextResult, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_addEncryptedResult_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AnalystService::Stub::AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextMsg& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* AnalystService::Stub::AsyncaddEncryptedResultRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextResult& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncaddEncryptedResultRaw(context, request, cq);
   result->StartCall();
@@ -97,10 +97,10 @@ AnalystService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AnalystService_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< AnalystService::Service, ::hheproto::CiphertextMsg, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< AnalystService::Service, ::hheproto::CiphertextResult, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AnalystService::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::hheproto::CiphertextMsg* req,
+             const ::hheproto::CiphertextResult* req,
              ::hheproto::Empty* resp) {
                return service->addEncryptedResult(ctx, req, resp);
              }, this)));
@@ -116,7 +116,7 @@ AnalystService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status AnalystService::Service::addEncryptedResult(::grpc::ServerContext* context, const ::hheproto::CiphertextMsg* request, ::hheproto::Empty* response) {
+::grpc::Status AnalystService::Service::addEncryptedResult(::grpc::ServerContext* context, const ::hheproto::CiphertextResult* request, ::hheproto::Empty* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -129,6 +129,7 @@ static const char* CSPService_method_names[] = {
   "/hheproto.CSPService/addEncryptedKeys",
   "/hheproto.CSPService/addEncryptedData",
   "/hheproto.CSPService/addMLModel",
+  "/hheproto.CSPService/evaluateModel",
 };
 
 std::unique_ptr< CSPService::Stub> CSPService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -142,6 +143,7 @@ CSPService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel
   , rpcmethod_addEncryptedKeys_(CSPService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_addEncryptedData_(CSPService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_addMLModel_(CSPService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_evaluateModel_(CSPService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CSPService::Stub::addPublicKeys(::grpc::ClientContext* context, const ::hheproto::PublicKeySetMsg& request, ::hheproto::Empty* response) {
@@ -236,6 +238,29 @@ void CSPService::Stub::async::addMLModel(::grpc::ClientContext* context, const :
   return result;
 }
 
+::grpc::Status CSPService::Stub::evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::hheproto::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::hheproto::CiphertextBytes, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_evaluateModel_, context, request, response);
+}
+
+void CSPService::Stub::async::evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::hheproto::CiphertextBytes, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_evaluateModel_, context, request, response, std::move(f));
+}
+
+void CSPService::Stub::async::evaluateModel(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_evaluateModel_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::PrepareAsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::hheproto::Empty, ::hheproto::CiphertextBytes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_evaluateModel_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::hheproto::Empty>* CSPService::Stub::AsyncevaluateModelRaw(::grpc::ClientContext* context, const ::hheproto::CiphertextBytes& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncevaluateModelRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 CSPService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CSPService_method_names[0],
@@ -277,6 +302,16 @@ CSPService::Service::Service() {
              ::hheproto::Empty* resp) {
                return service->addMLModel(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CSPService_method_names[4],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CSPService::Service, ::hheproto::CiphertextBytes, ::hheproto::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CSPService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::hheproto::CiphertextBytes* req,
+             ::hheproto::Empty* resp) {
+               return service->evaluateModel(ctx, req, resp);
+             }, this)));
 }
 
 CSPService::Service::~Service() {
@@ -304,6 +339,13 @@ CSPService::Service::~Service() {
 }
 
 ::grpc::Status CSPService::Service::addMLModel(::grpc::ServerContext* context, const ::hheproto::MLModelMsg* request, ::hheproto::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CSPService::Service::evaluateModel(::grpc::ServerContext* context, const ::hheproto::CiphertextBytes* request, ::hheproto::Empty* response) {
   (void) context;
   (void) request;
   (void) response;
