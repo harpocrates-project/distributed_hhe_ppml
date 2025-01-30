@@ -15,12 +15,12 @@ int main(int argc,char** argv)
         cspUrl = argv[2];
         dataSet = argv[3];
     } 
-    else if (argc != 1) 
+    else if (argc == 3) 
     {
-        cout << "[UserRPC] Wrong number of arguments provided – using default values" << endl;
-        analystUrl = "localhost:50051";
-        cspUrl = "localhost:50052";
+        analystUrl = argv[1];
+        cspUrl = argv[2];
         dataSet = "data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt";
+        cout << "Using Default Dataset" << endl;
         //dataSet = "data/arc/SpO2/SpO2_input_cleaned4%.csv";
     } 
     else 
@@ -32,6 +32,10 @@ int main(int argc,char** argv)
         //dataSet = "data/arc/SpO2/SpO2_input_cleaned4%.csv";
     }
     
+    cout << "Analyst: " << analystUrl << endl;
+    cout << "CSP URL: " << cspUrl << endl;
+    cout << "Data set: " << dataSet << endl;
+
     User* user = new User();
 
     // Create a gRPC channel for our stub
