@@ -27,6 +27,7 @@ using hheproto::EncSymmetricDataMsg;
 using hheproto::EncSymmetricDataRecord;
 using hheproto::MLModelMsg;
 using hheproto::CiphertextBytes;
+using hheproto::DataFile;
 
 
 class CSPServiceImpl final:public CSPService::Service
@@ -59,9 +60,15 @@ class CSPServiceImpl final:public CSPService::Service
         Status addMLModel(ServerContext* context, const MLModelMsg* request, Empty* reply) override;
 
         /**
-        rpc service - Receive data and evaluate date under NN model
+        rpc service - Receive data and evaluate Cyphertext bytes passed in the request using the NN model 
         */
         Status evaluateModel(ServerContext* context, const CiphertextBytes* request, Empty* reply) override;
+
+        /**
+        rpc service -  Evaluate Cyphertext data in an existing file using the NN model 
+        */
+        Status evaluateModelFromFile(ServerContext* context, const DataFile* request, Empty* reply) override;
+
         
         void runServer();
 

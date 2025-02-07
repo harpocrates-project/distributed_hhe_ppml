@@ -138,6 +138,8 @@ class BaseCSP
         */
         string getAnalystUUID(string analystId); 
 
+        string getAnalystIdfromUUID(string analystId);
+
         // functions
         /**
         Set up HE parameters
@@ -189,6 +191,9 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         */
         bool addAnalystUUID(string analystId, string analystUUID);
+
+        
+        bool addAnalystUUIDtoIDMap(string analystUUID, string analystId);
 
         /**
         Add User encrypted symmetric key on CSP
@@ -254,7 +259,7 @@ class BaseCSP
         Read HHE Decomposition data from a file
         @param[in] fileName  The file name for HHE Decomposition data
         */
-        bool readHHEDecompositionDataFromFile(string fileName);
+        bool readHHEDecompositionDataFromFile(string fileName, vector<Ciphertext>& output);
 
         /** 
         Convert HHEDecomp data from bytes to Ciphertext
@@ -279,7 +284,9 @@ class BaseCSP
         unordered_map<string, GaloisKeys*> analyst_he_gk_map;
         unordered_map<string, RelinKeys*> csp_he_rk_map;
         unordered_map<string, GaloisKeys*> csp_he_gk_map;
+
         unordered_map<string, string> analyst_uuid_map;
+        unordered_map<string, string> analyst_uuid_id_map;
 
         unordered_map<string, vector<Ciphertext>> enc_weights_map;  // Analyst's encrypted weights
         unordered_map<string, vector<Ciphertext>> enc_sym_key_map; // User's encrypted symmetric keys

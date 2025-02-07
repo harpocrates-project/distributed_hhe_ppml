@@ -446,12 +446,26 @@ bool BaseCSP::addAnalystUUID(string analystId, string analystUUID)
     return true;
 }
 
+bool BaseCSP::addAnalystUUIDtoIDMap(string analystUUID, string analystId)
+{
+    cout << "[CSP] Adding Analyst's UUID to ID map (AnalystId: " << analystId << ")" << endl;
+
+    analyst_uuid_id_map[analystUUID] = analystId;
+
+    return true;
+}
+
 /**
 Return the Analyst's UUID
 */
 string BaseCSP::getAnalystUUID(string analystId)
 {
     return analyst_uuid_map[analystId];
+}
+
+string BaseCSP::getAnalystIdfromUUID(string analystId)
+{
+    return analyst_uuid_id_map[analystId];
 }
 
 /**
@@ -505,7 +519,7 @@ bool BaseCSP::writeHHEDecompositionDataToFile(string fileName, vector<Ciphertext
 /** 
 Read HHE Decomposition data from a file
 */
-bool BaseCSP::readHHEDecompositionDataFromFile(string fileName)
+bool BaseCSP::readHHEDecompositionDataFromFile(string fileName, vector<Ciphertext>& output)
 {
     ifstream in(fileName, ios::binary);
     if (!in.is_open()) {
@@ -517,16 +531,16 @@ bool BaseCSP::readHHEDecompositionDataFromFile(string fileName)
     in.read(reinterpret_cast<char*>(&size), sizeof(size));
 
     // Resize the vector and load each ciphertext
-    vector<Ciphertext> ciphertexts;
-    ciphertexts.resize(size);
+    
+    output.resize(size);
     for (size_t i = 0; i < size; ++i) {
-        ciphertexts[i].load(*context, in);
+        output[i].load(*context, in);
     }
 
     in.close();
 
     cout << "Read HHE decomposition data from a file" << endl; 
-    for (Ciphertext t : ciphertexts)
+    for (Ciphertext t : output)
         print_Ciphertext(t);
 
     return true;

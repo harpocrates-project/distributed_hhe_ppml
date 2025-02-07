@@ -65,6 +65,7 @@ Status CSPServiceImpl::addPublicKeys(ServerContext* context, const PublicKeySetM
     string analystUUID = request->analystuuid();
     cout << "analyst's UUID: " << analystUUID << endl;
     csp->addAnalystUUID(analystId, analystUUID);
+    csp->addAnalystUUIDtoIDMap(analystUUID, analystId);
 
     return Status::OK;
 }
@@ -225,8 +226,11 @@ rpc service - Receive data and evaluate date under NN model
 */
 Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextBytes* request, Empty* reply)
 {
-    // Analyst's ID
-    string analystId = request->analystid();
+    // Analyst's Id from UUID 
+    string analystUUID = request->analystid();
+    cout << "analyst's UUID: " << analystUUID << endl;
+
+    string analystId = csp->getAnalystIdfromUUID(analystUUID);
     cout << "analyst's ID: " << analystId << endl;
 
     reply = new Empty();
@@ -269,6 +273,42 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
 
     return Status::OK;
 }
+
+
+Status CSPServiceImpl::evaluateModelFromFile(ServerContext* context, const DataFile* request, Empty* reply)
+{
+    reply = new Empty();
+
+    string fileName = request->filename();
+
+    // Read HHE decomposition data from a file
+    vector<Ciphertext> ciphertexts;
+    if (!csp->readHHEDecompositionDataFromFile(fileName, ciphertexts))
+        return Status(StatusCode::DATA_LOSS, "Failed to read HHE decomposition data from file");
+
+    // Find the position of the first underscore
+    size_t underscorePos = fileName.find('_');
+    // Find the position of the dot before the file extension
+    size_t dotPos = fileName.find(".bin");
+
+    // Extract the substring between the underscore and the dot
+    string analystUUID = fileName.substr(underscorePos + 1, dotPos - underscorePos - 1);
+
+    string analystId = csp->getAnalystIdfromUUID(analystUUID);
+    cout << "analyst's ID: " << analystId << endl;
+
+    csp->setHHEEncDataProcessedMap(analystId, ciphertexts);
+
+    int inputLen = 300;
+    csp->evaluateModel(analystId, inputLen);
+
+    // creates an object that is used to callback the Analyst
+    AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
+    analystRPCClient->addEncryptedResult(analystId);    
+
+    return Status::OK; 
+}
+
 
 /**
 Get Analyst IP Addr

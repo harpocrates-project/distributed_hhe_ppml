@@ -15,6 +15,7 @@ service CSPService{
     rpc addEncryptedData(EncSymmetricDataMsg) returns (Empty) { }
     rpc addMLModel (MLModelMsg) returns (Empty) { }
     rpc evaluateModel (CiphertextBytes) returns (Empty) { }
+    rpc evaluateModelFromFile (DataFile) returns (Empty) { }
 }
 
 message CiphertextBytes {
@@ -63,5 +64,9 @@ message EncSymmetricDataMsg {
 
 message EncSymmetricDataRecord {
     repeated uint64 value = 1;
+}
+
+message DataFile {
+    string filename = 1;
 }
   
