@@ -72,7 +72,7 @@ Where `analystAddress` and `analystPort` are the IP address and port number of t
 ## Integration with external components
 No specific interactions with external components is expected for the User and Analyst; they have been devised to be used via a command line interface. On the other hand, once data are received from the User by the CSP, they are automatically encrypted (HHE decomposition) and saved in a file, whose name includes the UUID of the designated Analyst. External components can later then trigger a model evaluation on these (or externally provided) data using one of the two gRPC endpoints described below.
 
-These RPC definitions are part of a service that allows clients to evaluate models using either direct ciphertext bytes or data from a file previously generated and saved by the CSP component. The use of Protocol Buffers ensures that these RPCs can be used across different programming languages and platforms, making the service highly interoperable. The CiphertextBytes message provides a way to pass encrypted data along with an analyst identifier (the UUID), while the DataFile message allows for specifying a file containing the necessary data for evaluation and reusing encrypted data already existing on the CSP.
+These RPC definitions are part of a service that allows other components to request model evaluation using either direct ciphertext bytes or data from a file previously generated and saved by the CSP component. The use of Protocol Buffers ensures that these RPCs can be used across different programming languages and platforms, making the service highly interoperable. The CiphertextBytes message provides a way to pass encrypted data along with an analyst identifier (the UUID), while the DataFile message allows for specifying a file containing the necessary data for evaluation and reusing encrypted data already existing on the CSP.
 
 ### Model Evaluation with Encrypted Data
 
@@ -89,7 +89,7 @@ These RPC definitions are part of a service that allows clients to evaluate mode
 
 - The `CiphertextBytes` message contains two fields:
      - `HHEDecomp`: A repeated field of bytes, which likely represents a collection of encrypted data segments.
-     - `analystID`: A string that identifies the analyst associated with the encrypted data.
+     - `analystID`: A string that identifies the UUID of the analyst associated with the encrypted data.
 - The `Empty` return type is used to acknowledge that the operation has been completed.
 
 
@@ -106,5 +106,5 @@ These RPC definitions are part of a service that allows clients to evaluate mode
   ```
 
 - The `DataFile` message contains a single field:
-     - `filename`: A string that specifies the name of the file containing the data to be used for model evaluation.
-- Similar to the previous RPC, the `Empty` return type signifies that the function does not return any meaningful data, only an acknowledgment of completion.
+     - `filename`: A string that specifies the name of the file (existing on the CSP component file system) containing the data to be used for model evaluation.
+- Similar to the previous RPC, the `Empty` return type is utilised to provide an acknowledgment of completion.
