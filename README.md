@@ -65,21 +65,46 @@ Where `localAddress` and `localPort` are the IP address and port number on which
 ### User
 The User component can be started via the command
 ```
-./build/user <analystAddress>:<analystPort> <cspAddress>:<cspPort>
+./build/user <analystAddress>:<analystPort> <cspAddress>:<cspPort> <dataSet>
 ```
-Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively.
+Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively. If no `dataSet` is specified, the components will use the default one located in `data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt`.
 
-### gRPC callback for Middleware
-i. FunctionName: evaluateModel. <br />
-ii. Parameters: HHEDecomp (a repeated byte with the data stored in the database) and analystID (that was specified in the file name from where the data was retrieved). <br />
-iii. Return value: empty.
-```
-// a gRPC callback for Middleware
-rpc evaluateModel (CiphertextBytes) returns (Empty) { }
+## Integration with external components
+No specific interactions with external components is expected for the User and Analyst; they have been devised to be used via a command line interface. On the other hand, once data are received from the User by the CSP, they are automatically encrypted (HHE decomposition) and saved in a file, whose name includes the UUID of the designated Analyst. External components can later then trigger a model evaluation on these (or externally provided) data using one of the two gRPC endpoints described below.
 
-// Parameters required for the gRPC callback
-message CiphertextBytes {
-    repeated bytes HHEDecomp = 1;
-    string analystID = 2;
-}
-```
+These RPC definitions are part of a service that allows clients to evaluate models using either direct ciphertext bytes or data from a file previously generated and saved by the CSP component. The use of Protocol Buffers ensures that these RPCs can be used across different programming languages and platforms, making the service highly interoperable. The CiphertextBytes message provides a way to pass encrypted data along with an analyst identifier (the UUID), while the DataFile message allows for specifying a file containing the necessary data for evaluation and reusing encrypted data already existing on the CSP.
+
+### Model Evaluation with Encrypted Data
+
+**`rpc evaluateModel (CiphertextBytes) returns (Empty) { }`**:
+- Defines an RPC named `evaluateModel`. It takes a single parameter of type `CiphertextBytes` and returns a response of type `Empty`.
+- The `CiphertextBytes` message type is defined as follows:
+
+  ```proto3
+  message CiphertextBytes {
+      repeated bytes HHEDecomp = 1;
+      string analystID = 2;
+  }
+  ```
+
+- The `CiphertextBytes` message contains two fields:
+     - `HHEDecomp`: A repeated field of bytes, which likely represents a collection of encrypted data segments.
+     - `analystID`: A string that identifies the analyst associated with the encrypted data.
+- The `Empty` return type is used to acknowledge that the operation has been completed.
+
+
+### Model Evaluation with File Name
+
+**`rpc evaluateModelFromFile (DataFile) returns (Empty) { }`**:
+- Defines an RPC named `evaluateModelFromFile`. It takes a single parameter of type `DataFile` and also returns a response of type `Empty`.
+- The `DataFile` message type is defined as follows:
+
+  ```proto3
+  message DataFile {
+      string filename = 1;
+  }
+  ```
+
+- The `DataFile` message contains a single field:
+     - `filename`: A string that specifies the name of the file containing the data to be used for model evaluation.
+- Similar to the previous RPC, the `Empty` return type signifies that the function does not return any meaningful data, only an acknowledgment of completion.
