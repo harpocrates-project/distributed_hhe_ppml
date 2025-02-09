@@ -88,12 +88,11 @@ void User::print_vec_Ciphertext(vector<Ciphertext> input, size_t size)
 /**
 Encrypt the plaintext data
 */
-void User::encryptData(vector<uint64_t> client_sym_key)
+void User::encryptData(vector<uint64_t> client_sym_key, int numRecords)
 { 
     pasta::PASTA SymmetricEncryptor(client_sym_key, config::plain_mod);
 
-
-    for (size_t i = 1; i < 3; i++)
+    for (size_t i = 1; i < numRecords; i++)
     {
         cout << "[User] Symmetrically encrypting input" << endl; 
         vi = data[i]; 

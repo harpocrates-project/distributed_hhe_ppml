@@ -60,7 +60,7 @@ class User
         Encrypt the plaintext data
         @param[in] client_sym_key The User symmetric key
         */
-        void encryptData(vector<uint64_t> client_sym_key); // data encryption
+        void encryptData(vector<uint64_t> client_sym_key, int numRecords); // data encryption
         
         /**
         Encrypt the plaintext symmetric key

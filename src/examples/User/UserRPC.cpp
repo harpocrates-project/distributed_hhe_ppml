@@ -8,8 +8,15 @@ int main(int argc,char** argv)
     string analystUrl;
     string cspUrl;
     string dataSet;
+    int records = 3;
 
-    if (argc == 4) 
+    if (argc == 5) 
+    {
+        analystUrl = argv[1];
+        cspUrl = argv[2];
+        dataSet = argv[3];
+        records = atoi(argv[4]);
+    } else if (argc == 4) 
     {
         analystUrl = argv[1];
         cspUrl = argv[2];
@@ -35,11 +42,11 @@ int main(int argc,char** argv)
     cout << "Analyst: " << analystUrl << endl;
     cout << "CSP URL: " << cspUrl << endl;
     cout << "Data set: " << dataSet << endl;
+    cout << "Will encrypt " << records << " records from the Dataset" << endl;
 
     User* user = new User();
 
     // Create a gRPC channel for our stub
-    //grpc::CreateChannel("locakhost:50051",grpc::InsecureChannelCredentials());
     AnalystServiceUserClient AnalystRPCClient(
       grpc::CreateChannel(analystUrl, grpc::InsecureChannelCredentials()));
 
@@ -66,7 +73,7 @@ int main(int argc,char** argv)
     // Create user's symmetric key which will be used for data encryption;
     user->setSymmetricKey();
     // Encrypt user data via symmetric key algorithm
-    user->encryptData(user->getSymmetricKey());
+    user->encryptData(user->getSymmetricKey(), records);
 
     cout << "=====================" << endl;    
     cout << "[UserRPC] Receiving Analyst HE Public key" << endl;
