@@ -335,9 +335,13 @@ class CSP_hhe_pktnn_1fc : public BaseCSP
 
 class CSPParallel_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
 {
-protected:
-    void performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE);
+    public:
+        void evaluateModel(string analystId, int inputLen) override;
+
+    protected:
+        void performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE);
+
+    private:
+        void manageThreadPool(std::vector<std::thread>& thread_pool, size_t& num_of_active_threads, unsigned int num_threads);
+        void waitForRemainingThreads(std::vector<std::thread>& thread_pool);
 };
-
-
-

@@ -625,7 +625,8 @@ bool BaseCSP::deserializeCiphertexts(const google::protobuf::RepeatedPtrField<st
     } 
 }
 
-void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, pasta::PASTA_SEAL &HHE)
+
+void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE)
 {
     unsigned int num_threads = std::thread::hardware_concurrency();
     std::vector<std::thread> thread_pool;
@@ -633,53 +634,163 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, past
 
     std::cout << "Using up to " << num_threads << " threads for decomposition" << std::endl;
 
-    auto decompose_task = [&](vector<uint64_t> record,
-                              vector<vector<Ciphertext>> &he_enc_data,
-                              const vector<Ciphertext> &userEncryptedSymmetricKey)
+    auto decompose_task = [&](vector<uint64_t> record, vector<vector<Ciphertext>>& he_enc_data, const vector<Ciphertext>& userEncryptedSymmetricKey, size_t index)
     {
-        auto result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            he_enc_data.push_back(result);
+        try {
+            std::cout << "Thread " << std::this_thread::get_id() << " started for record " << index << std::endl;
+            auto result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                he_enc_data.push_back(result);
+            }
+            std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
+        } catch (...) {
+            std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
         }
     };
 
-    auto &he_enc_data = he_enc_data_map[analystId];
-    const auto &userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
-    size_t num_of_active_threads = 1;
+    auto& he_enc_data = he_enc_data_map[analystId];
+    const auto& userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
+    size_t num_of_active_threads = 0;
 
-    const auto &records = enc_data_map[analystId];
-    for (size_t i = 0; i < records.size(); ++i)
-    {
-        const auto &record = records[i];
+    const auto& records = enc_data_map[analystId];
+    for (size_t i = 0; i < records.size(); ++i) {
+        const auto& record = records[i];
         size_t num_of_record_blocks = HHE.get_num_of_blocks(record);
 
         std::cout << "Processing record " << i << " with " << num_of_record_blocks << " blocks" << std::endl;
 
-        if (num_of_active_threads >= num_threads)
-        {
-            std::cout << "Max number of threads reached. Waiting for current threads to finish." << std::endl;
-            for (auto &th : thread_pool)
-            {
-                th.join();
-            }
-            thread_pool.clear();
-            num_of_active_threads = 0;
-        }
+        manageThreadPool(thread_pool, num_of_active_threads, num_threads);
 
-        thread_pool.emplace_back(decompose_task, record, std::ref(he_enc_data), std::ref(userEncryptedSymmetricKey));
+        std::cout << "Creating thread for record " << i << std::endl;
+        thread_pool.emplace_back(decompose_task, record, std::ref(he_enc_data), std::ref(userEncryptedSymmetricKey), i);
         num_of_active_threads = thread_pool.size() * num_of_record_blocks;
         std::cout << "Current number of active threads: " << num_of_active_threads << std::endl;
     }
 
-    for (auto &th : thread_pool)
-    {
-        th.join();
-    }
+    waitForRemainingThreads(thread_pool);
 
     std::cout << "All threads finished. Printing results." << std::endl;
-    for (auto &record : he_enc_data)
-    {
+    for (auto& record : he_enc_data) {
         print_vec_Ciphertext(record, record.size());
     }
+}
+
+
+void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
+{
+    unsigned int num_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> thread_pool;
+    std::mutex mtx;
+
+    std::cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << std::endl;
+
+    auto& he_enc_product = he_enc_product_map[analystId];
+    const auto& records = getHEEncDataProcessedMapValue(analystId);
+    size_t num_of_active_threads = 0;
+
+    // First loop: Multiply records with encrypted weights
+    auto multiply_task = [&](const Ciphertext& record, size_t index) {
+        try {
+            std::cout << "Thread " << std::this_thread::get_id() << " started for record " << index << std::endl;
+            Ciphertext tmp;
+            sealhelper::packed_enc_multiply(record, getEncWeightsMapFirstValue(analystId), tmp, *getEvaluator());
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                he_enc_product.push_back(tmp);
+            }
+            std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
+        } catch (...) {
+            std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
+        }
+    };
+
+    for (size_t i = 0; i < records.size(); ++i) {
+        const auto& record = records[i];
+
+        std::cout << "Processing record " << i << std::endl;
+
+        manageThreadPool(thread_pool, num_of_active_threads, num_threads);
+
+        std::cout << "Creating thread for record " << i << std::endl;
+        thread_pool.emplace_back(multiply_task, std::cref(record), i);
+        num_of_active_threads = thread_pool.size();
+        std::cout << "Current number of active threads: " << num_of_active_threads << std::endl;
+    }
+
+    waitForRemainingThreads(thread_pool);
+
+    std::cout << "All threads finished. Performing relinearization and sum." << std::endl;
+
+    // Second loop: Relinearize and sum the resulting product vector
+    num_of_active_threads = 0;
+    auto& he_sum_enc_product = he_sum_enc_product_map[analystId];
+
+    auto relinearize_and_sum_task = [&](Ciphertext& record, size_t index) {
+        try {
+            std::cout << "Thread " << std::this_thread::get_id() << " started for relinearization and sum of record " << index << std::endl;
+            std::cout << "encrypted_product size before relinearization = " << record.size() << std::endl;
+            getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
+            std::cout << "encrypted_product size after relinearization = " << record.size() << std::endl;
+
+            // Do encrypted sum on the resulting product vector
+            std::cout << "[CSP] Executing encrypted sum on the encrypted vector" << std::endl;
+            Ciphertext tmp1;
+            sealhelper::encrypted_vec_sum(record, tmp1, *getEvaluator(), getAnalystHEGaloisKeys(analystId), inputLen);
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                he_sum_enc_product.push_back(tmp1);
+            }
+            std::cout << "Thread " << std::this_thread::get_id() << " finished for relinearization and sum of record " << index << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Exception in thread " << std::this_thread::get_id() << " for relinearization and sum of record " << index << ": " << e.what() << std::endl;
+        } catch (...) {
+            std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for relinearization and sum of record " << index << std::endl;
+        }
+    };
+
+    for (size_t i = 0; i < he_enc_product.size(); ++i) {
+        auto& record = he_enc_product[i];
+
+        std::cout << "Processing relinearization and sum for record " << i << std::endl;
+
+        manageThreadPool(thread_pool, num_of_active_threads, num_threads);
+
+        std::cout << "Creating thread for relinearization and sum of record " << i << std::endl;
+        thread_pool.emplace_back(relinearize_and_sum_task, std::ref(record), i);
+        num_of_active_threads = thread_pool.size();
+        std::cout << "Current number of active threads: " << num_of_active_threads << std::endl;
+    }
+
+    waitForRemainingThreads(thread_pool);
+
+    print_vec_Ciphertext(he_sum_enc_product_map[analystId], he_sum_enc_product_map[analystId].size());
+
+    std::cout << "[CSP] Evaluation completed" << std::endl;
+}
+
+
+// Helper method to manage the thread pool
+void CSPParallel_hhe_pktnn_1fc::manageThreadPool(std::vector<std::thread>& thread_pool, size_t& num_of_active_threads, unsigned int num_threads)
+{
+    if (num_of_active_threads >= num_threads) {
+        std::cout << "Max number of threads reached. Waiting for current threads to finish." << std::endl;
+        waitForRemainingThreads(thread_pool);
+        num_of_active_threads = 0;
+    }
+}
+
+// Helper method to wait for remaining threads to finish
+void CSPParallel_hhe_pktnn_1fc::waitForRemainingThreads(std::vector<std::thread>& thread_pool)
+{
+    std::cout << "Waiting for remaining threads to finish." << std::endl;
+    for (auto& th : thread_pool) {
+        th.join();
+        std::cout << "Thread " << th.get_id() << " joined" << std::endl;
+    }
+    thread_pool.clear();
 }
