@@ -1,6 +1,12 @@
 #include "CSP.h"
 #include <iostream>
 #include <fstream>
+#include <thread>
+#include <vector>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
 
 // setter
 /** 
@@ -24,7 +30,7 @@ Create a HE Secret key
 */
 void BaseCSP::setHESecretKey(KeyGenerator* csp_keygen)
 {
-    cout << "[CSP] Creating a new HE secret key from the context" << endl;
+    std::cout << "[CSP] Creating a new HE secret key from the context" << std::endl;
     csp_he_sk = csp_keygen->secret_key();
 }
 
@@ -242,23 +248,39 @@ void BaseCSP::decompose(string analystId, int inputLen)
                           getAnalystHEGaloisKeys(analystId));
 
     cout << "[CSP] Decomposition: CSP does HHE decomposition to turn User's symmetric input into HE input" << endl;
-    // enc_data_map[analystId] ---> enc_data_map[userId]
 
+    auto start = high_resolution_clock::now();
+
+    // Perform decomposition
+    performDecomposition(analystId, HHE);
+
+    // Perform masking
+    performMasking(analystId, inputLen, HHE);
+
+    // Perform flattening
+    performFlattening(analystId, HHE);
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start);
+    cout << "Total decompose time: " << duration.count() << " ms" << endl;
+
+    cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
+    for (Ciphertext record : he_enc_data_processed_map[analystId])
+            print_Ciphertext(record);
+} 
+
+void BaseCSP::performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE)
+{
     for (vector<uint64_t> record : enc_data_map[analystId])
     {
-            he_enc_data_map[analystId].push_back(HHE.decomposition(record,
+        he_enc_data_map[analystId].push_back(HHE.decomposition(record,
                                                 getUserEncryptedSymmetricKey(analystId), 
                                                 config::USE_BATCH));
     }
+}
 
-    for (vector<Ciphertext> record : he_enc_data_map[analystId])
-        print_vec_Ciphertext(record, record.size());
-
-    
-    cout << "[CSP] Decomposition completed" << endl;
-
-    cout << "[CSP] Executing HHE decomposition postprocessing on the HE encrypted input" << endl;
-    // size_t num_block = inputLen / HHE.get_plain_size();
+void BaseCSP::performMasking(std::string analystId, int inputLen, pasta::PASTA_SEAL& HHE)
+{
     size_t rem = inputLen % HHE.get_plain_size();
 
     if (rem != 0)
@@ -267,7 +289,10 @@ void BaseCSP::decompose(string analystId, int inputLen)
         for (vector<Ciphertext> record : he_enc_data_map[analystId])
             HHE.mask(record.back(), mask);
     }
+}
 
+void BaseCSP::performFlattening(std::string analystId, pasta::PASTA_SEAL& HHE)
+{
     Ciphertext tmp;
     for (vector<Ciphertext> record : he_enc_data_map[analystId])
     {
@@ -276,11 +301,7 @@ void BaseCSP::decompose(string analystId, int inputLen)
                     getCSPHEGaloisKeysMapValue(analystId));  // vi_he_processed = hhe_decomposition = C_prime
         he_enc_data_processed_map[analystId].push_back(tmp);
     }
-
-    cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
-    for (Ciphertext record : he_enc_data_processed_map[analystId])
-            print_Ciphertext(record);
-} 
+}
 
 /**
 HHE evaluation
@@ -604,5 +625,61 @@ bool BaseCSP::deserializeCiphertexts(const google::protobuf::RepeatedPtrField<st
     } 
 }
 
+void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, pasta::PASTA_SEAL &HHE)
+{
+    unsigned int num_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> thread_pool;
+    std::mutex mtx;
 
+    std::cout << "Using up to " << num_threads << " threads for decomposition" << std::endl;
 
+    auto decompose_task = [&](vector<uint64_t> record,
+                              vector<vector<Ciphertext>> &he_enc_data,
+                              const vector<Ciphertext> &userEncryptedSymmetricKey)
+    {
+        auto result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            he_enc_data.push_back(result);
+        }
+    };
+
+    auto &he_enc_data = he_enc_data_map[analystId];
+    const auto &userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
+    size_t num_of_active_threads = 1;
+
+    const auto &records = enc_data_map[analystId];
+    for (size_t i = 0; i < records.size(); ++i)
+    {
+        const auto &record = records[i];
+        size_t num_of_record_blocks = HHE.get_num_of_blocks(record);
+
+        std::cout << "Processing record " << i << " with " << num_of_record_blocks << " blocks" << std::endl;
+
+        if (num_of_active_threads >= num_threads)
+        {
+            std::cout << "Max number of threads reached. Waiting for current threads to finish." << std::endl;
+            for (auto &th : thread_pool)
+            {
+                th.join();
+            }
+            thread_pool.clear();
+            num_of_active_threads = 0;
+        }
+
+        thread_pool.emplace_back(decompose_task, record, std::ref(he_enc_data), std::ref(userEncryptedSymmetricKey));
+        num_of_active_threads = thread_pool.size() * num_of_record_blocks;
+        std::cout << "Current number of active threads: " << num_of_active_threads << std::endl;
+    }
+
+    for (auto &th : thread_pool)
+    {
+        th.join();
+    }
+
+    std::cout << "All threads finished. Printing results." << std::endl;
+    for (auto &record : he_enc_data)
+    {
+        print_vec_Ciphertext(record, record.size());
+    }
+}

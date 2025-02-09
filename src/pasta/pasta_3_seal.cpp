@@ -1,4 +1,9 @@
 #include "pasta_3_seal.h"
+#include <thread>
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <mutex>
 
 using namespace seal;
 
@@ -117,17 +122,22 @@ namespace pasta
 
     size_t num_block = ceil((double)size / params.cipher_size);
 
-    Pasta pasta(plain_mod);
+    // Pasta pasta(plain_mod);
     std::vector<Ciphertext> res(num_block);
 
-    for (uint64_t b = 0; b < num_block; b++)
+    std::vector<std::thread> thread_pool;
+    std::mutex mtx; // Mutex for thread synchronization
+
+    auto decompose_task = [&](uint64_t b)
     {
+      Pasta pasta(plain_mod);
+      std::cout << "Thread " << std::this_thread::get_id() << " started for block " << b << std::endl;
       pasta.init_shake(nonce, b);
       Ciphertext state = enc_ssk[0];
 
       for (uint8_t r = 1; r <= PASTA_R; r++)
       {
-        // std::cout << "round " << (int)r << std::endl;
+        // std::cout << "Thread " << std::this_thread::get_id() << ": round " << (int)r << std::endl;
         auto mat1 = pasta.get_random_matrix();
         auto mat2 = pasta.get_random_matrix();
         auto rc = pasta.get_rc_vec(halfslots);
@@ -138,10 +148,8 @@ namespace pasta
           sbox_cube(state);
         else
           sbox_feistel(state);
-        // print_noise(state);
       }
 
-      // std::cout << "final add" << std::endl;
       auto mat1 = pasta.get_random_matrix();
       auto mat2 = pasta.get_random_matrix();
       auto rc = pasta.get_rc_vec(halfslots);
@@ -149,7 +157,6 @@ namespace pasta
       add_rc(state, rc);
       mix(state);
 
-      // remove second vector if needed
       if (REMOVE_SECOND_VEC)
       {
         std::vector<uint64_t> mask_vec(PASTA_T, 1);
@@ -158,16 +165,35 @@ namespace pasta
         evaluator.multiply_plain_inplace(state, mask);
       }
 
-      // add cipher
       std::vector<uint64_t> cipher_tmp;
+
       cipher_tmp.insert(
           cipher_tmp.begin(), ciphertexts.begin() + b * params.cipher_size,
           ciphertexts.begin() + std::min((b + 1) * params.cipher_size, size));
+
       Plaintext p;
       this->batch_encoder.encode(cipher_tmp, p);
       evaluator.negate_inplace(state);
-      evaluator.add_plain(state, p, res[b]);
+
+      // Lock the mutex before modifying the shared resource
+      {
+        std::lock_guard<std::mutex> lock(mtx);
+        evaluator.add_plain(state, p, res[b]);
+      }
+
+      std::cout << "Thread " << std::this_thread::get_id() << " finished for block " << b << std::endl;
+    };
+
+    for (uint64_t b = 0; b < num_block; b++)
+    {
+      thread_pool.emplace_back(decompose_task, b);
     }
+
+    for (auto &th : thread_pool)
+    {
+      th.join();
+    }
+
     return res;
   }
 
@@ -422,4 +448,4 @@ namespace pasta
     evaluator.add_inplace(state, tmp);
   }
 
-} // namespace PASTA_3
+} // namespace pasta

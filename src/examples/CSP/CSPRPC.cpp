@@ -376,7 +376,8 @@ int main(int argc,char** argv)
         url = "localhost:50052";
     }
 
-    csp = new CSP_hhe_pktnn_1fc();
+    //csp = new CSP_hhe_pktnn_1fc();
+    csp = new CSPParallel_hhe_pktnn_1fc();
     cspRPC = new CSPServiceImpl(url, csp);
 
     // Set up HE params

@@ -30,6 +30,10 @@ class PASTA_SEAL : public SEALZpCipher {
       std::vector<seal::Ciphertext>& ciphertext, bool batch_encoder = false);
   virtual void add_gk_indices();
 
+  size_t get_num_of_blocks(const std::vector<uint64_t> &ciphertexts) {
+    return ceil((double)ciphertexts.size() / params.cipher_size);
+  }
+
  private:
   static constexpr bool REMOVE_SECOND_VEC = false;
   static constexpr uint64_t BSGS_N1 = 16;

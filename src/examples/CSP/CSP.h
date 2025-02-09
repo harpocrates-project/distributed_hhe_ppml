@@ -41,6 +41,13 @@ class BaseCSP
 
         // getter
         /**
+        Return the SEAL context
+        */
+        shared_ptr<SEALContext> getContext() const {
+            return context;
+        }
+
+        /**
         Return the HE key generator
         */
         KeyGenerator* getKeyGenerator(); // csp_keygen
@@ -268,6 +275,11 @@ class BaseCSP
                             std::vector<Ciphertext>& ciphertexts, 
                             std::string& errorMessage);
     private: 
+
+        void performMasking(string analystId, int inputLen, pasta::PASTA_SEAL& HHE);
+        
+        void performFlattening(string analystId, pasta::PASTA_SEAL& HHE);
+
         shared_ptr<SEALContext> context;
         Evaluator* csp_he_eval;
         BatchEncoder* he_benc;
@@ -290,11 +302,15 @@ class BaseCSP
 
         unordered_map<string, vector<Ciphertext>> enc_weights_map;  // Analyst's encrypted weights
         unordered_map<string, vector<Ciphertext>> enc_sym_key_map; // User's encrypted symmetric keys
-        unordered_map<string, vector<vector<uint64_t>>> enc_data_map;      // User's encrypted data    
-        //unordered_map<string, vector<Ciphertext>> he_enc_data_map; // The HHE decomposition results. (vi_he)  
-        unordered_map<string, vector<vector<Ciphertext>>> he_enc_data_map; 
 
     protected:
+
+        virtual void performDecomposition(string analystId, pasta::PASTA_SEAL& HHE);
+
+        unordered_map<string, vector<vector<uint64_t>>> enc_data_map;      // User's encrypted data
+
+        unordered_map<string, vector<vector<Ciphertext>>> he_enc_data_map; // HE encrypted data
+
         // unordered_map<string, Ciphertext> he_enc_data_processed_map; // HHE decomposition postprocessing on the HE encrypted input. (vi_he_processed)
         unordered_map<string, vector<Ciphertext>> he_enc_data_processed_map;
 
@@ -314,8 +330,14 @@ class CSP_hhe_pktnn_1fc : public BaseCSP
         @param[in] inputLen The length of dataset
         */
         void evaluateModel(string analystId, int inputLen);
-}; 
+};
 
+
+class CSPParallel_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
+{
+protected:
+    void performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE);
+};
 
 
 
