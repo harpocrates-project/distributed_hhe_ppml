@@ -308,39 +308,45 @@ HHE evaluation
 */
 void CSP_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
 {
-        cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << endl;
+    cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << endl;
 
-        Ciphertext tmp;
-        for (Ciphertext record : getHEEncDataProcessedMapValue(analystId))
-        {
-            sealhelper::packed_enc_multiply(record, 
-                                            getEncWeightsMapFirstValue(analystId),
-                                            tmp, 
-                                            *getEvaluator()); 
-            he_enc_product_map[analystId].push_back(tmp);
-        }
+    auto start = high_resolution_clock::now();
 
-        Ciphertext tmp1;
-        for (Ciphertext record : he_enc_product_map[analystId]) 
-        {
-            cout << "encrypted_product size before relinearization = " << record.size() << endl;
-            getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
-            cout << "encrypted_product size after relinearization = " << record.size() << endl;
+    Ciphertext tmp;
+    for (Ciphertext record : getHEEncDataProcessedMapValue(analystId))
+    {
+        sealhelper::packed_enc_multiply(record, 
+                                        getEncWeightsMapFirstValue(analystId),
+                                        tmp, 
+                                        *getEvaluator()); 
+        he_enc_product_map[analystId].push_back(tmp);
+    }
+
+    Ciphertext tmp1;
+    for (Ciphertext record : he_enc_product_map[analystId]) 
+    {
+        cout << "encrypted_product size before relinearization = " << record.size() << endl;
+        getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
+        cout << "encrypted_product size after relinearization = " << record.size() << endl;
 
         // Do encrypted sum on the resulting product vector
-            cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
+        cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
 
-            sealhelper::encrypted_vec_sum(record, 
-                                        tmp1, 
-                                        *getEvaluator(), 
-                                        getAnalystHEGaloisKeys(analystId), 
-                                        inputLen);
-            he_sum_enc_product_map[analystId].push_back(tmp1);                            
-        }
+        sealhelper::encrypted_vec_sum(record, 
+                                      tmp1, 
+                                      *getEvaluator(), 
+                                      getAnalystHEGaloisKeys(analystId), 
+                                      inputLen);
+        he_sum_enc_product_map[analystId].push_back(tmp1);                            
+    }
 
-        print_vec_Ciphertext(he_sum_enc_product_map[analystId], he_sum_enc_product_map[analystId].size());
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start);
+    cout << "Total evaluation time: " << duration.count() << " ms" << endl;
 
-        cout << "[CSP] Evaluation completed" << endl;
+    print_vec_Ciphertext(he_sum_enc_product_map[analystId], he_sum_enc_product_map[analystId].size());
+
+    cout << "[CSP] Evaluation completed" << endl;
 } 
 
 /**
@@ -687,6 +693,8 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
 
     std::cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << std::endl;
 
+    auto start = high_resolution_clock::now();
+
     auto& he_enc_product = he_enc_product_map[analystId];
     const auto& records = getHEEncDataProcessedMapValue(analystId);
     size_t num_of_active_threads = 0;
@@ -767,6 +775,10 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
     }
 
     waitForRemainingThreads(thread_pool);
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start);
+    std::cout << "Total evaluation time: " << duration.count() << " ms" << std::endl;
 
     print_vec_Ciphertext(he_sum_enc_product_map[analystId], he_sum_enc_product_map[analystId].size());
 
