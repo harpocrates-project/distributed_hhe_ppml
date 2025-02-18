@@ -54,6 +54,7 @@ The CSP component can be started via the command
 ./build/csp <address>:<port>
 ```
 Where `address` and `port` are the local IP address and the port number on which the CSP will listen for incoming RPC requests. If no (or a wrong number of) arguments are provided, the CSP will listen on a default address and port number, i.e., `localhost:50052`.
+The CSP component performs two main operations, i.e., decomposition and evaluation. These have been devised to be performed in parallel using a number of thread automatically calculated using the number of available CPU cores (via std::thread::hardware_concurrency()).
 
 ### Analyst
 The Analyst component can be started via the command
@@ -67,7 +68,13 @@ The User component can be started via the command
 ```
 ./build/user <analystAddress>:<analystPort> <cspAddress>:<cspPort> <dataSet>
 ```
-Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively. If no `dataSet` is specified, the components will use the default one located in `data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt`.
+Where `analystAddress` and `analystPort` are the IP address and port number of the Analyst; `cspAddress` and `cspPort` are the IP address and port number of the CSP. If no (or a wrong number of) arguments are provided, the User will assume the Analyst and the CSP are listening for RPC calls on `localhost:50051` and `localhost:50052` respectively. If no `dataSet` is specified, the components will use the default one located in `data/Harpocrates_recordingwise_SIESTA_4percent/c000101_data.txt`. 
+
+By default, the User component encrypts and sends three segments of data from the specified (or default) `dataSet`. This number can be adjusted by providing an additional argument that indicates the number of records to encrypt
+
+```
+./build/user <analystAddress>:<analystPort> <cspAddress>:<cspPort> <dataSet> <numberOfSegments>
+```
 
 ## Integration with external components
 No specific interactions with external components is expected for the User and Analyst; they have been devised to be used via a command line interface. On the other hand, once data are received from the User by the CSP, they are automatically encrypted (HHE decomposition) and saved in a file, whose name includes the UUID of the designated Analyst. External components can later then trigger a model evaluation on these (or externally provided) data using one of the two gRPC endpoints described below.
