@@ -69,4 +69,21 @@ message EncSymmetricDataRecord {
 message DataFile {
     string filename = 1;
 }
+
+
+
+
+
+
+service MyService {
+    rpc GetResponse(MyRequest) returns (MyResponse);
+}
+
+message MyRequest {
+    string message = 1;
+}
+
+message MyResponse {
+    string response = 1;
+}
   

@@ -1383,6 +1383,213 @@ class CSPService final {
   typedef WithStreamedUnaryMethod_addPublicKeys<WithStreamedUnaryMethod_addEncryptedKeys<WithStreamedUnaryMethod_addEncryptedData<WithStreamedUnaryMethod_addMLModel<WithStreamedUnaryMethod_evaluateModel<WithStreamedUnaryMethod_evaluateModelFromFile<Service > > > > > > StreamedService;
 };
 
+class MyService final {
+ public:
+  static constexpr char const* service_full_name() {
+    return "hheproto.MyService";
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::hheproto::MyResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>> AsyncGetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>>(AsyncGetResponseRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>> PrepareAsyncGetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>>(PrepareAsyncGetResponseRaw(context, request, cq));
+    }
+    class async_interface {
+     public:
+      virtual ~async_interface() {}
+      virtual void GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+    };
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>* AsyncGetResponseRaw(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::hheproto::MyResponse>* PrepareAsyncGetResponseRaw(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::hheproto::MyResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>> AsyncGetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>>(AsyncGetResponseRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>> PrepareAsyncGetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>>(PrepareAsyncGetResponseRaw(context, request, cq));
+    }
+    class async final :
+      public StubInterface::async_interface {
+     public:
+      void GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetResponse(::grpc::ClientContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+     private:
+      friend class Stub;
+      explicit async(Stub* stub): stub_(stub) { }
+      Stub* stub() { return stub_; }
+      Stub* stub_;
+    };
+    class async* async() override { return &async_stub_; }
+
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>* AsyncGetResponseRaw(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::hheproto::MyResponse>* PrepareAsyncGetResponseRaw(::grpc::ClientContext* context, const ::hheproto::MyRequest& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_GetResponse_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status GetResponse(::grpc::ServerContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetResponse() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetResponse(::grpc::ServerContext* context, ::hheproto::MyRequest* request, ::grpc::ServerAsyncResponseWriter< ::hheproto::MyResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GetResponse<Service > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetResponse() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::hheproto::MyRequest, ::hheproto::MyResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::hheproto::MyRequest* request, ::hheproto::MyResponse* response) { return this->GetResponse(context, request, response); }));}
+    void SetMessageAllocatorFor_GetResponse(
+        ::grpc::MessageAllocator< ::hheproto::MyRequest, ::hheproto::MyResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::hheproto::MyRequest, ::hheproto::MyResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetResponse(
+      ::grpc::CallbackServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GetResponse<Service > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetResponse() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetResponse() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetResponse(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetResponse() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetResponse(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetResponse(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetResponse : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetResponse() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::hheproto::MyRequest, ::hheproto::MyResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::hheproto::MyRequest, ::hheproto::MyResponse>* streamer) {
+                       return this->StreamedGetResponse(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetResponse() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetResponse(::grpc::ServerContext* /*context*/, const ::hheproto::MyRequest* /*request*/, ::hheproto::MyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetResponse(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::hheproto::MyRequest,::hheproto::MyResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GetResponse<Service > StreamedUnaryService;
+  typedef Service SplitStreamedService;
+  typedef WithStreamedUnaryMethod_GetResponse<Service > StreamedService;
+};
+
 }  // namespace hheproto
 
 
