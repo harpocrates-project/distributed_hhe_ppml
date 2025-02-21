@@ -10,21 +10,7 @@ set(SOURCE_DIR
     src
 )
 
-set(PROJECT_SOURCE
-    ${SOURCE_DIR}/main.cpp
-    ${SOURCE_DIR}/examples/pktnn_examples.cpp
-    ${SOURCE_DIR}/examples/hhe_pktnn_examples.cpp
-    # ${SOURCE_DIR}/examples/quantization.cpp
-    ${SOURCE_DIR}/util/sealhelper.cpp
-    ${SOURCE_DIR}/util/pastahelper.cpp
-    ${SOURCE_DIR}/util/utils.cpp
-    ${SOURCE_DIR}/pasta/pasta_3_plain.cpp
-    ${SOURCE_DIR}/pasta/pasta_3_seal.cpp
-    ${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
-    configs/config.cpp
-    tests/ecg_tests.cpp
-    tests/mnist_tests.cpp
-)
+
 
 set(LIBRARIES_DIR
     libs
@@ -37,6 +23,9 @@ set(LIBRARIES
 )
 
 project(${PROJECT_NAME})
+
+# Set the CMAKE_PREFIX_PATH to the directory containing SEAL
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_SOURCE_DIR}/libs/seal)
 
 find_package(SEAL 4.0 REQUIRED)
 
@@ -69,9 +58,6 @@ else()
     add_definitions("-DOC_ENABLE_PORTABLE_AES")
   endif()
 endif()
-
-
-
 
 #Set this to ON if GRPC and Protobuf are installed on the system
 set(USE_SYSTEM_GRPC OFF)
@@ -162,30 +148,30 @@ target_link_libraries(hhe_grpc_proto
  
 
 set(ANALYST_SOURCE
-	${SOURCE_DIR}/examples/Analyst/AnalystRPC.cpp
-	${SOURCE_DIR}/examples/Analyst/Analyst.cpp
-	${SOURCE_DIR}/examples/Analyst/CSPServiceAnalystClient.cpp
-	${SOURCE_DIR}/util/sealhelper.cpp
+    ${SOURCE_DIR}/examples/Analyst/AnalystRPC.cpp
+    ${SOURCE_DIR}/examples/Analyst/Analyst.cpp
+    ${SOURCE_DIR}/examples/Analyst/CSPServiceAnalystClient.cpp
+    ${SOURCE_DIR}/util/sealhelper.cpp
         ${SOURCE_DIR}/util/pastahelper.cpp
-    	${SOURCE_DIR}/util/utils.cpp
-    	${SOURCE_DIR}/pasta/pasta_3_plain.cpp
-    	${SOURCE_DIR}/pasta/pasta_3_seal.cpp
-    	${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
-    	configs/config.cpp
+        ${SOURCE_DIR}/util/utils.cpp
+        ${SOURCE_DIR}/pasta/pasta_3_plain.cpp
+        ${SOURCE_DIR}/pasta/pasta_3_seal.cpp
+        ${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
+        configs/config.cpp
 )
 
 set(USER_SOURCE
-	${PROJECT_SOURCE_DIR}/src/examples/User/AnalystServiceUserClient.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/CSPServiceUserClient.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/User.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/UserRPC.cpp
-	${PROJECT_SOURCE_DIR}/src/util/sealhelper.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/AnalystServiceUserClient.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/CSPServiceUserClient.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/User.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/UserRPC.cpp
+    ${PROJECT_SOURCE_DIR}/src/util/sealhelper.cpp
         ${PROJECT_SOURCE_DIR}/src/util/pastahelper.cpp
-    	${PROJECT_SOURCE_DIR}/src/util/utils.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_plain.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_seal.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/SEAL_Cipher.cpp
-    	configs/config.cpp
+        ${PROJECT_SOURCE_DIR}/src/util/utils.cpp
+        ${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_plain.cpp
+        ${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_seal.cpp
+        ${PROJECT_SOURCE_DIR}/src/pasta/SEAL_Cipher.cpp
+        configs/config.cpp
 )
 
 
@@ -206,18 +192,15 @@ set(CSP_SOURCE
 
 
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
 
-ADD_EXECUTABLE(analyst ${ANALYST_SOURCE})
-ADD_EXECUTABLE(user ${USER_SOURCE}) 
+add_executable(analyst ${ANALYST_SOURCE})
+add_executable(user ${USER_SOURCE}) 
 add_executable(csp ${CSP_SOURCE})
 
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
     message(STATUS "Libraries included: ${LIBRARIES_DIR}/${LIBRARY}")
 endforeach(LIBRARY)
-target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
-target_link_libraries(${PROJECT_NAME} SEAL::seal)
 
 
 target_link_libraries(csp
@@ -250,6 +233,4 @@ target_link_libraries(user
     ${_REFLECTION}
     ${_GRPC_GRPCPP}
     ${_PROTOBUF_LIBPROTOBUF})
-
-
 
