@@ -345,3 +345,16 @@ class CSPParallel_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
         void manageThreadPool(std::vector<std::thread>& thread_pool, size_t& num_of_active_threads, unsigned int num_threads);
         void waitForRemainingThreads(std::vector<std::thread>& thread_pool);
 };
+
+
+class CSPFaaS_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
+{
+    public:
+        void evaluateModel(string analystId, int inputLen) override;
+
+    protected:
+        void performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE);
+    private:
+        static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
+};
+

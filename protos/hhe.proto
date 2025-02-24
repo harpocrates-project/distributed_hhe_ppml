@@ -70,20 +70,16 @@ message DataFile {
     string filename = 1;
 }
 
-
-
-
-
-
-service MyService {
-    rpc GetResponse(MyRequest) returns (MyResponse);
+message DecompositionRequest {
+    string analyst_id = 1;
+    bytes public_key = 2;
+    bytes secret_key = 3;
+    bytes relin_keys = 4;
+    bytes galois_keys = 5;
+    repeated uint64 record = 6;
+    repeated bytes user_encrypted_symmetric_key = 7;
 }
 
-message MyRequest {
-    string message = 1;
+message DecompositionResponse {
+    repeated bytes he_enc_data = 1;
 }
-
-message MyResponse {
-    string response = 1;
-}
-  

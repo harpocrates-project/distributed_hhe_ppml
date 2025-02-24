@@ -28,6 +28,7 @@ project(${PROJECT_NAME})
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_SOURCE_DIR}/libs/seal)
 
 find_package(SEAL 4.0 REQUIRED)
+find_package(CURL REQUIRED)
 
 # for AES code
 include(CheckCCompilerFlag)
@@ -191,7 +192,17 @@ set(CSP_SOURCE
 
 
 set(CSP_FAAS_SOURCE
-    ${SOURCE_DIR}/server.cpp
+    ${SOURCE_DIR}/examples/FaaS/server.cpp
+    ${SOURCE_DIR}/pasta/pasta_3_seal.cpp
+    ${SOURCE_DIR}/pasta/pasta_3_plain.cpp
+    ${SOURCE_DIR}/pasta/pasta_3_seal.cpp
+    ${SOURCE_DIR}/util/sealhelper.cpp
+    ${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
+    configs/config.cpp
+)
+
+set(CSP_FAAS_SOURCE_CLIENT
+    ${SOURCE_DIR}/examples/FaaS/client.cpp
 )
 
 
@@ -199,6 +210,7 @@ add_executable(analyst ${ANALYST_SOURCE})
 add_executable(user ${USER_SOURCE}) 
 add_executable(csp ${CSP_SOURCE})
 add_executable(csp_faas ${CSP_FAAS_SOURCE})
+add_executable(csp_faas_client ${CSP_FAAS_SOURCE_CLIENT})
 
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
@@ -212,6 +224,7 @@ target_link_libraries(csp
     aes
     pocketnn
     hhe_grpc_proto
+    ${CURL_LIBRARIES}
     ${_REFLECTION}
     ${_GRPC_GRPCPP}
     ${_PROTOBUF_LIBPROTOBUF})
@@ -239,10 +252,21 @@ target_link_libraries(user
 
     
 target_link_libraries(csp_faas
+    SEAL::seal
+    pocketnn
+    keccak
+    hhe_grpc_proto)
+#    ${_REFLECTION}
+#    ${_GRPC_GRPCPP}
+#    ${_PROTOBUF_LIBPROTOBUF})
+
+
+target_link_libraries(csp_faas_client
     hhe_grpc_proto
-    ${_REFLECTION}
-    ${_GRPC_GRPCPP}
-    ${_PROTOBUF_LIBPROTOBUF})
+    ${CURL_LIBRARIES})
+#    ${_REFLECTION}
+#    ${_GRPC_GRPCPP}
+#    ${_PROTOBUF_LIBPROTOBUF})
 
 
 

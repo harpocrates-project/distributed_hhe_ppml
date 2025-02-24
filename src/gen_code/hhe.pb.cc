@@ -172,32 +172,39 @@ struct DataFileDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DataFileDefaultTypeInternal _DataFile_default_instance_;
-PROTOBUF_CONSTEXPR MyRequest::MyRequest(
+PROTOBUF_CONSTEXPR DecompositionRequest::DecompositionRequest(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.record_)*/{}
+  , /*decltype(_impl_._record_cached_byte_size_)*/{0}
+  , /*decltype(_impl_.user_encrypted_symmetric_key_)*/{}
+  , /*decltype(_impl_.analyst_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.public_key_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.secret_key_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.relin_keys_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.galois_keys_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct MyRequestDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR MyRequestDefaultTypeInternal()
+struct DecompositionRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DecompositionRequestDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~MyRequestDefaultTypeInternal() {}
+  ~DecompositionRequestDefaultTypeInternal() {}
   union {
-    MyRequest _instance;
+    DecompositionRequest _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MyRequestDefaultTypeInternal _MyRequest_default_instance_;
-PROTOBUF_CONSTEXPR MyResponse::MyResponse(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DecompositionRequestDefaultTypeInternal _DecompositionRequest_default_instance_;
+PROTOBUF_CONSTEXPR DecompositionResponse::DecompositionResponse(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.response_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.he_enc_data_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct MyResponseDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR MyResponseDefaultTypeInternal()
+struct DecompositionResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DecompositionResponseDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~MyResponseDefaultTypeInternal() {}
+  ~DecompositionResponseDefaultTypeInternal() {}
   union {
-    MyResponse _instance;
+    DecompositionResponse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MyResponseDefaultTypeInternal _MyResponse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DecompositionResponseDefaultTypeInternal _DecompositionResponse_default_instance_;
 }  // namespace hheproto
 static ::_pb::Metadata file_level_metadata_hhe_2eproto[13];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_hhe_2eproto = nullptr;
@@ -290,19 +297,25 @@ const uint32_t TableStruct_hhe_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::hheproto::DataFile, _impl_.filename_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::hheproto::MyRequest, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::hheproto::MyRequest, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.analyst_id_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.public_key_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.secret_key_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.relin_keys_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.galois_keys_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.record_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionRequest, _impl_.user_encrypted_symmetric_key_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::hheproto::MyResponse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionResponse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::hheproto::MyResponse, _impl_.response_),
+  PROTOBUF_FIELD_OFFSET(::hheproto::DecompositionResponse, _impl_.he_enc_data_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::hheproto::CiphertextBytes)},
@@ -316,8 +329,8 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 63, -1, -1, sizeof(::hheproto::EncSymmetricDataMsg)},
   { 71, -1, -1, sizeof(::hheproto::EncSymmetricDataRecord)},
   { 78, -1, -1, sizeof(::hheproto::DataFile)},
-  { 85, -1, -1, sizeof(::hheproto::MyRequest)},
-  { 92, -1, -1, sizeof(::hheproto::MyResponse)},
+  { 85, -1, -1, sizeof(::hheproto::DecompositionRequest)},
+  { 98, -1, -1, sizeof(::hheproto::DecompositionResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -332,8 +345,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::hheproto::_EncSymmetricDataMsg_default_instance_._instance,
   &::hheproto::_EncSymmetricDataRecord_default_instance_._instance,
   &::hheproto::_DataFile_default_instance_._instance,
-  &::hheproto::_MyRequest_default_instance_._instance,
-  &::hheproto::_MyResponse_default_instance_._instance,
+  &::hheproto::_DecompositionRequest_default_instance_._instance,
+  &::hheproto::_DecompositionResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_hhe_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -355,29 +368,31 @@ const char descriptor_table_protodef_hhe_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "ricDataMsg\0220\n\006record\030\001 \003(\0132 .hheproto.En"
   "cSymmetricDataRecord\022\021\n\tpatientID\030\002 \001(\t\""
   "\'\n\026EncSymmetricDataRecord\022\r\n\005value\030\001 \003(\004"
-  "\"\034\n\010DataFile\022\020\n\010filename\030\001 \001(\t\"\034\n\tMyRequ"
-  "est\022\017\n\007message\030\001 \001(\t\"\036\n\nMyResponse\022\020\n\010re"
-  "sponse\030\001 \001(\t2\220\001\n\016AnalystService\0229\n\014getPu"
-  "blicKey\022\017.hheproto.Empty\032\026.hheproto.Publ"
-  "icKeyMsg\"\000\022C\n\022addEncryptedResult\022\032.hhepr"
-  "oto.CiphertextResult\032\017.hheproto.Empty\"\0002"
-  "\215\003\n\nCSPService\022=\n\raddPublicKeys\022\031.hhepro"
-  "to.PublicKeySetMsg\032\017.hheproto.Empty\"\000\022D\n"
-  "\020addEncryptedKeys\022\035.hheproto.EncSymmetri"
-  "cKeysMsg\032\017.hheproto.Empty\"\000\022D\n\020addEncryp"
-  "tedData\022\035.hheproto.EncSymmetricDataMsg\032\017"
-  ".hheproto.Empty\"\000\0225\n\naddMLModel\022\024.hhepro"
-  "to.MLModelMsg\032\017.hheproto.Empty\"\000\022=\n\reval"
-  "uateModel\022\031.hheproto.CiphertextBytes\032\017.h"
-  "heproto.Empty\"\000\022>\n\025evaluateModelFromFile"
-  "\022\022.hheproto.DataFile\032\017.hheproto.Empty\"\0002"
-  "E\n\tMyService\0228\n\013GetResponse\022\023.hheproto.M"
-  "yRequest\032\024.hheproto.MyResponseB\006\242\002\003HHEb\006"
-  "proto3"
+  "\"\034\n\010DataFile\022\020\n\010filename\030\001 \001(\t\"\261\001\n\024Decom"
+  "positionRequest\022\022\n\nanalyst_id\030\001 \001(\t\022\022\n\np"
+  "ublic_key\030\002 \001(\014\022\022\n\nsecret_key\030\003 \001(\014\022\022\n\nr"
+  "elin_keys\030\004 \001(\014\022\023\n\013galois_keys\030\005 \001(\014\022\016\n\006"
+  "record\030\006 \003(\004\022$\n\034user_encrypted_symmetric"
+  "_key\030\007 \003(\014\",\n\025DecompositionResponse\022\023\n\013h"
+  "e_enc_data\030\001 \003(\0142\220\001\n\016AnalystService\0229\n\014g"
+  "etPublicKey\022\017.hheproto.Empty\032\026.hheproto."
+  "PublicKeyMsg\"\000\022C\n\022addEncryptedResult\022\032.h"
+  "heproto.CiphertextResult\032\017.hheproto.Empt"
+  "y\"\0002\215\003\n\nCSPService\022=\n\raddPublicKeys\022\031.hh"
+  "eproto.PublicKeySetMsg\032\017.hheproto.Empty\""
+  "\000\022D\n\020addEncryptedKeys\022\035.hheproto.EncSymm"
+  "etricKeysMsg\032\017.hheproto.Empty\"\000\022D\n\020addEn"
+  "cryptedData\022\035.hheproto.EncSymmetricDataM"
+  "sg\032\017.hheproto.Empty\"\000\0225\n\naddMLModel\022\024.hh"
+  "eproto.MLModelMsg\032\017.hheproto.Empty\"\000\022=\n\r"
+  "evaluateModel\022\031.hheproto.CiphertextBytes"
+  "\032\017.hheproto.Empty\"\000\022>\n\025evaluateModelFrom"
+  "File\022\022.hheproto.DataFile\032\017.hheproto.Empt"
+  "y\"\000B\006\242\002\003HHEb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_hhe_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_hhe_2eproto = {
-    false, false, 1446, descriptor_table_protodef_hhe_2eproto,
+    false, false, 1539, descriptor_table_protodef_hhe_2eproto,
     "hhe.proto",
     &descriptor_table_hhe_2eproto_once, nullptr, 0, 13,
     schemas, file_default_instances, TableStruct_hhe_2eproto::offsets,
@@ -2723,51 +2738,113 @@ void DataFile::InternalSwap(DataFile* other) {
 
 // ===================================================================
 
-class MyRequest::_Internal {
+class DecompositionRequest::_Internal {
  public:
 };
 
-MyRequest::MyRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+DecompositionRequest::DecompositionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:hheproto.MyRequest)
+  // @@protoc_insertion_point(arena_constructor:hheproto.DecompositionRequest)
 }
-MyRequest::MyRequest(const MyRequest& from)
+DecompositionRequest::DecompositionRequest(const DecompositionRequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  MyRequest* const _this = this; (void)_this;
+  DecompositionRequest* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
+      decltype(_impl_.record_){from._impl_.record_}
+    , /*decltype(_impl_._record_cached_byte_size_)*/{0}
+    , decltype(_impl_.user_encrypted_symmetric_key_){from._impl_.user_encrypted_symmetric_key_}
+    , decltype(_impl_.analyst_id_){}
+    , decltype(_impl_.public_key_){}
+    , decltype(_impl_.secret_key_){}
+    , decltype(_impl_.relin_keys_){}
+    , decltype(_impl_.galois_keys_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.message_.InitDefault();
+  _impl_.analyst_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.message_.Set("", GetArenaForAllocation());
+    _impl_.analyst_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_message().empty()) {
-    _this->_impl_.message_.Set(from._internal_message(), 
+  if (!from._internal_analyst_id().empty()) {
+    _this->_impl_.analyst_id_.Set(from._internal_analyst_id(), 
       _this->GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:hheproto.MyRequest)
+  _impl_.public_key_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.public_key_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_public_key().empty()) {
+    _this->_impl_.public_key_.Set(from._internal_public_key(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.secret_key_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.secret_key_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_secret_key().empty()) {
+    _this->_impl_.secret_key_.Set(from._internal_secret_key(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.relin_keys_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.relin_keys_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_relin_keys().empty()) {
+    _this->_impl_.relin_keys_.Set(from._internal_relin_keys(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.galois_keys_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.galois_keys_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_galois_keys().empty()) {
+    _this->_impl_.galois_keys_.Set(from._internal_galois_keys(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:hheproto.DecompositionRequest)
 }
 
-inline void MyRequest::SharedCtor(
+inline void DecompositionRequest::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
+      decltype(_impl_.record_){arena}
+    , /*decltype(_impl_._record_cached_byte_size_)*/{0}
+    , decltype(_impl_.user_encrypted_symmetric_key_){arena}
+    , decltype(_impl_.analyst_id_){}
+    , decltype(_impl_.public_key_){}
+    , decltype(_impl_.secret_key_){}
+    , decltype(_impl_.relin_keys_){}
+    , decltype(_impl_.galois_keys_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.message_.InitDefault();
+  _impl_.analyst_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.message_.Set("", GetArenaForAllocation());
+    _impl_.analyst_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.public_key_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.public_key_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.secret_key_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.secret_key_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.relin_keys_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.relin_keys_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.galois_keys_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.galois_keys_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-MyRequest::~MyRequest() {
-  // @@protoc_insertion_point(destructor:hheproto.MyRequest)
+DecompositionRequest::~DecompositionRequest() {
+  // @@protoc_insertion_point(destructor:hheproto.DecompositionRequest)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -2775,38 +2852,111 @@ MyRequest::~MyRequest() {
   SharedDtor();
 }
 
-inline void MyRequest::SharedDtor() {
+inline void DecompositionRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.message_.Destroy();
+  _impl_.record_.~RepeatedField();
+  _impl_.user_encrypted_symmetric_key_.~RepeatedPtrField();
+  _impl_.analyst_id_.Destroy();
+  _impl_.public_key_.Destroy();
+  _impl_.secret_key_.Destroy();
+  _impl_.relin_keys_.Destroy();
+  _impl_.galois_keys_.Destroy();
 }
 
-void MyRequest::SetCachedSize(int size) const {
+void DecompositionRequest::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void MyRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:hheproto.MyRequest)
+void DecompositionRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:hheproto.DecompositionRequest)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.message_.ClearToEmpty();
+  _impl_.record_.Clear();
+  _impl_.user_encrypted_symmetric_key_.Clear();
+  _impl_.analyst_id_.ClearToEmpty();
+  _impl_.public_key_.ClearToEmpty();
+  _impl_.secret_key_.ClearToEmpty();
+  _impl_.relin_keys_.ClearToEmpty();
+  _impl_.galois_keys_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* MyRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* DecompositionRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string message = 1;
+      // string analyst_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_message();
+          auto str = _internal_mutable_analyst_id();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "hheproto.MyRequest.message"));
+          CHK_(::_pbi::VerifyUTF8(str, "hheproto.DecompositionRequest.analyst_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes public_key = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_public_key();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes secret_key = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_secret_key();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes relin_keys = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_relin_keys();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes galois_keys = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_galois_keys();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated uint64 record = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedUInt64Parser(_internal_mutable_record(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 48) {
+          _internal_add_record(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated bytes user_encrypted_symmetric_key = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_user_encrypted_symmetric_key();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<58>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -2833,92 +2983,213 @@ failure:
 #undef CHK_
 }
 
-uint8_t* MyRequest::_InternalSerialize(
+uint8_t* DecompositionRequest::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hheproto.MyRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.DecompositionRequest)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string message = 1;
-  if (!this->_internal_message().empty()) {
+  // string analyst_id = 1;
+  if (!this->_internal_analyst_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      this->_internal_analyst_id().data(), static_cast<int>(this->_internal_analyst_id().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "hheproto.MyRequest.message");
+      "hheproto.DecompositionRequest.analyst_id");
     target = stream->WriteStringMaybeAliased(
-        1, this->_internal_message(), target);
+        1, this->_internal_analyst_id(), target);
+  }
+
+  // bytes public_key = 2;
+  if (!this->_internal_public_key().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        2, this->_internal_public_key(), target);
+  }
+
+  // bytes secret_key = 3;
+  if (!this->_internal_secret_key().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        3, this->_internal_secret_key(), target);
+  }
+
+  // bytes relin_keys = 4;
+  if (!this->_internal_relin_keys().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        4, this->_internal_relin_keys(), target);
+  }
+
+  // bytes galois_keys = 5;
+  if (!this->_internal_galois_keys().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        5, this->_internal_galois_keys(), target);
+  }
+
+  // repeated uint64 record = 6;
+  {
+    int byte_size = _impl_._record_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteUInt64Packed(
+          6, _internal_record(), byte_size, target);
+    }
+  }
+
+  // repeated bytes user_encrypted_symmetric_key = 7;
+  for (int i = 0, n = this->_internal_user_encrypted_symmetric_key_size(); i < n; i++) {
+    const auto& s = this->_internal_user_encrypted_symmetric_key(i);
+    target = stream->WriteBytes(7, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hheproto.MyRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.DecompositionRequest)
   return target;
 }
 
-size_t MyRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hheproto.MyRequest)
+size_t DecompositionRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.DecompositionRequest)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string message = 1;
-  if (!this->_internal_message().empty()) {
+  // repeated uint64 record = 6;
+  {
+    size_t data_size = ::_pbi::WireFormatLite::
+      UInt64Size(this->_impl_.record_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::_pbi::ToCachedSize(data_size);
+    _impl_._record_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated bytes user_encrypted_symmetric_key = 7;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.user_encrypted_symmetric_key_.size());
+  for (int i = 0, n = _impl_.user_encrypted_symmetric_key_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+      _impl_.user_encrypted_symmetric_key_.Get(i));
+  }
+
+  // string analyst_id = 1;
+  if (!this->_internal_analyst_id().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_message());
+        this->_internal_analyst_id());
+  }
+
+  // bytes public_key = 2;
+  if (!this->_internal_public_key().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_public_key());
+  }
+
+  // bytes secret_key = 3;
+  if (!this->_internal_secret_key().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_secret_key());
+  }
+
+  // bytes relin_keys = 4;
+  if (!this->_internal_relin_keys().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_relin_keys());
+  }
+
+  // bytes galois_keys = 5;
+  if (!this->_internal_galois_keys().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_galois_keys());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MyRequest::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DecompositionRequest::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    MyRequest::MergeImpl
+    DecompositionRequest::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MyRequest::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DecompositionRequest::GetClassData() const { return &_class_data_; }
 
 
-void MyRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<MyRequest*>(&to_msg);
-  auto& from = static_cast<const MyRequest&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.MyRequest)
+void DecompositionRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DecompositionRequest*>(&to_msg);
+  auto& from = static_cast<const DecompositionRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.DecompositionRequest)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_message().empty()) {
-    _this->_internal_set_message(from._internal_message());
+  _this->_impl_.record_.MergeFrom(from._impl_.record_);
+  _this->_impl_.user_encrypted_symmetric_key_.MergeFrom(from._impl_.user_encrypted_symmetric_key_);
+  if (!from._internal_analyst_id().empty()) {
+    _this->_internal_set_analyst_id(from._internal_analyst_id());
+  }
+  if (!from._internal_public_key().empty()) {
+    _this->_internal_set_public_key(from._internal_public_key());
+  }
+  if (!from._internal_secret_key().empty()) {
+    _this->_internal_set_secret_key(from._internal_secret_key());
+  }
+  if (!from._internal_relin_keys().empty()) {
+    _this->_internal_set_relin_keys(from._internal_relin_keys());
+  }
+  if (!from._internal_galois_keys().empty()) {
+    _this->_internal_set_galois_keys(from._internal_galois_keys());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void MyRequest::CopyFrom(const MyRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.MyRequest)
+void DecompositionRequest::CopyFrom(const DecompositionRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.DecompositionRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool MyRequest::IsInitialized() const {
+bool DecompositionRequest::IsInitialized() const {
   return true;
 }
 
-void MyRequest::InternalSwap(MyRequest* other) {
+void DecompositionRequest::InternalSwap(DecompositionRequest* other) {
   using std::swap;
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.record_.InternalSwap(&other->_impl_.record_);
+  _impl_.user_encrypted_symmetric_key_.InternalSwap(&other->_impl_.user_encrypted_symmetric_key_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.message_, lhs_arena,
-      &other->_impl_.message_, rhs_arena
+      &_impl_.analyst_id_, lhs_arena,
+      &other->_impl_.analyst_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.public_key_, lhs_arena,
+      &other->_impl_.public_key_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.secret_key_, lhs_arena,
+      &other->_impl_.secret_key_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.relin_keys_, lhs_arena,
+      &other->_impl_.relin_keys_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.galois_keys_, lhs_arena,
+      &other->_impl_.galois_keys_, rhs_arena
   );
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata MyRequest::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata DecompositionRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
       file_level_metadata_hhe_2eproto[11]);
@@ -2926,51 +3197,39 @@ void MyRequest::InternalSwap(MyRequest* other) {
 
 // ===================================================================
 
-class MyResponse::_Internal {
+class DecompositionResponse::_Internal {
  public:
 };
 
-MyResponse::MyResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+DecompositionResponse::DecompositionResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:hheproto.MyResponse)
+  // @@protoc_insertion_point(arena_constructor:hheproto.DecompositionResponse)
 }
-MyResponse::MyResponse(const MyResponse& from)
+DecompositionResponse::DecompositionResponse(const DecompositionResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  MyResponse* const _this = this; (void)_this;
+  DecompositionResponse* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.response_){}
+      decltype(_impl_.he_enc_data_){from._impl_.he_enc_data_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.response_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.response_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_response().empty()) {
-    _this->_impl_.response_.Set(from._internal_response(), 
-      _this->GetArenaForAllocation());
-  }
-  // @@protoc_insertion_point(copy_constructor:hheproto.MyResponse)
+  // @@protoc_insertion_point(copy_constructor:hheproto.DecompositionResponse)
 }
 
-inline void MyResponse::SharedCtor(
+inline void DecompositionResponse::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.response_){}
+      decltype(_impl_.he_enc_data_){arena}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.response_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.response_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-MyResponse::~MyResponse() {
-  // @@protoc_insertion_point(destructor:hheproto.MyResponse)
+DecompositionResponse::~DecompositionResponse() {
+  // @@protoc_insertion_point(destructor:hheproto.DecompositionResponse)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -2978,38 +3237,42 @@ MyResponse::~MyResponse() {
   SharedDtor();
 }
 
-inline void MyResponse::SharedDtor() {
+inline void DecompositionResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.response_.Destroy();
+  _impl_.he_enc_data_.~RepeatedPtrField();
 }
 
-void MyResponse::SetCachedSize(int size) const {
+void DecompositionResponse::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void MyResponse::Clear() {
-// @@protoc_insertion_point(message_clear_start:hheproto.MyResponse)
+void DecompositionResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:hheproto.DecompositionResponse)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.response_.ClearToEmpty();
+  _impl_.he_enc_data_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* MyResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* DecompositionResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string response = 1;
+      // repeated bytes he_enc_data = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_response();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "hheproto.MyResponse.response"));
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_he_enc_data();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -3036,92 +3299,82 @@ failure:
 #undef CHK_
 }
 
-uint8_t* MyResponse::_InternalSerialize(
+uint8_t* DecompositionResponse::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hheproto.MyResponse)
+  // @@protoc_insertion_point(serialize_to_array_start:hheproto.DecompositionResponse)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string response = 1;
-  if (!this->_internal_response().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_response().data(), static_cast<int>(this->_internal_response().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "hheproto.MyResponse.response");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_response(), target);
+  // repeated bytes he_enc_data = 1;
+  for (int i = 0, n = this->_internal_he_enc_data_size(); i < n; i++) {
+    const auto& s = this->_internal_he_enc_data(i);
+    target = stream->WriteBytes(1, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hheproto.MyResponse)
+  // @@protoc_insertion_point(serialize_to_array_end:hheproto.DecompositionResponse)
   return target;
 }
 
-size_t MyResponse::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hheproto.MyResponse)
+size_t DecompositionResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hheproto.DecompositionResponse)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string response = 1;
-  if (!this->_internal_response().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_response());
+  // repeated bytes he_enc_data = 1;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.he_enc_data_.size());
+  for (int i = 0, n = _impl_.he_enc_data_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+      _impl_.he_enc_data_.Get(i));
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MyResponse::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DecompositionResponse::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    MyResponse::MergeImpl
+    DecompositionResponse::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MyResponse::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DecompositionResponse::GetClassData() const { return &_class_data_; }
 
 
-void MyResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<MyResponse*>(&to_msg);
-  auto& from = static_cast<const MyResponse&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.MyResponse)
+void DecompositionResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DecompositionResponse*>(&to_msg);
+  auto& from = static_cast<const DecompositionResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:hheproto.DecompositionResponse)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_response().empty()) {
-    _this->_internal_set_response(from._internal_response());
-  }
+  _this->_impl_.he_enc_data_.MergeFrom(from._impl_.he_enc_data_);
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void MyResponse::CopyFrom(const MyResponse& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.MyResponse)
+void DecompositionResponse::CopyFrom(const DecompositionResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hheproto.DecompositionResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool MyResponse::IsInitialized() const {
+bool DecompositionResponse::IsInitialized() const {
   return true;
 }
 
-void MyResponse::InternalSwap(MyResponse* other) {
+void DecompositionResponse::InternalSwap(DecompositionResponse* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.response_, lhs_arena,
-      &other->_impl_.response_, rhs_arena
-  );
+  _impl_.he_enc_data_.InternalSwap(&other->_impl_.he_enc_data_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata MyResponse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata DecompositionResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_hhe_2eproto_getter, &descriptor_table_hhe_2eproto_once,
       file_level_metadata_hhe_2eproto[12]);
@@ -3174,13 +3427,13 @@ template<> PROTOBUF_NOINLINE ::hheproto::DataFile*
 Arena::CreateMaybeMessage< ::hheproto::DataFile >(Arena* arena) {
   return Arena::CreateMessageInternal< ::hheproto::DataFile >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hheproto::MyRequest*
-Arena::CreateMaybeMessage< ::hheproto::MyRequest >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::hheproto::MyRequest >(arena);
+template<> PROTOBUF_NOINLINE ::hheproto::DecompositionRequest*
+Arena::CreateMaybeMessage< ::hheproto::DecompositionRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::hheproto::DecompositionRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hheproto::MyResponse*
-Arena::CreateMaybeMessage< ::hheproto::MyResponse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::hheproto::MyResponse >(arena);
+template<> PROTOBUF_NOINLINE ::hheproto::DecompositionResponse*
+Arena::CreateMaybeMessage< ::hheproto::DecompositionResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::hheproto::DecompositionResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

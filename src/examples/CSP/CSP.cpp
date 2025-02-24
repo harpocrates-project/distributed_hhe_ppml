@@ -4,6 +4,10 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include <string>
+#include <curl/curl.h>
+#include "hhe.pb.h"
+#include <mutex>
 
 using namespace std;
 using namespace std::chrono;
@@ -805,4 +809,173 @@ void CSPParallel_hhe_pktnn_1fc::waitForRemainingThreads(std::vector<std::thread>
         std::cout << "Thread " << th.get_id() << " joined" << std::endl;
     }
     thread_pool.clear();
+}
+
+
+void CSPFaaS_hhe_pktnn_1fc::performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE) {
+    std::vector<std::thread> thread_pool;
+    std::mutex mtx;
+
+    auto decompose_task = [&](vector<uint64_t> record, vector<vector<Ciphertext>>& he_enc_data, const vector<Ciphertext>& userEncryptedSymmetricKey, size_t index) {
+        try {
+            std::cout << "Thread " << std::this_thread::get_id() << " started for record " << index << std::endl;
+
+            // Create the protobuf request
+            hheproto::DecompositionRequest request;
+            request.set_analyst_id(analystId);
+
+            // Serialize keys
+            std::string pk_str, sk_str, rk_str, gk_str;
+            {
+                std::ostringstream pk_stream;
+                getAnalystHEPublicKey(analystId).save(pk_stream);
+                pk_str = pk_stream.str();
+            }
+            {
+                std::ostringstream sk_stream;
+                getHESecretKey().save(sk_stream);
+                sk_str = sk_stream.str();
+            }
+            {
+                std::ostringstream rk_stream;
+                getAnalystHERelinKeys(analystId).save(rk_stream);
+                rk_str = rk_stream.str();
+            }
+            {
+                std::ostringstream gk_stream;
+                getAnalystHEGaloisKeys(analystId).save(gk_stream);
+                gk_str = gk_stream.str();
+            }
+            request.set_public_key(pk_str);
+            request.set_secret_key(sk_str);
+            request.set_relin_keys(rk_str);
+            request.set_galois_keys(gk_str);
+
+            // Serialize record
+            for (auto& value : record) {
+                request.add_record(value);
+            }
+
+            // Serialize userEncryptedSymmetricKey
+            for (auto& key : userEncryptedSymmetricKey) {
+                std::ostringstream key_stream;
+                key.save(key_stream);
+                request.add_user_encrypted_symmetric_key(key_stream.str());
+            }
+
+            // Serialize the request to a string
+            std::string serializedRequest;
+            if (!request.SerializeToString(&serializedRequest)) {
+                throw std::runtime_error("Failed to serialize DecompositionRequest protobuf message");
+            }
+
+            // Initialize CURL
+            CURL *curl;
+            CURLcode res;
+            curl_global_init(CURL_GLOBAL_DEFAULT);
+            curl = curl_easy_init();
+
+            if(curl) {
+                // Set the URL for the POST request
+                curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:8080");
+
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, serializedRequest.c_str());
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, serializedRequest.size());
+
+                // Set the content type to application/octet-stream
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Content-Type: application/octet-stream");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+                // Set up the callback function to handle the response data
+                std::string responseString;
+                curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CSPFaaS_hhe_pktnn_1fc::WriteCallback);
+                curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
+
+                // Enable verbose output for debugging
+                curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+                // Perform the request
+                res = curl_easy_perform(curl);
+
+                // Check for errors
+                if(res != CURLE_OK) {
+                    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+                } else {
+                    // Deserialize the response
+                    hheproto::DecompositionResponse response;
+                    if (!response.ParseFromString(responseString)) {
+                        std::cerr << "Failed to parse DecompositionResponse protobuf message. Response: " << responseString << std::endl;
+                    } else {
+                        // Convert the response to Ciphertext objects
+                        std::vector<Ciphertext> result;
+                        for (const auto& data : response.he_enc_data()) {
+                            Ciphertext ct;
+                            std::istringstream data_stream(data);
+                            ct.load(*getContext(), data_stream);
+                            result.push_back(ct);
+                        }
+
+                        // Print the result
+                        //std::cout << "Printing result of thread" << std::endl;
+                        //print_vec_Ciphertext(result, record.size());
+
+                        // Update the local data structures
+                        {
+                            std::lock_guard<std::mutex> lock(mtx);
+                            he_enc_data.push_back(result);
+                        }
+                    }
+                }
+
+                // Clean up
+                curl_slist_free_all(headers);
+                curl_easy_cleanup(curl);
+                curl_global_cleanup();
+            }
+
+            std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
+        } catch (...) {
+            std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
+        }
+    };
+
+    auto& he_enc_data = he_enc_data_map[analystId];
+    const auto& userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
+
+    const auto& records = enc_data_map[analystId];
+    for (size_t i = 0; i < records.size(); ++i) {
+        const auto& record = records[i];
+        std::cout << "Processing record " << i << std::endl;
+        thread_pool.emplace_back(decompose_task, record, std::ref(he_enc_data), std::ref(userEncryptedSymmetricKey), i);
+    }
+
+    for (auto& th : thread_pool) {
+        th.join();
+    }
+
+    std::cout << "All threads finished. Printing results." << std::endl;
+    for (auto& record : he_enc_data) {
+        print_vec_Ciphertext(record, record.size());
+    }
+}
+
+void CSPFaaS_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen) {}
+
+
+size_t CSPFaaS_hhe_pktnn_1fc::WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
+    //static thread_local int call_count = 0;
+    size_t totalSize = size * nmemb;
+    std::string* responseString = static_cast<std::string*>(userp);
+    try {
+        responseString->append(static_cast<char*>(contents), totalSize);
+        //call_count++;
+        //std::cout << "Thread " << std::this_thread::get_id() << " called WriteCallback " << call_count << " times. Appended " << totalSize << " bytes." << std::endl;
+    } catch (const std::bad_alloc& e) {
+        std::cerr << "Memory allocation error in WriteCallback: " << e.what() << std::endl;
+        return 0; // Returning 0 will signal an error to libcurl
+    }
+    return totalSize;
 }

@@ -58,6 +58,12 @@ extern CiphertextResultDefaultTypeInternal _CiphertextResult_default_instance_;
 class DataFile;
 struct DataFileDefaultTypeInternal;
 extern DataFileDefaultTypeInternal _DataFile_default_instance_;
+class DecompositionRequest;
+struct DecompositionRequestDefaultTypeInternal;
+extern DecompositionRequestDefaultTypeInternal _DecompositionRequest_default_instance_;
+class DecompositionResponse;
+struct DecompositionResponseDefaultTypeInternal;
+extern DecompositionResponseDefaultTypeInternal _DecompositionResponse_default_instance_;
 class Empty;
 struct EmptyDefaultTypeInternal;
 extern EmptyDefaultTypeInternal _Empty_default_instance_;
@@ -73,12 +79,6 @@ extern EncSymmetricKeysMsgDefaultTypeInternal _EncSymmetricKeysMsg_default_insta
 class MLModelMsg;
 struct MLModelMsgDefaultTypeInternal;
 extern MLModelMsgDefaultTypeInternal _MLModelMsg_default_instance_;
-class MyRequest;
-struct MyRequestDefaultTypeInternal;
-extern MyRequestDefaultTypeInternal _MyRequest_default_instance_;
-class MyResponse;
-struct MyResponseDefaultTypeInternal;
-extern MyResponseDefaultTypeInternal _MyResponse_default_instance_;
 class PublicKeyMsg;
 struct PublicKeyMsgDefaultTypeInternal;
 extern PublicKeyMsgDefaultTypeInternal _PublicKeyMsg_default_instance_;
@@ -91,13 +91,13 @@ template<> ::hheproto::CiphertextBytes* Arena::CreateMaybeMessage<::hheproto::Ci
 template<> ::hheproto::CiphertextMsg* Arena::CreateMaybeMessage<::hheproto::CiphertextMsg>(Arena*);
 template<> ::hheproto::CiphertextResult* Arena::CreateMaybeMessage<::hheproto::CiphertextResult>(Arena*);
 template<> ::hheproto::DataFile* Arena::CreateMaybeMessage<::hheproto::DataFile>(Arena*);
+template<> ::hheproto::DecompositionRequest* Arena::CreateMaybeMessage<::hheproto::DecompositionRequest>(Arena*);
+template<> ::hheproto::DecompositionResponse* Arena::CreateMaybeMessage<::hheproto::DecompositionResponse>(Arena*);
 template<> ::hheproto::Empty* Arena::CreateMaybeMessage<::hheproto::Empty>(Arena*);
 template<> ::hheproto::EncSymmetricDataMsg* Arena::CreateMaybeMessage<::hheproto::EncSymmetricDataMsg>(Arena*);
 template<> ::hheproto::EncSymmetricDataRecord* Arena::CreateMaybeMessage<::hheproto::EncSymmetricDataRecord>(Arena*);
 template<> ::hheproto::EncSymmetricKeysMsg* Arena::CreateMaybeMessage<::hheproto::EncSymmetricKeysMsg>(Arena*);
 template<> ::hheproto::MLModelMsg* Arena::CreateMaybeMessage<::hheproto::MLModelMsg>(Arena*);
-template<> ::hheproto::MyRequest* Arena::CreateMaybeMessage<::hheproto::MyRequest>(Arena*);
-template<> ::hheproto::MyResponse* Arena::CreateMaybeMessage<::hheproto::MyResponse>(Arena*);
 template<> ::hheproto::PublicKeyMsg* Arena::CreateMaybeMessage<::hheproto::PublicKeyMsg>(Arena*);
 template<> ::hheproto::PublicKeySetMsg* Arena::CreateMaybeMessage<::hheproto::PublicKeySetMsg>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -1942,24 +1942,24 @@ class DataFile final :
 };
 // -------------------------------------------------------------------
 
-class MyRequest final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.MyRequest) */ {
+class DecompositionRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.DecompositionRequest) */ {
  public:
-  inline MyRequest() : MyRequest(nullptr) {}
-  ~MyRequest() override;
-  explicit PROTOBUF_CONSTEXPR MyRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline DecompositionRequest() : DecompositionRequest(nullptr) {}
+  ~DecompositionRequest() override;
+  explicit PROTOBUF_CONSTEXPR DecompositionRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  MyRequest(const MyRequest& from);
-  MyRequest(MyRequest&& from) noexcept
-    : MyRequest() {
+  DecompositionRequest(const DecompositionRequest& from);
+  DecompositionRequest(DecompositionRequest&& from) noexcept
+    : DecompositionRequest() {
     *this = ::std::move(from);
   }
 
-  inline MyRequest& operator=(const MyRequest& from) {
+  inline DecompositionRequest& operator=(const DecompositionRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  inline MyRequest& operator=(MyRequest&& from) noexcept {
+  inline DecompositionRequest& operator=(DecompositionRequest&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1982,20 +1982,20 @@ class MyRequest final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const MyRequest& default_instance() {
+  static const DecompositionRequest& default_instance() {
     return *internal_default_instance();
   }
-  static inline const MyRequest* internal_default_instance() {
-    return reinterpret_cast<const MyRequest*>(
-               &_MyRequest_default_instance_);
+  static inline const DecompositionRequest* internal_default_instance() {
+    return reinterpret_cast<const DecompositionRequest*>(
+               &_DecompositionRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     11;
 
-  friend void swap(MyRequest& a, MyRequest& b) {
+  friend void swap(DecompositionRequest& a, DecompositionRequest& b) {
     a.Swap(&b);
   }
-  inline void Swap(MyRequest* other) {
+  inline void Swap(DecompositionRequest* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2008,7 +2008,7 @@ class MyRequest final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(MyRequest* other) {
+  void UnsafeArenaSwap(DecompositionRequest* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2016,14 +2016,14 @@ class MyRequest final :
 
   // implements Message ----------------------------------------------
 
-  MyRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MyRequest>(arena);
+  DecompositionRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DecompositionRequest>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MyRequest& from);
+  void CopyFrom(const DecompositionRequest& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MyRequest& from) {
-    MyRequest::MergeImpl(*this, from);
+  void MergeFrom( const DecompositionRequest& from) {
+    DecompositionRequest::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2041,15 +2041,15 @@ class MyRequest final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(MyRequest* other);
+  void InternalSwap(DecompositionRequest* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hheproto.MyRequest";
+    return "hheproto.DecompositionRequest";
   }
   protected:
-  explicit MyRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit DecompositionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -2063,23 +2063,131 @@ class MyRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 1,
+    kRecordFieldNumber = 6,
+    kUserEncryptedSymmetricKeyFieldNumber = 7,
+    kAnalystIdFieldNumber = 1,
+    kPublicKeyFieldNumber = 2,
+    kSecretKeyFieldNumber = 3,
+    kRelinKeysFieldNumber = 4,
+    kGaloisKeysFieldNumber = 5,
   };
-  // string message = 1;
-  void clear_message();
-  const std::string& message() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_message(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_message();
-  PROTOBUF_NODISCARD std::string* release_message();
-  void set_allocated_message(std::string* message);
+  // repeated uint64 record = 6;
+  int record_size() const;
   private:
-  const std::string& _internal_message() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
-  std::string* _internal_mutable_message();
+  int _internal_record_size() const;
+  public:
+  void clear_record();
+  private:
+  uint64_t _internal_record(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
+      _internal_record() const;
+  void _internal_add_record(uint64_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
+      _internal_mutable_record();
+  public:
+  uint64_t record(int index) const;
+  void set_record(int index, uint64_t value);
+  void add_record(uint64_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
+      record() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
+      mutable_record();
+
+  // repeated bytes user_encrypted_symmetric_key = 7;
+  int user_encrypted_symmetric_key_size() const;
+  private:
+  int _internal_user_encrypted_symmetric_key_size() const;
+  public:
+  void clear_user_encrypted_symmetric_key();
+  const std::string& user_encrypted_symmetric_key(int index) const;
+  std::string* mutable_user_encrypted_symmetric_key(int index);
+  void set_user_encrypted_symmetric_key(int index, const std::string& value);
+  void set_user_encrypted_symmetric_key(int index, std::string&& value);
+  void set_user_encrypted_symmetric_key(int index, const char* value);
+  void set_user_encrypted_symmetric_key(int index, const void* value, size_t size);
+  std::string* add_user_encrypted_symmetric_key();
+  void add_user_encrypted_symmetric_key(const std::string& value);
+  void add_user_encrypted_symmetric_key(std::string&& value);
+  void add_user_encrypted_symmetric_key(const char* value);
+  void add_user_encrypted_symmetric_key(const void* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& user_encrypted_symmetric_key() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_user_encrypted_symmetric_key();
+  private:
+  const std::string& _internal_user_encrypted_symmetric_key(int index) const;
+  std::string* _internal_add_user_encrypted_symmetric_key();
   public:
 
-  // @@protoc_insertion_point(class_scope:hheproto.MyRequest)
+  // string analyst_id = 1;
+  void clear_analyst_id();
+  const std::string& analyst_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_analyst_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_analyst_id();
+  PROTOBUF_NODISCARD std::string* release_analyst_id();
+  void set_allocated_analyst_id(std::string* analyst_id);
+  private:
+  const std::string& _internal_analyst_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_analyst_id(const std::string& value);
+  std::string* _internal_mutable_analyst_id();
+  public:
+
+  // bytes public_key = 2;
+  void clear_public_key();
+  const std::string& public_key() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_public_key(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_public_key();
+  PROTOBUF_NODISCARD std::string* release_public_key();
+  void set_allocated_public_key(std::string* public_key);
+  private:
+  const std::string& _internal_public_key() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_public_key(const std::string& value);
+  std::string* _internal_mutable_public_key();
+  public:
+
+  // bytes secret_key = 3;
+  void clear_secret_key();
+  const std::string& secret_key() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_secret_key(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_secret_key();
+  PROTOBUF_NODISCARD std::string* release_secret_key();
+  void set_allocated_secret_key(std::string* secret_key);
+  private:
+  const std::string& _internal_secret_key() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_secret_key(const std::string& value);
+  std::string* _internal_mutable_secret_key();
+  public:
+
+  // bytes relin_keys = 4;
+  void clear_relin_keys();
+  const std::string& relin_keys() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_relin_keys(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_relin_keys();
+  PROTOBUF_NODISCARD std::string* release_relin_keys();
+  void set_allocated_relin_keys(std::string* relin_keys);
+  private:
+  const std::string& _internal_relin_keys() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_relin_keys(const std::string& value);
+  std::string* _internal_mutable_relin_keys();
+  public:
+
+  // bytes galois_keys = 5;
+  void clear_galois_keys();
+  const std::string& galois_keys() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_galois_keys(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_galois_keys();
+  PROTOBUF_NODISCARD std::string* release_galois_keys();
+  void set_allocated_galois_keys(std::string* galois_keys);
+  private:
+  const std::string& _internal_galois_keys() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_galois_keys(const std::string& value);
+  std::string* _internal_mutable_galois_keys();
+  public:
+
+  // @@protoc_insertion_point(class_scope:hheproto.DecompositionRequest)
  private:
   class _Internal;
 
@@ -2087,7 +2195,14 @@ class MyRequest final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t > record_;
+    mutable std::atomic<int> _record_cached_byte_size_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> user_encrypted_symmetric_key_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr analyst_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr public_key_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr secret_key_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr relin_keys_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr galois_keys_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2095,24 +2210,24 @@ class MyRequest final :
 };
 // -------------------------------------------------------------------
 
-class MyResponse final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.MyResponse) */ {
+class DecompositionResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hheproto.DecompositionResponse) */ {
  public:
-  inline MyResponse() : MyResponse(nullptr) {}
-  ~MyResponse() override;
-  explicit PROTOBUF_CONSTEXPR MyResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline DecompositionResponse() : DecompositionResponse(nullptr) {}
+  ~DecompositionResponse() override;
+  explicit PROTOBUF_CONSTEXPR DecompositionResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  MyResponse(const MyResponse& from);
-  MyResponse(MyResponse&& from) noexcept
-    : MyResponse() {
+  DecompositionResponse(const DecompositionResponse& from);
+  DecompositionResponse(DecompositionResponse&& from) noexcept
+    : DecompositionResponse() {
     *this = ::std::move(from);
   }
 
-  inline MyResponse& operator=(const MyResponse& from) {
+  inline DecompositionResponse& operator=(const DecompositionResponse& from) {
     CopyFrom(from);
     return *this;
   }
-  inline MyResponse& operator=(MyResponse&& from) noexcept {
+  inline DecompositionResponse& operator=(DecompositionResponse&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2135,20 +2250,20 @@ class MyResponse final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const MyResponse& default_instance() {
+  static const DecompositionResponse& default_instance() {
     return *internal_default_instance();
   }
-  static inline const MyResponse* internal_default_instance() {
-    return reinterpret_cast<const MyResponse*>(
-               &_MyResponse_default_instance_);
+  static inline const DecompositionResponse* internal_default_instance() {
+    return reinterpret_cast<const DecompositionResponse*>(
+               &_DecompositionResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     12;
 
-  friend void swap(MyResponse& a, MyResponse& b) {
+  friend void swap(DecompositionResponse& a, DecompositionResponse& b) {
     a.Swap(&b);
   }
-  inline void Swap(MyResponse* other) {
+  inline void Swap(DecompositionResponse* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2161,7 +2276,7 @@ class MyResponse final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(MyResponse* other) {
+  void UnsafeArenaSwap(DecompositionResponse* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2169,14 +2284,14 @@ class MyResponse final :
 
   // implements Message ----------------------------------------------
 
-  MyResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MyResponse>(arena);
+  DecompositionResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DecompositionResponse>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MyResponse& from);
+  void CopyFrom(const DecompositionResponse& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MyResponse& from) {
-    MyResponse::MergeImpl(*this, from);
+  void MergeFrom( const DecompositionResponse& from) {
+    DecompositionResponse::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2194,15 +2309,15 @@ class MyResponse final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(MyResponse* other);
+  void InternalSwap(DecompositionResponse* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hheproto.MyResponse";
+    return "hheproto.DecompositionResponse";
   }
   protected:
-  explicit MyResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit DecompositionResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -2216,23 +2331,33 @@ class MyResponse final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResponseFieldNumber = 1,
+    kHeEncDataFieldNumber = 1,
   };
-  // string response = 1;
-  void clear_response();
-  const std::string& response() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_response(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_response();
-  PROTOBUF_NODISCARD std::string* release_response();
-  void set_allocated_response(std::string* response);
+  // repeated bytes he_enc_data = 1;
+  int he_enc_data_size() const;
   private:
-  const std::string& _internal_response() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_response(const std::string& value);
-  std::string* _internal_mutable_response();
+  int _internal_he_enc_data_size() const;
+  public:
+  void clear_he_enc_data();
+  const std::string& he_enc_data(int index) const;
+  std::string* mutable_he_enc_data(int index);
+  void set_he_enc_data(int index, const std::string& value);
+  void set_he_enc_data(int index, std::string&& value);
+  void set_he_enc_data(int index, const char* value);
+  void set_he_enc_data(int index, const void* value, size_t size);
+  std::string* add_he_enc_data();
+  void add_he_enc_data(const std::string& value);
+  void add_he_enc_data(std::string&& value);
+  void add_he_enc_data(const char* value);
+  void add_he_enc_data(const void* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& he_enc_data() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_he_enc_data();
+  private:
+  const std::string& _internal_he_enc_data(int index) const;
+  std::string* _internal_add_he_enc_data();
   public:
 
-  // @@protoc_insertion_point(class_scope:hheproto.MyResponse)
+  // @@protoc_insertion_point(class_scope:hheproto.DecompositionResponse)
  private:
   class _Internal;
 
@@ -2240,7 +2365,7 @@ class MyResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr response_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> he_enc_data_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3371,110 +3496,457 @@ inline void DataFile::set_allocated_filename(std::string* filename) {
 
 // -------------------------------------------------------------------
 
-// MyRequest
+// DecompositionRequest
 
-// string message = 1;
-inline void MyRequest::clear_message() {
-  _impl_.message_.ClearToEmpty();
+// string analyst_id = 1;
+inline void DecompositionRequest::clear_analyst_id() {
+  _impl_.analyst_id_.ClearToEmpty();
 }
-inline const std::string& MyRequest::message() const {
-  // @@protoc_insertion_point(field_get:hheproto.MyRequest.message)
-  return _internal_message();
+inline const std::string& DecompositionRequest::analyst_id() const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.analyst_id)
+  return _internal_analyst_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void MyRequest::set_message(ArgT0&& arg0, ArgT... args) {
+void DecompositionRequest::set_analyst_id(ArgT0&& arg0, ArgT... args) {
  
- _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:hheproto.MyRequest.message)
+ _impl_.analyst_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.analyst_id)
 }
-inline std::string* MyRequest::mutable_message() {
-  std::string* _s = _internal_mutable_message();
-  // @@protoc_insertion_point(field_mutable:hheproto.MyRequest.message)
+inline std::string* DecompositionRequest::mutable_analyst_id() {
+  std::string* _s = _internal_mutable_analyst_id();
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.analyst_id)
   return _s;
 }
-inline const std::string& MyRequest::_internal_message() const {
-  return _impl_.message_.Get();
+inline const std::string& DecompositionRequest::_internal_analyst_id() const {
+  return _impl_.analyst_id_.Get();
 }
-inline void MyRequest::_internal_set_message(const std::string& value) {
+inline void DecompositionRequest::_internal_set_analyst_id(const std::string& value) {
   
-  _impl_.message_.Set(value, GetArenaForAllocation());
+  _impl_.analyst_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* MyRequest::_internal_mutable_message() {
+inline std::string* DecompositionRequest::_internal_mutable_analyst_id() {
   
-  return _impl_.message_.Mutable(GetArenaForAllocation());
+  return _impl_.analyst_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* MyRequest::release_message() {
-  // @@protoc_insertion_point(field_release:hheproto.MyRequest.message)
-  return _impl_.message_.Release();
+inline std::string* DecompositionRequest::release_analyst_id() {
+  // @@protoc_insertion_point(field_release:hheproto.DecompositionRequest.analyst_id)
+  return _impl_.analyst_id_.Release();
 }
-inline void MyRequest::set_allocated_message(std::string* message) {
-  if (message != nullptr) {
+inline void DecompositionRequest::set_allocated_analyst_id(std::string* analyst_id) {
+  if (analyst_id != nullptr) {
     
   } else {
     
   }
-  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+  _impl_.analyst_id_.SetAllocated(analyst_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.message_.IsDefault()) {
-    _impl_.message_.Set("", GetArenaForAllocation());
+  if (_impl_.analyst_id_.IsDefault()) {
+    _impl_.analyst_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:hheproto.MyRequest.message)
+  // @@protoc_insertion_point(field_set_allocated:hheproto.DecompositionRequest.analyst_id)
+}
+
+// bytes public_key = 2;
+inline void DecompositionRequest::clear_public_key() {
+  _impl_.public_key_.ClearToEmpty();
+}
+inline const std::string& DecompositionRequest::public_key() const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.public_key)
+  return _internal_public_key();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DecompositionRequest::set_public_key(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.public_key_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.public_key)
+}
+inline std::string* DecompositionRequest::mutable_public_key() {
+  std::string* _s = _internal_mutable_public_key();
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.public_key)
+  return _s;
+}
+inline const std::string& DecompositionRequest::_internal_public_key() const {
+  return _impl_.public_key_.Get();
+}
+inline void DecompositionRequest::_internal_set_public_key(const std::string& value) {
+  
+  _impl_.public_key_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::_internal_mutable_public_key() {
+  
+  return _impl_.public_key_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::release_public_key() {
+  // @@protoc_insertion_point(field_release:hheproto.DecompositionRequest.public_key)
+  return _impl_.public_key_.Release();
+}
+inline void DecompositionRequest::set_allocated_public_key(std::string* public_key) {
+  if (public_key != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.public_key_.SetAllocated(public_key, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.public_key_.IsDefault()) {
+    _impl_.public_key_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.DecompositionRequest.public_key)
+}
+
+// bytes secret_key = 3;
+inline void DecompositionRequest::clear_secret_key() {
+  _impl_.secret_key_.ClearToEmpty();
+}
+inline const std::string& DecompositionRequest::secret_key() const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.secret_key)
+  return _internal_secret_key();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DecompositionRequest::set_secret_key(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.secret_key_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.secret_key)
+}
+inline std::string* DecompositionRequest::mutable_secret_key() {
+  std::string* _s = _internal_mutable_secret_key();
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.secret_key)
+  return _s;
+}
+inline const std::string& DecompositionRequest::_internal_secret_key() const {
+  return _impl_.secret_key_.Get();
+}
+inline void DecompositionRequest::_internal_set_secret_key(const std::string& value) {
+  
+  _impl_.secret_key_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::_internal_mutable_secret_key() {
+  
+  return _impl_.secret_key_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::release_secret_key() {
+  // @@protoc_insertion_point(field_release:hheproto.DecompositionRequest.secret_key)
+  return _impl_.secret_key_.Release();
+}
+inline void DecompositionRequest::set_allocated_secret_key(std::string* secret_key) {
+  if (secret_key != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.secret_key_.SetAllocated(secret_key, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.secret_key_.IsDefault()) {
+    _impl_.secret_key_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.DecompositionRequest.secret_key)
+}
+
+// bytes relin_keys = 4;
+inline void DecompositionRequest::clear_relin_keys() {
+  _impl_.relin_keys_.ClearToEmpty();
+}
+inline const std::string& DecompositionRequest::relin_keys() const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.relin_keys)
+  return _internal_relin_keys();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DecompositionRequest::set_relin_keys(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.relin_keys_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.relin_keys)
+}
+inline std::string* DecompositionRequest::mutable_relin_keys() {
+  std::string* _s = _internal_mutable_relin_keys();
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.relin_keys)
+  return _s;
+}
+inline const std::string& DecompositionRequest::_internal_relin_keys() const {
+  return _impl_.relin_keys_.Get();
+}
+inline void DecompositionRequest::_internal_set_relin_keys(const std::string& value) {
+  
+  _impl_.relin_keys_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::_internal_mutable_relin_keys() {
+  
+  return _impl_.relin_keys_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::release_relin_keys() {
+  // @@protoc_insertion_point(field_release:hheproto.DecompositionRequest.relin_keys)
+  return _impl_.relin_keys_.Release();
+}
+inline void DecompositionRequest::set_allocated_relin_keys(std::string* relin_keys) {
+  if (relin_keys != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.relin_keys_.SetAllocated(relin_keys, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.relin_keys_.IsDefault()) {
+    _impl_.relin_keys_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.DecompositionRequest.relin_keys)
+}
+
+// bytes galois_keys = 5;
+inline void DecompositionRequest::clear_galois_keys() {
+  _impl_.galois_keys_.ClearToEmpty();
+}
+inline const std::string& DecompositionRequest::galois_keys() const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.galois_keys)
+  return _internal_galois_keys();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DecompositionRequest::set_galois_keys(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.galois_keys_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.galois_keys)
+}
+inline std::string* DecompositionRequest::mutable_galois_keys() {
+  std::string* _s = _internal_mutable_galois_keys();
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.galois_keys)
+  return _s;
+}
+inline const std::string& DecompositionRequest::_internal_galois_keys() const {
+  return _impl_.galois_keys_.Get();
+}
+inline void DecompositionRequest::_internal_set_galois_keys(const std::string& value) {
+  
+  _impl_.galois_keys_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::_internal_mutable_galois_keys() {
+  
+  return _impl_.galois_keys_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DecompositionRequest::release_galois_keys() {
+  // @@protoc_insertion_point(field_release:hheproto.DecompositionRequest.galois_keys)
+  return _impl_.galois_keys_.Release();
+}
+inline void DecompositionRequest::set_allocated_galois_keys(std::string* galois_keys) {
+  if (galois_keys != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.galois_keys_.SetAllocated(galois_keys, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.galois_keys_.IsDefault()) {
+    _impl_.galois_keys_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.DecompositionRequest.galois_keys)
+}
+
+// repeated uint64 record = 6;
+inline int DecompositionRequest::_internal_record_size() const {
+  return _impl_.record_.size();
+}
+inline int DecompositionRequest::record_size() const {
+  return _internal_record_size();
+}
+inline void DecompositionRequest::clear_record() {
+  _impl_.record_.Clear();
+}
+inline uint64_t DecompositionRequest::_internal_record(int index) const {
+  return _impl_.record_.Get(index);
+}
+inline uint64_t DecompositionRequest::record(int index) const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.record)
+  return _internal_record(index);
+}
+inline void DecompositionRequest::set_record(int index, uint64_t value) {
+  _impl_.record_.Set(index, value);
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.record)
+}
+inline void DecompositionRequest::_internal_add_record(uint64_t value) {
+  _impl_.record_.Add(value);
+}
+inline void DecompositionRequest::add_record(uint64_t value) {
+  _internal_add_record(value);
+  // @@protoc_insertion_point(field_add:hheproto.DecompositionRequest.record)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
+DecompositionRequest::_internal_record() const {
+  return _impl_.record_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >&
+DecompositionRequest::record() const {
+  // @@protoc_insertion_point(field_list:hheproto.DecompositionRequest.record)
+  return _internal_record();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
+DecompositionRequest::_internal_mutable_record() {
+  return &_impl_.record_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint64_t >*
+DecompositionRequest::mutable_record() {
+  // @@protoc_insertion_point(field_mutable_list:hheproto.DecompositionRequest.record)
+  return _internal_mutable_record();
+}
+
+// repeated bytes user_encrypted_symmetric_key = 7;
+inline int DecompositionRequest::_internal_user_encrypted_symmetric_key_size() const {
+  return _impl_.user_encrypted_symmetric_key_.size();
+}
+inline int DecompositionRequest::user_encrypted_symmetric_key_size() const {
+  return _internal_user_encrypted_symmetric_key_size();
+}
+inline void DecompositionRequest::clear_user_encrypted_symmetric_key() {
+  _impl_.user_encrypted_symmetric_key_.Clear();
+}
+inline std::string* DecompositionRequest::add_user_encrypted_symmetric_key() {
+  std::string* _s = _internal_add_user_encrypted_symmetric_key();
+  // @@protoc_insertion_point(field_add_mutable:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+  return _s;
+}
+inline const std::string& DecompositionRequest::_internal_user_encrypted_symmetric_key(int index) const {
+  return _impl_.user_encrypted_symmetric_key_.Get(index);
+}
+inline const std::string& DecompositionRequest::user_encrypted_symmetric_key(int index) const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+  return _internal_user_encrypted_symmetric_key(index);
+}
+inline std::string* DecompositionRequest::mutable_user_encrypted_symmetric_key(int index) {
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+  return _impl_.user_encrypted_symmetric_key_.Mutable(index);
+}
+inline void DecompositionRequest::set_user_encrypted_symmetric_key(int index, const std::string& value) {
+  _impl_.user_encrypted_symmetric_key_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::set_user_encrypted_symmetric_key(int index, std::string&& value) {
+  _impl_.user_encrypted_symmetric_key_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::set_user_encrypted_symmetric_key(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.user_encrypted_symmetric_key_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::set_user_encrypted_symmetric_key(int index, const void* value, size_t size) {
+  _impl_.user_encrypted_symmetric_key_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline std::string* DecompositionRequest::_internal_add_user_encrypted_symmetric_key() {
+  return _impl_.user_encrypted_symmetric_key_.Add();
+}
+inline void DecompositionRequest::add_user_encrypted_symmetric_key(const std::string& value) {
+  _impl_.user_encrypted_symmetric_key_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::add_user_encrypted_symmetric_key(std::string&& value) {
+  _impl_.user_encrypted_symmetric_key_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::add_user_encrypted_symmetric_key(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.user_encrypted_symmetric_key_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline void DecompositionRequest::add_user_encrypted_symmetric_key(const void* value, size_t size) {
+  _impl_.user_encrypted_symmetric_key_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+DecompositionRequest::user_encrypted_symmetric_key() const {
+  // @@protoc_insertion_point(field_list:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+  return _impl_.user_encrypted_symmetric_key_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+DecompositionRequest::mutable_user_encrypted_symmetric_key() {
+  // @@protoc_insertion_point(field_mutable_list:hheproto.DecompositionRequest.user_encrypted_symmetric_key)
+  return &_impl_.user_encrypted_symmetric_key_;
 }
 
 // -------------------------------------------------------------------
 
-// MyResponse
+// DecompositionResponse
 
-// string response = 1;
-inline void MyResponse::clear_response() {
-  _impl_.response_.ClearToEmpty();
+// repeated bytes he_enc_data = 1;
+inline int DecompositionResponse::_internal_he_enc_data_size() const {
+  return _impl_.he_enc_data_.size();
 }
-inline const std::string& MyResponse::response() const {
-  // @@protoc_insertion_point(field_get:hheproto.MyResponse.response)
-  return _internal_response();
+inline int DecompositionResponse::he_enc_data_size() const {
+  return _internal_he_enc_data_size();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MyResponse::set_response(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.response_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:hheproto.MyResponse.response)
+inline void DecompositionResponse::clear_he_enc_data() {
+  _impl_.he_enc_data_.Clear();
 }
-inline std::string* MyResponse::mutable_response() {
-  std::string* _s = _internal_mutable_response();
-  // @@protoc_insertion_point(field_mutable:hheproto.MyResponse.response)
+inline std::string* DecompositionResponse::add_he_enc_data() {
+  std::string* _s = _internal_add_he_enc_data();
+  // @@protoc_insertion_point(field_add_mutable:hheproto.DecompositionResponse.he_enc_data)
   return _s;
 }
-inline const std::string& MyResponse::_internal_response() const {
-  return _impl_.response_.Get();
+inline const std::string& DecompositionResponse::_internal_he_enc_data(int index) const {
+  return _impl_.he_enc_data_.Get(index);
 }
-inline void MyResponse::_internal_set_response(const std::string& value) {
-  
-  _impl_.response_.Set(value, GetArenaForAllocation());
+inline const std::string& DecompositionResponse::he_enc_data(int index) const {
+  // @@protoc_insertion_point(field_get:hheproto.DecompositionResponse.he_enc_data)
+  return _internal_he_enc_data(index);
 }
-inline std::string* MyResponse::_internal_mutable_response() {
-  
-  return _impl_.response_.Mutable(GetArenaForAllocation());
+inline std::string* DecompositionResponse::mutable_he_enc_data(int index) {
+  // @@protoc_insertion_point(field_mutable:hheproto.DecompositionResponse.he_enc_data)
+  return _impl_.he_enc_data_.Mutable(index);
 }
-inline std::string* MyResponse::release_response() {
-  // @@protoc_insertion_point(field_release:hheproto.MyResponse.response)
-  return _impl_.response_.Release();
+inline void DecompositionResponse::set_he_enc_data(int index, const std::string& value) {
+  _impl_.he_enc_data_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionResponse.he_enc_data)
 }
-inline void MyResponse::set_allocated_response(std::string* response) {
-  if (response != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.response_.SetAllocated(response, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.response_.IsDefault()) {
-    _impl_.response_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:hheproto.MyResponse.response)
+inline void DecompositionResponse::set_he_enc_data(int index, std::string&& value) {
+  _impl_.he_enc_data_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:hheproto.DecompositionResponse.he_enc_data)
+}
+inline void DecompositionResponse::set_he_enc_data(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.he_enc_data_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:hheproto.DecompositionResponse.he_enc_data)
+}
+inline void DecompositionResponse::set_he_enc_data(int index, const void* value, size_t size) {
+  _impl_.he_enc_data_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:hheproto.DecompositionResponse.he_enc_data)
+}
+inline std::string* DecompositionResponse::_internal_add_he_enc_data() {
+  return _impl_.he_enc_data_.Add();
+}
+inline void DecompositionResponse::add_he_enc_data(const std::string& value) {
+  _impl_.he_enc_data_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:hheproto.DecompositionResponse.he_enc_data)
+}
+inline void DecompositionResponse::add_he_enc_data(std::string&& value) {
+  _impl_.he_enc_data_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:hheproto.DecompositionResponse.he_enc_data)
+}
+inline void DecompositionResponse::add_he_enc_data(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.he_enc_data_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:hheproto.DecompositionResponse.he_enc_data)
+}
+inline void DecompositionResponse::add_he_enc_data(const void* value, size_t size) {
+  _impl_.he_enc_data_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:hheproto.DecompositionResponse.he_enc_data)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+DecompositionResponse::he_enc_data() const {
+  // @@protoc_insertion_point(field_list:hheproto.DecompositionResponse.he_enc_data)
+  return _impl_.he_enc_data_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+DecompositionResponse::mutable_he_enc_data() {
+  // @@protoc_insertion_point(field_mutable_list:hheproto.DecompositionResponse.he_enc_data)
+  return &_impl_.he_enc_data_;
 }
 
 #ifdef __GNUC__

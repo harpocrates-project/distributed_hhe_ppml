@@ -78,7 +78,7 @@ namespace pasta
         print_noise(state);
       }
 
-      std::cout << "final add" << std::endl;
+      //std::cout << "final add" << std::endl;
       auto mat1 = pasta.get_random_matrix();
       auto mat2 = pasta.get_random_matrix();
       auto rc = pasta.get_rc_vec(halfslots);
@@ -131,7 +131,7 @@ namespace pasta
     auto decompose_task = [&](uint64_t b)
     {
       Pasta pasta(plain_mod);
-      std::cout << "Thread " << std::this_thread::get_id() << " started for block " << b << std::endl;
+      //std::cout << "Thread " << std::this_thread::get_id() << " started for block " << b << std::endl;
       pasta.init_shake(nonce, b);
       Ciphertext state = enc_ssk[0];
 
@@ -181,7 +181,7 @@ namespace pasta
         evaluator.add_plain(state, p, res[b]);
       }
 
-      std::cout << "Thread " << std::this_thread::get_id() << " finished for block " << b << std::endl;
+      //std::cout << "Thread " << std::this_thread::get_id() << " finished for block " << b << std::endl;
     };
 
     for (uint64_t b = 0; b < num_block; b++)

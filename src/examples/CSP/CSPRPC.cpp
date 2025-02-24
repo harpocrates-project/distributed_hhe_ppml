@@ -377,7 +377,8 @@ int main(int argc,char** argv)
     }
 
     //csp = new CSP_hhe_pktnn_1fc();
-    csp = new CSPParallel_hhe_pktnn_1fc();
+    //csp = new CSPParallel_hhe_pktnn_1fc();
+    csp = new  CSPFaaS_hhe_pktnn_1fc();
     cspRPC = new CSPServiceImpl(url, csp);
 
     // Set up HE params
