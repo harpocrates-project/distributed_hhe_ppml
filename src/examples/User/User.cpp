@@ -92,10 +92,17 @@ void User::encryptData(vector<uint64_t> client_sym_key, int numRecords)
 { 
     pasta::PASTA SymmetricEncryptor(client_sym_key, config::plain_mod);
 
-    for (size_t i = 1; i < numRecords; i++)
+    for (size_t i = 0; i < numRecords; i++)
     {
         cout << "[User] Symmetrically encrypting input" << endl; 
-        vi = data[i]; 
+        vi = data[i];
+
+        if (vi.empty() || vi.size() == 0)
+        {
+            cout << "[User] Empty input" << endl;
+            break;
+        }
+
         vi_se = pastahelper::symmetric_encrypt_vec(SymmetricEncryptor, vi); // the symmetric encrypted images
         utils::print_vec(vi_se, vi_se.size(), "vi_se");
 
