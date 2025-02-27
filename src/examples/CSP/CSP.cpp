@@ -661,9 +661,10 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, past
             auto result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
             {
                 std::lock_guard<std::mutex> lock(mtx);
-                he_enc_data.push_back(result);
+                he_enc_data[index] = result;
+                std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
             }
-            std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
+            
         } catch (const std::exception& e) {
             std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
         } catch (...) {
@@ -672,6 +673,7 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, past
     };
 
     auto& he_enc_data = he_enc_data_map[analystId];
+    he_enc_data.resize(enc_data_map[analystId].size());
     const auto& userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
     size_t num_of_active_threads = 0;
 
@@ -733,7 +735,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
             sealhelper::packed_enc_multiply(record, getEncWeightsMapFirstValue(analystId), tmp, *getEvaluator());
             {
                 std::lock_guard<std::mutex> lock(mtx);
-                he_enc_product.push_back(tmp);
+                he_enc_product[index] = tmp;
             }
             std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
         } catch (const std::exception& e) {
@@ -742,6 +744,8 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
             std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
         }
     };
+
+    he_enc_product.resize(records.size());
 
     for (size_t i = 0; i < records.size(); ++i) {
         const auto& record = records[i];
@@ -777,7 +781,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
             sealhelper::encrypted_vec_sum(record, tmp1, *getEvaluator(), getAnalystHEGaloisKeys(analystId), inputLen);
             {
                 std::lock_guard<std::mutex> lock(mtx);
-                he_sum_enc_product.push_back(tmp1);
+                he_sum_enc_product[index] = tmp1;
             }
             std::cout << "Thread " << std::this_thread::get_id() << " finished for relinearization and sum of record " << index << std::endl;
         } catch (const std::exception& e) {
@@ -786,6 +790,8 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string analystId, int inputLen)
             std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for relinearization and sum of record " << index << std::endl;
         }
     };
+
+    he_sum_enc_product.resize(he_enc_product.size());
 
     for (size_t i = 0; i < he_enc_product.size(); ++i) {
         auto& record = he_enc_product[i];
