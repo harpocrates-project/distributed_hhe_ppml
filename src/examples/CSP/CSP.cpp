@@ -286,8 +286,16 @@ void BaseCSP::performMasking(std::string analystId, int inputLen, pasta::PASTA_S
     if (rem != 0)
     {
         vector<uint64_t> mask(rem, 1);
-        for (vector<Ciphertext> record : he_enc_data_map[analystId])
+        for (vector<Ciphertext> record : he_enc_data_map[analystId]) 
+        {
+            if (record.size() == 0)
+            {
+                cout << "Empty record" << endl;
+                continue;
+            }
+
             HHE.mask(record.back(), mask);
+        }
     }
 }
 
@@ -296,6 +304,12 @@ void BaseCSP::performFlattening(std::string analystId, pasta::PASTA_SEAL& HHE)
     Ciphertext tmp;
     for (vector<Ciphertext> record : he_enc_data_map[analystId])
     {
+        if (record.size() == 0)
+        {
+            cout << "Empty record" << endl;
+            continue;
+        }
+
         HHE.flatten(record, 
                     tmp, 
                     getCSPHEGaloisKeysMapValue(analystId));  // vi_he_processed = hhe_decomposition = C_prime
@@ -679,9 +693,21 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, past
     waitForRemainingThreads(thread_pool);
 
     std::cout << "All threads finished. Printing results." << std::endl;
-    for (auto& record : he_enc_data) {
+
+    cout << records.size() << " records processed" << endl;
+    cout << he_enc_data.size() << " records in he_enc_data" << endl;
+
+
+    for (auto& record : he_enc_data_map[analystId]) {
+        if (record.size() == 0) {
+            std::cerr << "Empty record" << std::endl;
+            continue;
+        }
+        cout << "Record size: " << record.size() << endl;
         print_vec_Ciphertext(record, record.size());
     }
+
+    cout << "[CSP] Initial Decomposition completed" << endl;
 }
 
 
