@@ -220,6 +220,7 @@ class CiphertextBytes final :
   enum : int {
     kHHEDecompFieldNumber = 1,
     kAnalystIDFieldNumber = 2,
+    kPatientIDFieldNumber = 3,
   };
   // repeated bytes HHEDecomp = 1;
   int hhedecomp_size() const;
@@ -259,6 +260,20 @@ class CiphertextBytes final :
   std::string* _internal_mutable_analystid();
   public:
 
+  // string patientID = 3;
+  void clear_patientid();
+  const std::string& patientid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_patientid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_patientid();
+  PROTOBUF_NODISCARD std::string* release_patientid();
+  void set_allocated_patientid(std::string* patientid);
+  private:
+  const std::string& _internal_patientid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_patientid(const std::string& value);
+  std::string* _internal_mutable_patientid();
+  public:
+
   // @@protoc_insertion_point(class_scope:hheproto.CiphertextBytes)
  private:
   class _Internal;
@@ -269,6 +284,7 @@ class CiphertextBytes final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> hhedecomp_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr analystid_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr patientid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -932,9 +948,10 @@ class CiphertextResult final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kPatientIDFieldNumber = 1,
   };
-  // repeated .hheproto.CiphertextMsg result = 1;
+  // repeated .hheproto.CiphertextMsg result = 2;
   int result_size() const;
   private:
   int _internal_result_size() const;
@@ -952,6 +969,20 @@ class CiphertextResult final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg >&
       result() const;
 
+  // string patientID = 1;
+  void clear_patientid();
+  const std::string& patientid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_patientid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_patientid();
+  PROTOBUF_NODISCARD std::string* release_patientid();
+  void set_allocated_patientid(std::string* patientid);
+  private:
+  const std::string& _internal_patientid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_patientid(const std::string& value);
+  std::string* _internal_mutable_patientid();
+  public:
+
   // @@protoc_insertion_point(class_scope:hheproto.CiphertextResult)
  private:
   class _Internal;
@@ -961,6 +992,7 @@ class CiphertextResult final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::hheproto::CiphertextMsg > result_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr patientid_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2068,6 +2100,56 @@ inline void CiphertextBytes::set_allocated_analystid(std::string* analystid) {
   // @@protoc_insertion_point(field_set_allocated:hheproto.CiphertextBytes.analystID)
 }
 
+// string patientID = 3;
+inline void CiphertextBytes::clear_patientid() {
+  _impl_.patientid_.ClearToEmpty();
+}
+inline const std::string& CiphertextBytes::patientid() const {
+  // @@protoc_insertion_point(field_get:hheproto.CiphertextBytes.patientID)
+  return _internal_patientid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CiphertextBytes::set_patientid(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.patientid_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.CiphertextBytes.patientID)
+}
+inline std::string* CiphertextBytes::mutable_patientid() {
+  std::string* _s = _internal_mutable_patientid();
+  // @@protoc_insertion_point(field_mutable:hheproto.CiphertextBytes.patientID)
+  return _s;
+}
+inline const std::string& CiphertextBytes::_internal_patientid() const {
+  return _impl_.patientid_.Get();
+}
+inline void CiphertextBytes::_internal_set_patientid(const std::string& value) {
+  
+  _impl_.patientid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CiphertextBytes::_internal_mutable_patientid() {
+  
+  return _impl_.patientid_.Mutable(GetArenaForAllocation());
+}
+inline std::string* CiphertextBytes::release_patientid() {
+  // @@protoc_insertion_point(field_release:hheproto.CiphertextBytes.patientID)
+  return _impl_.patientid_.Release();
+}
+inline void CiphertextBytes::set_allocated_patientid(std::string* patientid) {
+  if (patientid != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.patientid_.SetAllocated(patientid, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.patientid_.IsDefault()) {
+    _impl_.patientid_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.CiphertextBytes.patientID)
+}
+
 // -------------------------------------------------------------------
 
 // Empty
@@ -2654,7 +2736,57 @@ inline void PublicKeySetMsg::set_allocated_analystuuid(std::string* analystuuid)
 
 // CiphertextResult
 
-// repeated .hheproto.CiphertextMsg result = 1;
+// string patientID = 1;
+inline void CiphertextResult::clear_patientid() {
+  _impl_.patientid_.ClearToEmpty();
+}
+inline const std::string& CiphertextResult::patientid() const {
+  // @@protoc_insertion_point(field_get:hheproto.CiphertextResult.patientID)
+  return _internal_patientid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CiphertextResult::set_patientid(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.patientid_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:hheproto.CiphertextResult.patientID)
+}
+inline std::string* CiphertextResult::mutable_patientid() {
+  std::string* _s = _internal_mutable_patientid();
+  // @@protoc_insertion_point(field_mutable:hheproto.CiphertextResult.patientID)
+  return _s;
+}
+inline const std::string& CiphertextResult::_internal_patientid() const {
+  return _impl_.patientid_.Get();
+}
+inline void CiphertextResult::_internal_set_patientid(const std::string& value) {
+  
+  _impl_.patientid_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CiphertextResult::_internal_mutable_patientid() {
+  
+  return _impl_.patientid_.Mutable(GetArenaForAllocation());
+}
+inline std::string* CiphertextResult::release_patientid() {
+  // @@protoc_insertion_point(field_release:hheproto.CiphertextResult.patientID)
+  return _impl_.patientid_.Release();
+}
+inline void CiphertextResult::set_allocated_patientid(std::string* patientid) {
+  if (patientid != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.patientid_.SetAllocated(patientid, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.patientid_.IsDefault()) {
+    _impl_.patientid_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:hheproto.CiphertextResult.patientID)
+}
+
+// repeated .hheproto.CiphertextMsg result = 2;
 inline int CiphertextResult::_internal_result_size() const {
   return _impl_.result_.size();
 }

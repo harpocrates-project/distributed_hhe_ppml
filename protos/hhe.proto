@@ -21,6 +21,7 @@ service CSPService{
 message CiphertextBytes {
     repeated bytes HHEDecomp = 1;
     string analystID = 2;
+    string patientID = 3;
 }
 
 message Empty{ }
@@ -40,7 +41,8 @@ message PublicKeySetMsg {
 }
 
 message CiphertextResult{
-    repeated CiphertextMsg result = 1;
+    string patientID = 1;
+    repeated CiphertextMsg result = 2;
 }
 
 message CiphertextMsg {

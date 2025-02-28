@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "CSPRPC.h"
 using grpc::StatusCode;
 
@@ -178,7 +179,6 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
     
     // Receive the patientID from the User 
     string patientID = request->patientid();
-    cout << "patientID: " << patientID << endl;
 
 
     // transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
@@ -199,16 +199,15 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
     int inputLen = 300;
 
     
-    csp->addUserEncryptedData(analystId, values); 
+    csp->addUserEncryptedData(patientID, analystId, values); 
   
-    // TODO: should be done in a separate thread
     // HHE docomposition
-    csp->decompose(analystId, inputLen);
+    csp->decompose(patientID, analystId, inputLen);
 
     // Write HHE decomposition data from memory to a file
     string analystUUID = csp->getAnalystUUID(analystId);
     string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
-    csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(analystId));
+    csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(patientID, analystId));
    
     // Read HHE decomposition data from a file
     // csp->readHHEDecompositionDataFromFile(fileName);
@@ -236,6 +235,9 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
     string analystId = csp->getAnalystIdfromUUID(analystUUID);
     cout << "analyst's ID: " << analystId << endl;
 
+    string patientId = request->patientid();
+    cout << "patient's ID: " << patientId << endl;
+
     reply = new Empty();
 
     // Retrieve and deserialize the HHEDecomp data
@@ -247,7 +249,7 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
         }
 
     cout << "Successfully deserialized " << ciphertexts.size() << " ciphertexts." << endl;
-    csp->setHHEEncDataProcessedMap(analystId, ciphertexts);
+    csp->setHHEEncDataProcessedMap(patientId, analystId, ciphertexts);
 
 
     // transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
@@ -268,11 +270,11 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
     int inputLen = 300;
 
     // HHE evaluation
-    csp->evaluateModel(analystId, inputLen);
+    csp->evaluateModel(patientId, analystId, inputLen);
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
-    analystRPCClient->addEncryptedResult(analystId);    
+    analystRPCClient->addEncryptedResult(patientId, analystId);    
 
     return Status::OK;
 }
@@ -284,30 +286,39 @@ Status CSPServiceImpl::evaluateModelFromFile(ServerContext* context, const DataF
 
     string fileName = request->filename();
 
+    // Use std::filesystem to extract the filename without the path
+    std::filesystem::path filePath(fileName);
+    string fileNameOnly = filePath.filename().string();
+
     // Read HHE decomposition data from a file
     vector<Ciphertext> ciphertexts;
     if (!csp->readHHEDecompositionDataFromFile(fileName, ciphertexts))
         return Status(StatusCode::DATA_LOSS, "Failed to read HHE decomposition data from file");
 
     // Find the position of the first underscore
-    size_t underscorePos = fileName.find('_');
+    size_t underscorePos = fileNameOnly.find('_');
     // Find the position of the dot before the file extension
-    size_t dotPos = fileName.find(".bin");
+    size_t dotPos = fileNameOnly.find(".bin");
 
-    // Extract the substring between the underscore and the dot
-    string analystUUID = fileName.substr(underscorePos + 1, dotPos - underscorePos - 1);
+    // Extract the substring before the underscore as patientId
+    string patientId = fileNameOnly.substr(0, underscorePos);
+    cout << "patient's ID: " << patientId << endl;
+
+    // Extract the substring between the underscore and the dot as analystUUID
+    string analystUUID = fileNameOnly.substr(underscorePos + 1, dotPos - underscorePos - 1);
+    cout << "analyst's UUID: " << analystUUID << endl;
 
     string analystId = csp->getAnalystIdfromUUID(analystUUID);
     cout << "analyst's ID: " << analystId << endl;
 
-    csp->setHHEEncDataProcessedMap(analystId, ciphertexts);
+    csp->setHHEEncDataProcessedMap(patientId, analystId, ciphertexts);
 
     int inputLen = 300;
-    csp->evaluateModel(analystId, inputLen);
+    csp->evaluateModel(patientId, analystId, inputLen);
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
-    analystRPCClient->addEncryptedResult(analystId);    
+    analystRPCClient->addEncryptedResult(patientId, analystId);    
 
     return Status::OK; 
 }

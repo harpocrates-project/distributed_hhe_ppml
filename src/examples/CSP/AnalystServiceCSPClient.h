@@ -36,7 +36,7 @@ class AnalystServiceCSPClient
         /**
         rpc service - Send encrypted result to Analyst
         */
-        bool addEncryptedResult(string analystId);
+        bool addEncryptedResult(string patientId, string analystId);
 
     private:
         unique_ptr<AnalystService::Stub> stub_;

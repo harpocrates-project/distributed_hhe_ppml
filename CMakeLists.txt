@@ -70,10 +70,7 @@ else()
   endif()
 endif()
 
-
-
-
-#Set this to ON if GRPC and Protobuf are installed on the system
+# Set this to ON if GRPC and Protobuf are installed on the system
 set(USE_SYSTEM_GRPC OFF)
 
 if(USE_SYSTEM_GRPC)
@@ -145,10 +142,6 @@ add_custom_command(
 # Include generated *.pb.h files
 include_directories("${PROJECT_SOURCE_DIR}/src/gen_code")
 
-#include_directories(/usr/local/include)
-#include_directories(pasta)
-#include_directories(configs)
-
 # hhe_grpc_proto
 add_library(hhe_grpc_proto
   ${hhe_grpc_srcs}
@@ -159,36 +152,33 @@ target_link_libraries(hhe_grpc_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
- 
 
 set(ANALYST_SOURCE
-	${SOURCE_DIR}/examples/Analyst/AnalystRPC.cpp
-	${SOURCE_DIR}/examples/Analyst/Analyst.cpp
-	${SOURCE_DIR}/examples/Analyst/CSPServiceAnalystClient.cpp
-	${SOURCE_DIR}/util/sealhelper.cpp
-        ${SOURCE_DIR}/util/pastahelper.cpp
-    	${SOURCE_DIR}/util/utils.cpp
-    	${SOURCE_DIR}/pasta/pasta_3_plain.cpp
-    	${SOURCE_DIR}/pasta/pasta_3_seal.cpp
-    	${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
-    	configs/config.cpp
+    ${SOURCE_DIR}/examples/Analyst/AnalystRPC.cpp
+    ${SOURCE_DIR}/examples/Analyst/Analyst.cpp
+    ${SOURCE_DIR}/examples/Analyst/CSPServiceAnalystClient.cpp
+    ${SOURCE_DIR}/util/sealhelper.cpp
+    ${SOURCE_DIR}/util/pastahelper.cpp
+    ${SOURCE_DIR}/util/utils.cpp
+    ${SOURCE_DIR}/pasta/pasta_3_plain.cpp
+    ${SOURCE_DIR}/pasta/pasta_3_seal.cpp
+    ${SOURCE_DIR}/pasta/SEAL_Cipher.cpp
+    configs/config.cpp
 )
 
 set(USER_SOURCE
-	${PROJECT_SOURCE_DIR}/src/examples/User/AnalystServiceUserClient.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/CSPServiceUserClient.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/User.cpp
-	${PROJECT_SOURCE_DIR}/src/examples/User/UserRPC.cpp
-	${PROJECT_SOURCE_DIR}/src/util/sealhelper.cpp
-        ${PROJECT_SOURCE_DIR}/src/util/pastahelper.cpp
-    	${PROJECT_SOURCE_DIR}/src/util/utils.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_plain.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_seal.cpp
-    	${PROJECT_SOURCE_DIR}/src/pasta/SEAL_Cipher.cpp
-    	configs/config.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/AnalystServiceUserClient.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/CSPServiceUserClient.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/User.cpp
+    ${PROJECT_SOURCE_DIR}/src/examples/User/UserRPC.cpp
+    ${PROJECT_SOURCE_DIR}/src/util/sealhelper.cpp
+    ${PROJECT_SOURCE_DIR}/src/util/pastahelper.cpp
+    ${PROJECT_SOURCE_DIR}/src/util/utils.cpp
+    ${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_plain.cpp
+    ${PROJECT_SOURCE_DIR}/src/pasta/pasta_3_seal.cpp
+    ${PROJECT_SOURCE_DIR}/src/pasta/SEAL_Cipher.cpp
+    configs/config.cpp
 )
-
-
 
 set(CSP_SOURCE
     ${SOURCE_DIR}/examples/CSP/CSP.cpp
@@ -203,22 +193,19 @@ set(CSP_SOURCE
     configs/config.cpp
 )
 
+add_executable(single_hhe_ppml ${PROJECT_SOURCE})
 
-
-
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
-
-ADD_EXECUTABLE(analyst ${ANALYST_SOURCE})
-ADD_EXECUTABLE(user ${USER_SOURCE}) 
+add_executable(analyst ${ANALYST_SOURCE})
+add_executable(user ${USER_SOURCE}) 
 add_executable(csp ${CSP_SOURCE})
 
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
     message(STATUS "Libraries included: ${LIBRARIES_DIR}/${LIBRARY}")
 endforeach(LIBRARY)
-target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
-target_link_libraries(${PROJECT_NAME} SEAL::seal)
 
+target_link_libraries(single_hhe_ppml ${LIBRARIES})
+target_link_libraries(single_hhe_ppml SEAL::seal)
 
 target_link_libraries(csp
     SEAL::seal
@@ -229,7 +216,6 @@ target_link_libraries(csp
     ${_REFLECTION}
     ${_GRPC_GRPCPP}
     ${_PROTOBUF_LIBPROTOBUF})
-
 
 target_link_libraries(analyst
     SEAL::seal

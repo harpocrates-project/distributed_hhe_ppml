@@ -27,16 +27,20 @@ Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const Ciph
 {
     reply = new Empty();
 
-    cout << "[Analyst Service] Adding and decrypting the result from CSP "<< endl;
+    
+
+    // Get the patientId from the request and print it
+    string patientId = request->patientid();
+
+    cout << "[Analyst Service] Adding and decrypting the result from CSP for patient: "<< patientId << endl;
 
     std::string strBuffer;
     seal_byte* buffer = nullptr;
-    // int length;
     vector<seal_byte*> resultsBytes;
     vector<int> resultsLengths;
    
     int len;
-    for (int i=0, length; i < request->result_size(); i++)
+    for (int i = 0, length; i < request->result_size(); i++)
     {
         strBuffer = request->result(i).data();
         length = request->result(i).length();
@@ -51,11 +55,8 @@ Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const Ciph
         len = length;
 
         // Analyst calls decryptData() to decrypt the encrypted result
-        analyst->decryptData(buffer, length);
+        analyst->decryptData(patientId, buffer, length);
     }
-    
-    //cout << "bytes size: " << resultsBytes.size() << endl;
-    //cout << "lengths size: " << resultsLengths.size() << endl;
 
     return Status::OK;
 } 

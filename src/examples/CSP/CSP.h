@@ -36,7 +36,7 @@ class BaseCSP
         @param[in] analystId   The Analyst IP Addr
         @param[in] ciphertexts The HHE Decomposition data
         */
-        void setHHEEncDataProcessedMap(string analystId, vector<Ciphertext> ciphertexts);
+        void setHHEEncDataProcessedMap(string patientId, string analystId, vector<Ciphertext> ciphertexts);
     
 
         // getter
@@ -96,18 +96,18 @@ class BaseCSP
         Return the HE encrypted data
         @param[in] analystId The Analyst IP Addr
         */
-        vector<vector<Ciphertext>> getHEEncryptedData(string analystId); // vi_he
+        vector<vector<Ciphertext>> getHEEncryptedData(string patientId, string analystId); // vi_he
 
         /**
         Return the encrypted result calculated by CSP via HHE decomposition and evaluation
         */
-        int getEncryptedResultBytes(string analystId, seal_byte* &buffer, int index);
+        int getEncryptedResultBytes(string patientId, string analystId, seal_byte* &buffer, int index);
 
         /** 
         Return the HE encrypted processed data 
         @param[in] analystId The Analyst IP Addr
         */
-        vector<Ciphertext> getHEEncDataProcessedMapValue(string analystId);
+        vector<Ciphertext> getHEEncDataProcessedMapValue(string patientId, string analystId);
 
         /** 
         Return the first value of encrypted weights map
@@ -131,13 +131,13 @@ class BaseCSP
         Return the Sum of the HE_ENC_Product
         @param[in] analystId The Analyst IP Addr
         */
-        vector<Ciphertext> getHESumEncProduct(string analystId);
+        vector<Ciphertext> getHESumEncProduct(string patientId, string analystId);
 
         /** 
         Return the HE encrypted processed data 
         @param[in] analystId The Analyst IP Addr
         */
-        vector<Ciphertext> getHEEncDataProcessedMap(string analystId);
+        vector<Ciphertext> getHEEncDataProcessedMap(string patientId, string analystId);
 
         /**
         Return the Analyst's UUID
@@ -215,7 +215,7 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] values The data values
         */
-        bool addUserEncryptedData(string analystId, vector <vector<uint64_t>> values);
+        bool addUserEncryptedData(string patientId, string analystId, vector <vector<uint64_t>> values);
        
         /**
         Add Analyst NN model encrypted weights on CSP
@@ -230,7 +230,7 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        void decompose(string analystId, int inputLen);
+        void decompose(string patientId, string analystId, int inputLen);
 
         // pure virtual function
         /**
@@ -238,7 +238,7 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        virtual void evaluateModel(string analystId, int inputLen) = 0;
+        virtual void evaluateModel(string patientId, string analystId, int inputLen) = 0;
 
         /**
         Helper function to print the first ten bytes of the seal_byte input
@@ -276,9 +276,9 @@ class BaseCSP
                             std::string& errorMessage);
     private: 
 
-        void performMasking(string analystId, int inputLen, pasta::PASTA_SEAL& HHE);
+        void performMasking(string patiendId, string analystId, int inputLen, pasta::PASTA_SEAL& HHE);
         
-        void performFlattening(string analystId, pasta::PASTA_SEAL& HHE);
+        void performFlattening(string patientId, string analystId, pasta::PASTA_SEAL& HHE);
 
         shared_ptr<SEALContext> context;
         Evaluator* csp_he_eval;
@@ -305,20 +305,22 @@ class BaseCSP
 
     protected:
 
-        virtual void performDecomposition(string analystId, pasta::PASTA_SEAL& HHE);
+        virtual void performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL& HHE);
 
-        unordered_map<string, vector<vector<uint64_t>>> enc_data_map;      // User's encrypted data
+        // Use a nested map to store the data by mapping the analystId and the patientId to the values vector
+        unordered_map<string, unordered_map<string, vector<vector<uint64_t>>>> enc_data_map; // User's encrypted data
 
-        unordered_map<string, vector<vector<Ciphertext>>> he_enc_data_map; // HE encrypted data
+        // Use a nested map to store the HE encrypted data by mapping the analystId and the patientId
+        unordered_map<string, unordered_map<string, vector<vector<Ciphertext>>>> he_enc_data_map; // HE encrypted data
 
-        // unordered_map<string, Ciphertext> he_enc_data_processed_map; // HHE decomposition postprocessing on the HE encrypted input. (vi_he_processed)
-        unordered_map<string, vector<Ciphertext>> he_enc_data_processed_map;
+        // HHE decomposition postprocessing on the HE encrypted input. (vi_he_processed)
+        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_enc_data_processed_map;
 
-        // unordered_map<string, Ciphertext> he_enc_product_map; // The multiply of vi_he_processed. (encrypted_product)
-        unordered_map<string, vector<Ciphertext>> he_enc_product_map; 
+        // The multiply of vi_he_processed. (encrypted_product)
+        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_enc_product_map; 
 
-        // unordered_map<string, Ciphertext> he_sum_enc_product_map; // The results will be sent to Analyst. (sum of encrypted_product)
-        unordered_map<string, vector<Ciphertext>> he_sum_enc_product_map;
+        // The results will be sent to Analyst. (sum of encrypted_product)
+        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_sum_enc_product_map;
 };      
 
 class CSP_hhe_pktnn_1fc : public BaseCSP 
@@ -329,17 +331,17 @@ class CSP_hhe_pktnn_1fc : public BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        void evaluateModel(string analystId, int inputLen);
+        void evaluateModel(string patientId, string analystId, int inputLen);
 };
 
 
 class CSPParallel_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
 {
     public:
-        void evaluateModel(string analystId, int inputLen) override;
+    void evaluateModel(string patientId, string analystId, int inputLen) override;
 
     protected:
-        void performDecomposition(std::string analystId, pasta::PASTA_SEAL& HHE);
+        void performDecomposition(std::string patientId, std::string analystId, pasta::PASTA_SEAL& HHE);
 
     private:
         void manageThreadPool(std::vector<std::thread>& thread_pool, size_t& num_of_active_threads, unsigned int num_threads);
