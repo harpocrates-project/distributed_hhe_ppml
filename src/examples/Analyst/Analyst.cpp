@@ -1,4 +1,5 @@
 #include "Analyst.h"
+#include <fstream>
 
 // setter
 /**
@@ -347,9 +348,9 @@ int BaseAnalyst::getEncryptedWeightsBytes(seal_byte* &buffer, int index)
 }
 
 /**
- Decrypt the Ciphertext from CSP and obtains the plaintext result.
-*/
-void BaseAnalyst::decryptData(seal_byte* bytes, int size)
+ * Decrypt the Ciphertext from CSP and obtains the plaintext result.
+ */
+void BaseAnalyst::decryptData(string patientId, seal_byte* bytes, int size)
 {
     cout << "[Analyst] Decrypting the HE encrypted results (size: " << size << ") received from the CSP" << endl;
     print_seal_bytes(bytes);
@@ -376,8 +377,37 @@ void BaseAnalyst::decryptData(seal_byte* bytes, int size)
     cout << "HHE prediction = " << hhe_pred << " | ";
     //cout << "plain prediction = " << plain_pred << " | ";
     //cout << "ground-truth prediction = " << gt_out << endl;
-    
+
+    // Collect the predictions
+    hhe_predictions.push_back(hhe_pred);
+
     cout << "\n---------------------- Done ----------------------" << endl;
+
+    // Write predictions to file
+    writePredictionsToFile(patientId, hhe_predictions);
+}
+
+/**
+ * Write the HHE predictions to a text file.
+ */
+void BaseAnalyst::writePredictionsToFile(const string& patientId, const vector<int64_t>& hhe_predictions)
+{
+    string fileName = patientId + "_hhe_binaryoutput.txt";
+    ofstream outFile(fileName);
+
+    if (!outFile.is_open())
+    {
+        cerr << "Failed to open file: " << fileName << endl;
+        return;
+    }
+
+    for (const auto& prediction : hhe_predictions)
+    {
+        outFile << prediction << endl;
+    }
+
+    outFile.close();
+    cout << "Predictions written to file: " << fileName << endl;
 }
 
 /**

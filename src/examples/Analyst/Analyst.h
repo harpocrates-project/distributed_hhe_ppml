@@ -186,13 +186,14 @@ class BaseAnalyst
         /**
         Decrypt the Ciphertext from CSP and obtains the plaintext result
         */
-        void decryptData(seal_byte* bytes, int size);
+        void decryptData(string patientId, seal_byte* bytes, int size);
        
         /** 
         Helper function to print the first ten bytes of the seal_byte input
         */
         void print_seal_bytes(seal_byte* buffer);
 
+        void writePredictionsToFile(const string& patientId, const vector<int64_t>& hhe_predictions);
 
         // pure virtual function
         /**
@@ -217,6 +218,8 @@ class BaseAnalyst
         Decryptor* analyst_he_dec;       // Analyst HE decryptor
 
         string dataset;   // The data set name for NN calculation
+
+        vector<int64_t> hhe_predictions; // to store predictions
 
     protected:
         vector<Ciphertext> enc_weights_t; // The encrypted weight
