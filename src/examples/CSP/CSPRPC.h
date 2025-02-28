@@ -79,7 +79,7 @@ class CSPServiceImpl final:public CSPService::Service
  
         void startRPCService();
         
-        vector <vector<uint64_t>> values;
+        //vector <vector<uint64_t>> values;
 
         /**
         Get Analyst IP Addr

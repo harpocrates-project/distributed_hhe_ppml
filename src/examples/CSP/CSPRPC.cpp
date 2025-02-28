@@ -161,7 +161,10 @@ rpc service - Add User encrypted data for NN calculation
 */
 Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetricDataMsg* request, Empty* reply)
 {
+    vector <vector<uint64_t>> values;
+
     string analystId = getAnalystId(context->client_metadata());
+    cout << "analystId: " << analystId << endl;
 
     reply = new Empty();
 

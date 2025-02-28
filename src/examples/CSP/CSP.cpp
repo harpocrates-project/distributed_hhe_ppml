@@ -543,6 +543,10 @@ bool BaseCSP::writeHHEDecompositionDataToFile(string fileName, vector<Ciphertext
 
     // Save the size of the vector
     size_t size = input.size();
+    cout << "The size of the vector is " << size << endl;
+
+    cout << "File Name:" << fileName << endl;
+
     out.write(reinterpret_cast<const char*>(&size), sizeof(size));
 
     // Save each ciphertext
@@ -673,6 +677,7 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(std::string analystId, past
     };
 
     auto& he_enc_data = he_enc_data_map[analystId];
+    cout << enc_data_map[analystId].size() << " records to process" << endl;
     he_enc_data.resize(enc_data_map[analystId].size());
     const auto& userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
     size_t num_of_active_threads = 0;

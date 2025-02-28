@@ -359,3 +359,6 @@ MigrationBackup/
 notebooks/lightning_logs
 
 libs/pasta3/
+
+#binary decomposition files
+*.bin
