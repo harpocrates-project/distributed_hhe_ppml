@@ -58,6 +58,9 @@ Status AnalystServiceImpl::addEncryptedResult(ServerContext* context, const Ciph
         analyst->decryptData(patientId, buffer, length);
     }
 
+    // Write predictions to file
+    analyst->writePredictionsToFile(patientId);
+
     return Status::OK;
 } 
 

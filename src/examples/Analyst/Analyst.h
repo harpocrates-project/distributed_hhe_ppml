@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../Common.h"
+#include <map>
+#include <mutex>
 
 class BaseAnalyst
 {
@@ -193,7 +195,7 @@ class BaseAnalyst
         */
         void print_seal_bytes(seal_byte* buffer);
 
-        void writePredictionsToFile(const string& patientId, const vector<int64_t>& hhe_predictions);
+        void writePredictionsToFile(const string& patientId);
 
         // pure virtual function
         /**
@@ -219,7 +221,11 @@ class BaseAnalyst
 
         string dataset;   // The data set name for NN calculation
 
-        vector<int64_t> hhe_predictions; // to store predictions
+        // Map to store predictions associated with patientId
+        std::map<std::string, std::vector<int64_t>> hhePredictions;
+
+        // Mutex to protect access to hhePredictions
+        std::mutex hhePredictions_mutex;
 
     protected:
         vector<Ciphertext> enc_weights_t; // The encrypted weight

@@ -369,28 +369,25 @@ void BaseAnalyst::decryptData(string patientId, seal_byte* bytes, int size)
     matrix::vector vo(1);
     vo[0] = decrypted_result[inputLen - 1];
 
-    //cout << "Plaintext FC layer output: " << vo_p[0] << endl;
     cout << "Decrypted HHE FC layer output: " << vo[0] << endl;
 
     cout << "Analyst applies the sigmoid to get final prediction" << endl;
     int64_t hhe_pred = utils::int_sigmoid(vo[0]);
     cout << "HHE prediction = " << hhe_pred << " | ";
-    //cout << "plain prediction = " << plain_pred << " | ";
-    //cout << "ground-truth prediction = " << gt_out << endl;
 
     // Collect the predictions
-    hhe_predictions.push_back(hhe_pred);
+    {
+        std::lock_guard<std::mutex> lock(hhePredictions_mutex);
+        hhePredictions[patientId].push_back(hhe_pred);
+    }
 
     cout << "\n---------------------- Done ----------------------" << endl;
-
-    // Write predictions to file
-    writePredictionsToFile(patientId, hhe_predictions);
 }
 
 /**
  * Write the HHE predictions to a text file.
  */
-void BaseAnalyst::writePredictionsToFile(const string& patientId, const vector<int64_t>& hhe_predictions)
+void BaseAnalyst::writePredictionsToFile(const string& patientId)
 {
     string fileName = patientId + "_hhe_binaryoutput.txt";
     ofstream outFile(fileName);
@@ -401,7 +398,7 @@ void BaseAnalyst::writePredictionsToFile(const string& patientId, const vector<i
         return;
     }
 
-    for (const auto& prediction : hhe_predictions)
+    for (const auto& prediction : hhePredictions[patientId])
     {
         outFile << prediction << endl;
     }
