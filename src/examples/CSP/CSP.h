@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <mutex>
 
 #include "../../Common.h"
 #include <google/protobuf/repeated_field.h> // Include for RepeatedPtrField
@@ -303,6 +304,10 @@ class BaseCSP
         unordered_map<string, vector<Ciphertext>> enc_weights_map;  // Analyst's encrypted weights
         unordered_map<string, vector<Ciphertext>> enc_sym_key_map; // User's encrypted symmetric keys
 
+        // Mutex to protect access to enc_data_map
+        std::mutex enc_data_map_mutex;
+
+
     protected:
 
         virtual void performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL& HHE);
@@ -321,6 +326,18 @@ class BaseCSP
 
         // The results will be sent to Analyst. (sum of encrypted_product)
         unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_sum_enc_product_map;
+
+        // Mutex to protect access to he_enc_data_map
+        std::mutex he_enc_data_map_mutex;
+
+        // Mutex to protect access to he_enc_data_processed_map
+        std::mutex he_enc_data_processed_map_mutex;
+
+        // Mutex to protect access to he_enc_product_map
+        std::mutex he_enc_product_map_mutex;
+
+        // Mutex to protect access to he_sum_enc_product_map
+        std::mutex he_sum_enc_product_map_mutex;
 };      
 
 class CSP_hhe_pktnn_1fc : public BaseCSP 

@@ -362,3 +362,6 @@ libs/pasta3/
 
 #binary decomposition files
 *.bin
+
+#analyst output files
+*_hhe_binaryoutput.txt

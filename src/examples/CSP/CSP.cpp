@@ -271,11 +271,16 @@ void BaseCSP::decompose(string patientId, string analystId, int inputLen)
 
 void BaseCSP::performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL& HHE)
 {
-    for (vector<uint64_t> record : enc_data_map[analystId][patientId])
+    for (vector<uint64_t>& record : enc_data_map[analystId][patientId])
     {
-        he_enc_data_map[analystId][patientId].push_back(HHE.decomposition(record,
-                                                getUserEncryptedSymmetricKey(analystId), 
-                                                config::USE_BATCH));
+        // Perform decomposition and store the result in a local variable
+        vector<Ciphertext> local_result = HHE.decomposition(record, getUserEncryptedSymmetricKey(analystId), config::USE_BATCH);
+
+        // Lock the mutex to ensure thread safety while copying the result to he_enc_data_map
+        {
+            std::lock_guard<std::mutex> lock(he_enc_data_map_mutex);
+            he_enc_data_map[analystId][patientId].push_back(std::move(local_result));
+        }
     }
 }
 
@@ -286,15 +291,18 @@ void BaseCSP::performMasking(string patientId, string analystId, int inputLen, p
     if (rem != 0)
     {
         vector<uint64_t> mask(rem, 1);
-        for (vector<Ciphertext> record : he_enc_data_map[analystId][patientId]) 
         {
-            if (record.size() == 0)
+            std::lock_guard<std::mutex> lock(he_enc_data_map_mutex);
+            for (vector<Ciphertext> record : he_enc_data_map[analystId][patientId]) 
             {
-                cout << "Empty record" << endl;
-                continue;
-            }
+                if (record.size() == 0)
+                {
+                    cout << "Empty record" << endl;
+                    continue;
+                }
 
-            HHE.mask(record.back(), mask);
+                HHE.mask(record.back(), mask);
+            }
         }
     }
 }
@@ -311,9 +319,12 @@ void BaseCSP::performFlattening(string patientId, string analystId, pasta::PASTA
         }
 
         HHE.flatten(record, 
-                    tmp, 
-                    getCSPHEGaloisKeysMapValue(analystId));  // vi_he_processed = hhe_decomposition = C_prime
-        he_enc_data_processed_map[analystId][patientId].push_back(tmp);
+            tmp, 
+            getCSPHEGaloisKeysMapValue(analystId));  // vi_he_processed = hhe_decomposition = C_prime
+        {
+            std::lock_guard<std::mutex> lock(he_enc_data_processed_map_mutex);
+            he_enc_data_processed_map[analystId][patientId].push_back(tmp);
+        }
     }
 }
 
@@ -333,7 +344,11 @@ void CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int in
                                         getEncWeightsMapFirstValue(analystId),
                                         tmp, 
                                         *getEvaluator()); 
-        he_enc_product_map[analystId][patientId].push_back(tmp);
+
+        {
+            std::lock_guard<std::mutex> lock(he_enc_product_map_mutex);
+            he_enc_product_map[analystId][patientId].push_back(tmp);
+        }
     }
 
     Ciphertext tmp1;
@@ -351,7 +366,11 @@ void CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int in
                                       *getEvaluator(), 
                                       getAnalystHEGaloisKeys(analystId), 
                                       inputLen);
-        he_sum_enc_product_map[analystId][patientId].push_back(tmp1);                            
+
+        {
+            std::lock_guard<std::mutex> lock(he_sum_enc_product_map_mutex);
+            he_sum_enc_product_map[analystId][patientId].push_back(tmp1);
+        }                          
     }
 
     auto end = high_resolution_clock::now();
@@ -470,6 +489,9 @@ Add User encrypted data on CSP
 bool BaseCSP::addUserEncryptedData(string patientId, string analystId, vector<vector<uint64_t>> values)
 {
     cout << "[CSP] Adding User encrypted data (PatientId: " << patientId << " AnalystId: " << analystId << ")" << endl;
+
+    // Lock the mutex to ensure thread safety
+    std::lock_guard<std::mutex> lock(enc_data_map_mutex);
 
     enc_data_map[analystId][patientId] = values;
     return true;
@@ -652,7 +674,6 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
 {
     unsigned int num_threads = std::thread::hardware_concurrency();
     std::vector<std::thread> thread_pool;
-    std::mutex mtx;
 
     std::cout << "Using up to " << num_threads << " threads for decomposition" << std::endl;
 
@@ -660,13 +681,17 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
     {
         try {
             std::cout << "Thread " << std::this_thread::get_id() << " started for record " << index << std::endl;
-            auto result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
+
+            // Perform decomposition and store the result in a local variable
+            vector<Ciphertext> local_result = HHE.decomposition(record, userEncryptedSymmetricKey, config::USE_BATCH);
+
+            // Lock the mutex to ensure thread safety while copying the result to he_enc_data
             {
-                std::lock_guard<std::mutex> lock(mtx);
-                he_enc_data[index] = result;
-                std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
+                std::lock_guard<std::mutex> lock(he_enc_data_map_mutex);
+                he_enc_data[index] = std::move(local_result);
             }
-            
+
+            std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
         } catch (...) {
@@ -702,7 +727,6 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
     cout << records.size() << " records processed" << endl;
     cout << he_enc_data.size() << " records in he_enc_data" << endl;
 
-
     for (auto& record : he_enc_data_map[analystId][patientId]) {
         if (record.size() == 0) {
             std::cerr << "Empty record" << std::endl;
@@ -720,7 +744,6 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
 {
     unsigned int num_threads = std::thread::hardware_concurrency();
     std::vector<std::thread> thread_pool;
-    std::mutex mtx;
 
     std::cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << std::endl;
 
@@ -737,7 +760,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
             Ciphertext tmp;
             sealhelper::packed_enc_multiply(record, getEncWeightsMapFirstValue(analystId), tmp, *getEvaluator());
             {
-                std::lock_guard<std::mutex> lock(mtx);
+                std::lock_guard<std::mutex> lock(he_enc_product_map_mutex);
                 he_enc_product[index] = tmp;
             }
             std::cout << "Thread " << std::this_thread::get_id() << " finished for record " << index << std::endl;
@@ -783,7 +806,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
             Ciphertext tmp1;
             sealhelper::encrypted_vec_sum(record, tmp1, *getEvaluator(), getAnalystHEGaloisKeys(analystId), inputLen);
             {
-                std::lock_guard<std::mutex> lock(mtx);
+                std::lock_guard<std::mutex> lock(he_sum_enc_product_map_mutex);
                 he_sum_enc_product[index] = tmp1;
             }
             std::cout << "Thread " << std::this_thread::get_id() << " finished for relinearization and sum of record " << index << std::endl;
