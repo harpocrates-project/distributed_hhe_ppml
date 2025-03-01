@@ -120,6 +120,15 @@ else()
   endif()
 endif()
 
+# Fetch and build TBB
+FetchContent_Declare(
+    tbb
+    GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
+    GIT_TAG        v2022.0.0
+)
+
+FetchContent_MakeAvailable(tbb)
+
 # Proto file
 get_filename_component(hhe_proto "${PROJECT_SOURCE_DIR}/protos/hhe.proto" ABSOLUTE)
 get_filename_component(hhe_proto_path "${hhe_proto}" PATH)
@@ -213,6 +222,7 @@ target_link_libraries(csp
     aes
     pocketnn
     hhe_grpc_proto
+    TBB::tbb
     ${_REFLECTION}
     ${_GRPC_GRPCPP}
     ${_PROTOBUF_LIBPROTOBUF})

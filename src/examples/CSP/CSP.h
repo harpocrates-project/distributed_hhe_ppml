@@ -1,6 +1,5 @@
 #pragma once
-#include <unordered_map>
-#include <mutex>
+#include <oneapi/tbb/concurrent_unordered_map.h>
 
 #include "../../Common.h"
 #include <google/protobuf/repeated_field.h> // Include for RepeatedPtrField
@@ -292,52 +291,36 @@ class BaseCSP
         //GaloisKeys csp_gk;
         //RelinKeys csp_rk;
 
-        unordered_map<string, PublicKey*> analyst_he_pk_map;
-        unordered_map<string, RelinKeys*> analyst_he_rk_map;
-        unordered_map<string, GaloisKeys*> analyst_he_gk_map;
-        unordered_map<string, RelinKeys*> csp_he_rk_map;
-        unordered_map<string, GaloisKeys*> csp_he_gk_map;
+        oneapi::tbb::concurrent_unordered_map<string, PublicKey*> analyst_he_pk_map;
+        oneapi::tbb::concurrent_unordered_map<string, RelinKeys*> analyst_he_rk_map;
+        oneapi::tbb::concurrent_unordered_map<string, GaloisKeys*> analyst_he_gk_map;
+        oneapi::tbb::concurrent_unordered_map<string, RelinKeys*> csp_he_rk_map;
+        oneapi::tbb::concurrent_unordered_map<string, GaloisKeys*> csp_he_gk_map;
 
-        unordered_map<string, string> analyst_uuid_map;
-        unordered_map<string, string> analyst_uuid_id_map;
+        oneapi::tbb::concurrent_unordered_map<string, string> analyst_uuid_map;
+        oneapi::tbb::concurrent_unordered_map<string, string> analyst_uuid_id_map;
 
-        unordered_map<string, vector<Ciphertext>> enc_weights_map;  // Analyst's encrypted weights
-        unordered_map<string, vector<Ciphertext>> enc_sym_key_map; // User's encrypted symmetric keys
-
-        // Mutex to protect access to enc_data_map
-        std::mutex enc_data_map_mutex;
-
+        oneapi::tbb::concurrent_unordered_map<string, vector<Ciphertext>> enc_weights_map;  // Analyst's encrypted weights
+        oneapi::tbb::concurrent_unordered_map<string, vector<Ciphertext>> enc_sym_key_map; // User's encrypted symmetric keys
 
     protected:
 
         virtual void performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL& HHE);
 
         // Use a nested map to store the data by mapping the analystId and the patientId to the values vector
-        unordered_map<string, unordered_map<string, vector<vector<uint64_t>>>> enc_data_map; // User's encrypted data
+        oneapi::tbb::concurrent_unordered_map<string, oneapi::tbb::concurrent_unordered_map<string, vector<vector<uint64_t>>>> enc_data_map; // User's encrypted data
 
         // Use a nested map to store the HE encrypted data by mapping the analystId and the patientId
-        unordered_map<string, unordered_map<string, vector<vector<Ciphertext>>>> he_enc_data_map; // HE encrypted data
+        oneapi::tbb::concurrent_unordered_map<string, oneapi::tbb::concurrent_unordered_map<string, vector<vector<Ciphertext>>>> he_enc_data_map; // HE encrypted data
 
         // HHE decomposition postprocessing on the HE encrypted input. (vi_he_processed)
-        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_enc_data_processed_map;
+        oneapi::tbb::concurrent_unordered_map<string, oneapi::tbb::concurrent_unordered_map<string, vector<Ciphertext>>> he_enc_data_processed_map;
 
         // The multiply of vi_he_processed. (encrypted_product)
-        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_enc_product_map; 
+        oneapi::tbb::concurrent_unordered_map<string, oneapi::tbb::concurrent_unordered_map<string, vector<Ciphertext>>> he_enc_product_map; 
 
         // The results will be sent to Analyst. (sum of encrypted_product)
-        unordered_map<string, unordered_map<string, vector<Ciphertext>>> he_sum_enc_product_map;
-
-        // Mutex to protect access to he_enc_data_map
-        std::mutex he_enc_data_map_mutex;
-
-        // Mutex to protect access to he_enc_data_processed_map
-        std::mutex he_enc_data_processed_map_mutex;
-
-        // Mutex to protect access to he_enc_product_map
-        std::mutex he_enc_product_map_mutex;
-
-        // Mutex to protect access to he_sum_enc_product_map
-        std::mutex he_sum_enc_product_map_mutex;
+        oneapi::tbb::concurrent_unordered_map<string, oneapi::tbb::concurrent_unordered_map<string, vector<Ciphertext>>> he_sum_enc_product_map;
 };      
 
 class CSP_hhe_pktnn_1fc : public BaseCSP 
