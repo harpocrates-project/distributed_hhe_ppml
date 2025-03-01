@@ -162,7 +162,7 @@ rpc service - Add User encrypted data for NN calculation
 */
 Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetricDataMsg* request, Empty* reply)
 {
-    vector <vector<uint64_t>> values;
+    vector<vector<uint64_t>> values;
 
     string analystId = getAnalystId(context->client_metadata());
     cout << "analystId: " << analystId << endl;
@@ -170,55 +170,35 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
     reply = new Empty();
 
     cout << "[CSP Service] Adding User encrypted data" << endl;
-    for (EncSymmetricDataRecord record: request->record())
+    for (EncSymmetricDataRecord record : request->record())
     {
         vector<uint64_t> record_values(record.value().begin(), record.value().end());
         values.push_back(std::move(record_values));
         //utils::print_vec(record_values, record_values.size(), "record");
-    }   
-    
-    // Receive the patientID from the User 
+    }
+
+    // Receive the patientID from the User
     string patientID = request->patientid();
 
-
-    // transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
-    // if (lowerStr != "spo2" && lowerStr != "ecg")
-    // {
-    //     throw std::runtime_error("Dataset must be either SpO2 or ECG");
-    // }
-    // int inputLen = 0;
-    // if (lowerStr == "spo2")
-    // {
-    //     inputLen = 300;
-    // }
-    // if (lowerStr == "ecg")
-    // {
-    //     inputLen = 128;
-    // }
-        // }
     int inputLen = 300;
 
-    
-    csp->addUserEncryptedData(patientID, analystId, values); 
-  
-    // HHE docomposition
-    csp->decompose(patientID, analystId, inputLen);
+    try
+    {
+        csp->addUserEncryptedData(patientID, analystId, values);
 
-    // Write HHE decomposition data from memory to a file
-    string analystUUID = csp->getAnalystUUID(analystId);
-    string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
-    csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(patientID, analystId));
-   
-    // Read HHE decomposition data from a file
-    // csp->readHHEDecompositionDataFromFile(fileName);
+        // HHE decomposition
+        csp->decompose(patientID, analystId, inputLen);
 
-    // Needs to be done in the new gRPC call
-    // HHE evaluation
-    // csp->evaluateModel(analystId, inputLen);
-
-    // creates an object that is used to callback the Analyst
-    // AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
-    // analystRPCClient->addEncryptedResult(analystId);    
+        // Write HHE decomposition data from memory to a file
+        string analystUUID = csp->getAnalystUUID(analystId);
+        string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
+        csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(patientID, analystId));
+    }
+    catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during decomposition: " << e.what() << endl;
+        return Status(StatusCode::INTERNAL, e.what());
+    }
 
     return Status::OK;
 }

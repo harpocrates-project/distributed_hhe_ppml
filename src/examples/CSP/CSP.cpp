@@ -72,7 +72,13 @@ Return the Analyst HE Public key
 */
 PublicKey BaseCSP::getAnalystHEPublicKey(string analystId)
 {
-    return *analyst_he_pk_map[analystId];
+    auto it = analyst_he_pk_map.find(analystId);
+    if (it == analyst_he_pk_map.end())
+    {
+        cerr << "[CSP] Error: Public key not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Public key not found");
+    }
+    return *(it->second);
 }
 
 /**
@@ -80,7 +86,13 @@ Return the Analyst HE Relin keys
 */
 RelinKeys BaseCSP::getAnalystHERelinKeys(string analystId)
 {
-    return *analyst_he_rk_map[analystId];
+    auto it = analyst_he_rk_map.find(analystId);
+    if (it == analyst_he_rk_map.end())
+    {
+        cerr << "[CSP] Error: Relin keys not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Relin keys not found");
+    }
+    return *(it->second);
 }
 
 /**
@@ -88,7 +100,13 @@ Return the Analyst HE Galois keys
 */
 GaloisKeys BaseCSP::getAnalystHEGaloisKeys(string analystId)
 {
-    return *analyst_he_gk_map[analystId];
+    auto it = analyst_he_gk_map.find(analystId);
+    if (it == analyst_he_gk_map.end())
+    {
+        cerr << "[CSP] Error: Galois keys not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Galois keys not found");
+    }
+    return *(it->second);
 }
 
 /**
@@ -96,24 +114,27 @@ Return the User encrypted symmetric key
 */
 vector<Ciphertext> BaseCSP::getUserEncryptedSymmetricKey(string analystId)
 {
-    return enc_sym_key_map[analystId];
+    auto it = enc_sym_key_map.find(analystId);
+    if (it == enc_sym_key_map.end())
+    {
+        cerr << "[CSP] Error: Encrypted symmetric key not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Encrypted symmetric key not found");
+    }
+    return it->second;
 }
-
-/**
-Return the User encrypted data
-*/
-// vector<uint64_t> BaseCSP::getUserEncryptedData(string analystId)
-// {
-//     cout << "[CSP] Obtaining User's encrypted data (Analyst Id: " << analystId << ")" << endl;
-//     return enc_data_map[analystId];
-// }
 
 /**
 Return the HE encrypted data
 */
 vector<vector<Ciphertext>> BaseCSP::getHEEncryptedData(string patientId, string analystId)
 {
-    return he_enc_data_map[analystId][patientId];
+    auto it = he_enc_data_map.find(analystId);
+    if (it == he_enc_data_map.end() || it->second.find(patientId) == it->second.end())
+    {
+        cerr << "[CSP] Error: HE encrypted data not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("HE encrypted data not found");
+    }
+    return it->second[patientId];
 }
 
 /**
@@ -121,7 +142,13 @@ Return the Sum of the HE_ENC_Product
 */
 vector<Ciphertext> BaseCSP::getHESumEncProduct(string patientId, string analystId)
 {
-    return he_sum_enc_product_map[analystId][patientId];
+    auto it = he_sum_enc_product_map.find(analystId);
+    if (it == he_sum_enc_product_map.end() || it->second.find(patientId) == it->second.end())
+    {
+        cerr << "[CSP] Error: Sum of HE_ENC_Product not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("Sum of HE_ENC_Product not found");
+    }
+    return it->second[patientId];
 }
 
 /**
@@ -147,7 +174,13 @@ Return the HE encrypted processed data
 */
 vector<Ciphertext> BaseCSP::getHEEncDataProcessedMapValue(string patientId, string analystId)
 {
-    return he_enc_data_processed_map[analystId][patientId];
+    auto it = he_enc_data_processed_map.find(analystId);
+    if (it == he_enc_data_processed_map.end() || it->second.find(patientId) == it->second.end())
+    {
+        cerr << "[CSP] Error: HE encrypted processed data not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("HE encrypted processed data not found");
+    }
+    return it->second[patientId];
 }
 
 /**
@@ -155,7 +188,13 @@ Return the first value of encrypted weights map
 */
 Ciphertext BaseCSP::getEncWeightsMapFirstValue(string analystId)
 {
-    return enc_weights_map[analystId][0];
+    auto it = enc_weights_map.find(analystId);
+    if (it == enc_weights_map.end() || it->second.empty())
+    {
+        cerr << "[CSP] Error: Encrypted weights not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Encrypted weights not found");
+    }
+    return it->second[0];
 }
 
 /**
@@ -163,7 +202,13 @@ Return the CSP Relin keys value
 */
 RelinKeys BaseCSP::getCSPHERelinKeysMapValue(string analystId)
 {
-    return *csp_he_rk_map[analystId];
+    auto it = csp_he_rk_map.find(analystId);
+    if (it == csp_he_rk_map.end())
+    {
+        cerr << "[CSP] Error: CSP Relin keys not found for AnalystId: " << analystId << endl;
+        throw runtime_error("CSP Relin keys not found");
+    }
+    return *(it->second);
 }
 
 /**
@@ -171,7 +216,13 @@ Return the CSP Galois keys value
 */
 GaloisKeys BaseCSP::getCSPHEGaloisKeysMapValue(string analystId)
 {
-    return *csp_he_gk_map[analystId];
+    auto it = csp_he_gk_map.find(analystId);
+    if (it == csp_he_gk_map.end())
+    {
+        cerr << "[CSP] Error: CSP Galois keys not found for AnalystId: " << analystId << endl;
+        throw runtime_error("CSP Galois keys not found");
+    }
+    return *(it->second);
 }
 
 /**
@@ -242,6 +293,7 @@ HHE decomposition
 void BaseCSP::decompose(string patientId, string analystId, int inputLen)
 {
     cout << "[CSP] Making a PASTA_SEAL HHE object based on the CSP's HE sk and Analyst's HE pk, rk, gk (Analyst Id: " << analystId << ")" << endl;
+
     pasta::PASTA_SEAL HHE(context,
                           getAnalystHEPublicKey(analystId),
                           getHESecretKey(),
@@ -272,6 +324,8 @@ void BaseCSP::decompose(string patientId, string analystId, int inputLen)
 
 void BaseCSP::performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL &HHE)
 {
+try
+    {
     for (vector<uint64_t> &record : enc_data_map[analystId][patientId])
     {
         // Perform decomposition and store the result in a local variable
@@ -280,9 +334,16 @@ void BaseCSP::performDecomposition(string patientId, string analystId, pasta::PA
         he_enc_data_map[analystId][patientId].push_back(std::move(local_result));
     }
 }
+catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during decomposition: " << e.what() << endl;
+    }
+}
 
 void BaseCSP::performMasking(string patientId, string analystId, int inputLen, pasta::PASTA_SEAL &HHE)
 {
+try
+    {
     size_t rem = inputLen % HHE.get_plain_size();
 
     if (rem != 0)
@@ -302,9 +363,16 @@ void BaseCSP::performMasking(string patientId, string analystId, int inputLen, p
         }
     }
 }
+catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during masking: " << e.what() << endl;
+    }
+}
 
 void BaseCSP::performFlattening(string patientId, string analystId, pasta::PASTA_SEAL &HHE)
 {
+try
+    {
     Ciphertext tmp;
     for (vector<Ciphertext> record : he_enc_data_map[analystId][patientId])
     {
@@ -321,6 +389,11 @@ void BaseCSP::performFlattening(string patientId, string analystId, pasta::PASTA
         he_enc_data_processed_map[analystId][patientId].push_back(tmp);
     }
 }
+catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during flattening: " << e.what() << endl;
+    }
+}
 
 /**
 HHE evaluation
@@ -331,6 +404,8 @@ void CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int in
 
     auto start = high_resolution_clock::now();
 
+try
+    {
     Ciphertext tmp;
     for (Ciphertext record : getHEEncDataProcessedMapValue(patientId, analystId))
     {
@@ -369,12 +444,19 @@ void CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int in
 
     cout << "[CSP] Evaluation completed" << endl;
 }
+catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during evaluation: " << e.what() << endl;
+    }
+}
 
 /**
 Add Analyst HE Public key on CSP
 */
 bool BaseCSP::addAnalystHEPublicKey(string analystId, seal_byte *bytes, int size)
 {
+try
+    {
     cout << "[CSP] Adding Analyst HE Public key (AnalystId: " << analystId << ") and (size=" << size << ")" << endl;
     print_seal_bytes(bytes);
 
@@ -384,6 +466,12 @@ bool BaseCSP::addAnalystHEPublicKey(string analystId, seal_byte *bytes, int size
     analyst_he_pk_map[analystId] = analyst_he_pk;
 
     return true;
+}
+    catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error adding Analyst HE Public key: " << e.what() << endl;
+        return false;
+    }
 }
 
 /**
