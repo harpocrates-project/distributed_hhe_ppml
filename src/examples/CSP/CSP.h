@@ -90,7 +90,7 @@ class BaseCSP
         Return the User encrypted data
         @param[in] analystId The Analyst IP Addr
         */       
-        //vector<uint64_t> getUserEncryptedData(string analystId);  // vi_se
+        vector<vector<uint64_t>> getUserEncryptedData(string patientId, string analystId);  // vi_se
         
         /**
         Return the HE encrypted data
@@ -138,6 +138,21 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         */
         vector<Ciphertext> getHEEncDataProcessedMap(string patientId, string analystId);
+
+
+        /** 
+         * Return the HE encrypted product data
+         * @param[in] analystId The Analyst IP Addr
+         * @param[in] patientId The Patient ID
+         */
+        vector<Ciphertext> getHEEncProductMapValue(string patientId, string analystId);
+
+        /**
+         * Return the HE sum encrypted product data
+         * @param[in] analystId The Analyst IP Addr
+         * @param[in] patientId The Patient ID
+         */
+        vector<Ciphertext> getHESumEncProductMapValue(string patientId, string analystId);
 
         /**
         Return the Analyst's UUID

@@ -124,6 +124,20 @@ vector<Ciphertext> BaseCSP::getUserEncryptedSymmetricKey(string analystId)
 }
 
 /**
+Return the User encrypted data
+*/
+vector<vector<uint64_t>> BaseCSP::getUserEncryptedData(string patientId, string analystId) 
+{
+    auto it = enc_data_map.find(analystId);
+    if (it == enc_data_map.end() || it->second.find(patientId) == it->second.end())
+    {
+        cerr << "[CSP] Error: Encrypted data not found for AnalystId: " << analystId << endl;
+        throw runtime_error("Encrypted data not found");
+    }
+    return it->second[patientId];
+}
+
+/**
 Return the HE encrypted data
 */
 vector<vector<Ciphertext>> BaseCSP::getHEEncryptedData(string patientId, string analystId)
@@ -157,7 +171,8 @@ Return the encrypted result calculated by CSP via HHE decomposition and evaluati
 
 int BaseCSP::getEncryptedResultBytes(string patientId, string analystId, seal_byte *&buffer, int index)
 {
-    Ciphertext encrypted_sum_vec = he_sum_enc_product_map[analystId][patientId].at(index);
+    //Ciphertext encrypted_sum_vec = he_sum_enc_product_map[analystId][patientId].at(index);
+    Ciphertext encrypted_sum_vec = getHESumEncProduct(patientId, analystId).at(index);
 
     int encrypted_sum_vec_size = encrypted_sum_vec.save_size();
     buffer = new seal_byte[encrypted_sum_vec_size];
@@ -230,7 +245,37 @@ Return the HE encrypted processed data
 */
 vector<Ciphertext> BaseCSP::getHEEncDataProcessedMap(string patientId, string analystId)
 {
-    return he_enc_data_processed_map[analystId][patientId];
+    auto it = he_enc_data_processed_map.find(analystId);
+    if (it == he_enc_data_processed_map.end() || it->second.find(patientId) == it->second.end())
+    {
+        cerr << "[CSP] Error: HE encrypted processed data not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("HE encrypted processed data not found");
+    }
+    return it->second[patientId];
+}
+
+/** 
+Return the HE encrypted product data
+*/
+vector<Ciphertext> BaseCSP::getHEEncProductMapValue(string patientId, string analystId) {
+    auto it = he_enc_product_map.find(analystId);
+    if (it == he_enc_product_map.end() || it->second.find(patientId) == it->second.end()) {
+        cerr << "[CSP] Error: HE encrypted product data not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("HE encrypted product data not found");
+    }
+    return it->second[patientId];
+}
+
+/** 
+Return the HE sum encrypted product data
+ */
+vector<Ciphertext> BaseCSP::getHESumEncProductMapValue(string patientId, string analystId) {
+    auto it = he_sum_enc_product_map.find(analystId);
+    if (it == he_sum_enc_product_map.end() || it->second.find(patientId) == it->second.end()) {
+        cerr << "[CSP] Error: HE sum encrypted product data not found for AnalystId: " << analystId << " and PatientId: " << patientId << endl;
+        throw runtime_error("HE sum encrypted product data not found");
+    }
+    return it->second[patientId];
 }
 
 // functions
@@ -318,7 +363,7 @@ void BaseCSP::decompose(string patientId, string analystId, int inputLen)
     cout << "Total decompose time: " << duration.count() << " ms" << endl;
 
     cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
-    for (Ciphertext record : he_enc_data_processed_map[analystId][patientId])
+    for (Ciphertext record : getHEEncDataProcessedMap(patientId, analystId))
         print_Ciphertext(record);
 }
 
@@ -326,7 +371,7 @@ void BaseCSP::performDecomposition(string patientId, string analystId, pasta::PA
 {
 try
     {
-    for (vector<uint64_t> &record : enc_data_map[analystId][patientId])
+    for (vector<uint64_t> &record : getUserEncryptedData(patientId, analystId))
     {
         // Perform decomposition and store the result in a local variable
         vector<Ciphertext> local_result = HHE.decomposition(record, getUserEncryptedSymmetricKey(analystId), config::USE_BATCH);
@@ -350,7 +395,7 @@ try
     {
         vector<uint64_t> mask(rem, 1);
         {
-            for (vector<Ciphertext> record : he_enc_data_map[analystId][patientId])
+            for (vector<Ciphertext> record : getHEEncryptedData(patientId, analystId))
             {
                 if (record.size() == 0)
                 {
@@ -374,7 +419,7 @@ void BaseCSP::performFlattening(string patientId, string analystId, pasta::PASTA
 try
     {
     Ciphertext tmp;
-    for (vector<Ciphertext> record : he_enc_data_map[analystId][patientId])
+    for (vector<Ciphertext> record : getHEEncryptedData(patientId, analystId))
     {
         if (record.size() == 0)
         {
@@ -418,7 +463,7 @@ try
     }
 
     Ciphertext tmp1;
-    for (Ciphertext record : he_enc_product_map[analystId][patientId])
+    for (Ciphertext record : getHEEncProductMapValue(patientId, analystId))
     {
         cout << "encrypted_product size before relinearization = " << record.size() << endl;
         getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
@@ -440,7 +485,7 @@ try
     auto duration = duration_cast<milliseconds>(end - start);
     cout << "Total evaluation time: " << duration.count() << " ms" << endl;
 
-    print_vec_Ciphertext(he_sum_enc_product_map[analystId][patientId], he_sum_enc_product_map[analystId][patientId].size());
+    print_vec_Ciphertext(getHESumEncProductMapValue(patientId, analystId), getHESumEncProductMapValue(patientId, analystId).size());
 
     cout << "[CSP] Evaluation completed" << endl;
 }
@@ -787,12 +832,12 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
     };
 
     auto &he_enc_data = he_enc_data_map[analystId][patientId];
-    cout << enc_data_map[analystId].size() << " records to process" << endl;
-    he_enc_data.resize(enc_data_map[analystId][patientId].size());
+    cout << getUserEncryptedData(patientId, analystId).size() << " records to process for: " << patientId << endl;
+    he_enc_data.resize(getUserEncryptedData(patientId, analystId).size());
     const auto &userEncryptedSymmetricKey = getUserEncryptedSymmetricKey(analystId);
     size_t num_of_active_threads = 0;
 
-    const auto &records = enc_data_map[analystId][patientId];
+    const auto &records = getUserEncryptedData(patientId, analystId);
     for (size_t i = 0; i < records.size(); ++i)
     {
         const auto &record = records[i];
@@ -815,7 +860,7 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
     cout << records.size() << " records processed" << endl;
     cout << he_enc_data.size() << " records in he_enc_data" << endl;
 
-    for (auto &record : he_enc_data_map[analystId][patientId])
+    for (auto &record : getHEEncryptedData(patientId, analystId))
     {
         if (record.size() == 0)
         {
@@ -939,7 +984,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
     auto duration = duration_cast<milliseconds>(end - start);
     std::cout << "Total evaluation time: " << duration.count() << " ms" << std::endl;
 
-    print_vec_Ciphertext(he_sum_enc_product_map[analystId][patientId], he_sum_enc_product_map[analystId].size());
+    print_vec_Ciphertext(getHESumEncProduct(patientId, analystId), getHESumEncProduct(patientId, analystId).size());
 
     std::cout << "[CSP] Evaluation completed" << std::endl;
 }
