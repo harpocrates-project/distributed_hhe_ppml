@@ -27,12 +27,20 @@ We use the processed ECG dataset from [this work](https://github.com/SharifAbuad
 ```
 
 ## Requirements
+The software has been successfully compiled using:
 
-`cpp==11.3.0`  
-`CMAKE>=3.25.1`  
-`SEAL==4.0.0`
+```
+cpp==13.3.0
+CMAKE==3.23.3
+SEAL==4.0.0
+gRPC==1.53.0
+```
 
-The PASTA library for HHE is built upon Microsoft's SEAL library. In this repo, SEAL is already installed in `libs/seal`. If you want to install it somewhere else, please refer to the [SEAL's repo](https://github.com/microsoft/SEAL).
+The PASTA library for HHE is built upon Microsoft's SEAL library. In this repo, SEAL is already installed in `libs/seal`. If you want to install it somewhere else, please refer to the [SEAL's repo](https://github.com/microsoft/SEAL). Likewise, the build process will download and compile the `gRPC` and `protobuf` libraries. If you have them already installed in your environment, please adjust the Makefile to use them directly by changing the following setting to `ON`:
+
+```
+set(USE_SYSTEM_GRPC ON)
+```
 
 ## How to run
 
@@ -42,11 +50,14 @@ Before compiling the application, you can take a look at `src/config.cpp` and ch
 - When `dry_run` is `true`, we only run a few data examples set by `dry_run_num_samples`. Otherwise it runs the whole dataset.
 - `save_weight_path` and `save_bias_path` defines the paths that the trained weights and bias will be saved. It also defines the paths that the trained weights and bias will be loaded from in the inference protocols.
 
-To compile and run this project, see the followings:
-In the terminal, `cd` into the project's directory, then run
-- `cmake -S . -B build -DCMAKE_PREFIX_PATH=libs/seal`  
-- `cmake --build build`  
-- Please, note that this process may initially take a long time due to the gRPC and Protobuf dependencies being downloaded and built. As soon as the project and the dependencies are built, the produced executables will be available in the `./build` directory. Please, also note that at the moment the workflow is implemented so that the components must be started according to the same order as they are listed below.
+To compile and run this project, in the terminal, `cd` into the project's directory, then run:
+
+```
+cmake -S . -B build`  
+cmake --build build --target csp user analyst
+```
+
+Please, note that this process may initially take a long time due to the gRPC and Protobuf dependencies being downloaded and built. As soon as the project and the dependencies are built, the produced executables will be available in the `./build` directory. Please, also note that at the moment the workflow is implemented so that the components must be started according to the same order as they are listed below.
 
 ### CSP
 The CSP component can be started via the command
@@ -55,6 +66,7 @@ The CSP component can be started via the command
 ```
 Where `address` and `port` are the local IP address and the port number on which the CSP will listen for incoming RPC requests. If no (or a wrong number of) arguments are provided, the CSP will listen on a default address and port number, i.e., `localhost:50052`.
 The CSP component performs two main operations, i.e., decomposition and evaluation. These have been devised to be performed in parallel using a number of thread automatically calculated using the number of available CPU cores (via std::thread::hardware_concurrency()).
+Moreover, the CSP component supports processing concurrent requests for decomposition and evaluation originating from multiple gRPC invocations. They are all handled in separate threads using synchronised data structures.
 
 ### Analyst
 The Analyst component can be started via the command
@@ -77,7 +89,7 @@ By default, the User component encrypts and sends three segments of data from th
 ```
 
 ## Integration with external components
-No specific interactions with external components is expected for the User and Analyst; they have been devised to be used via a command line interface. On the other hand, once data are received from the User by the CSP, they are automatically encrypted (HHE decomposition) and saved in a file, whose name includes the UUID of the designated Analyst. External components can later then trigger a model evaluation on these (or externally provided) data using one of the two gRPC endpoints described below.
+No specific interactions with external components is expected for the User and Analyst; they have been devised to be used via a command line interface. On the other hand, once data are received from the User by the CSP, they are automatically re-encrypted (HHE decomposition) and saved in a file, whose name includes the UUID of the designated Analyst. External components can later then trigger a model evaluation on these (or externally provided) data using one of the two gRPC endpoints described below.
 
 These RPC definitions are part of a service that allows other components to request model evaluation using either direct ciphertext bytes or data from a file previously generated and saved by the CSP component. The use of Protocol Buffers ensures that these RPCs can be used across different programming languages and platforms, making the service highly interoperable. The CiphertextBytes message provides a way to pass encrypted data along with an analyst identifier (the UUID), while the DataFile message allows for specifying a file containing the necessary data for evaluation and reusing encrypted data already existing on the CSP.
 
@@ -91,12 +103,14 @@ These RPC definitions are part of a service that allows other components to requ
   message CiphertextBytes {
       repeated bytes HHEDecomp = 1;
       string analystID = 2;
+      string patientID = 3;
   }
   ```
 
-- The `CiphertextBytes` message contains two fields:
-     - `HHEDecomp`: A repeated field of bytes, which likely represents a collection of encrypted data segments.
+- The `CiphertextBytes` message contains three fields:
+     - `HHEDecomp`: A repeated field of bytes that represents a collection of HHE encrypted data segments.
      - `analystID`: A string that identifies the UUID of the analyst associated with the encrypted data.
+     - `patientID`: A string that identifies the (anonymised) ID of a patient the encrypted data pertain to.
 - The `Empty` return type is used to acknowledge that the operation has been completed.
 
 
@@ -113,5 +127,5 @@ These RPC definitions are part of a service that allows other components to requ
   ```
 
 - The `DataFile` message contains a single field:
-     - `filename`: A string that specifies the name of the file (existing on the CSP component file system) containing the data to be used for model evaluation.
+     - `filename`: A string that specifies the name of the file (existing on the CSP component file system) containing the data to be used for model evaluation. The file name usually consists of two parts, where the first part is the patient ID and the second part is the analyst ID, e.g., `c000101_387797b2-2ac4-4373-9097-969c81e8f96f.bin`.
 - Similar to the previous RPC, the `Empty` return type is utilised to provide an acknowledgment of completion.
