@@ -26,7 +26,7 @@ int AnalystServiceUserClient::getPublicKey (seal_byte* &buffer)
     {
       cout << status.error_code() << ": " << status.error_message()
                 << endl;
-      return -1;
+      return 0;
     }
 }
 

@@ -245,7 +245,7 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        void decompose(string patientId, string analystId, int inputLen);
+        bool decompose(string patientId, string analystId, int inputLen);
 
         // pure virtual function
         /**
@@ -253,7 +253,7 @@ class BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        virtual void evaluateModel(string patientId, string analystId, int inputLen) = 0;
+        virtual bool evaluateModel(string patientId, string analystId, int inputLen) = 0;
 
         /**
         Helper function to print the first ten bytes of the seal_byte input
@@ -346,14 +346,14 @@ class CSP_hhe_pktnn_1fc : public BaseCSP
         @param[in] analystId The Analyst IP Addr
         @param[in] inputLen The length of dataset
         */
-        void evaluateModel(string patientId, string analystId, int inputLen);
+        bool evaluateModel(string patientId, string analystId, int inputLen);
 };
 
 
 class CSPParallel_hhe_pktnn_1fc : public CSP_hhe_pktnn_1fc
 {
     public:
-    void evaluateModel(string patientId, string analystId, int inputLen) override;
+    bool evaluateModel(string patientId, string analystId, int inputLen) override;
 
     protected:
         void performDecomposition(std::string patientId, std::string analystId, pasta::PASTA_SEAL& HHE);

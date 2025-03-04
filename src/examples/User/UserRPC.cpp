@@ -79,6 +79,14 @@ int main(int argc,char** argv)
     cout << "[UserRPC] Receiving Analyst HE Public key" << endl;
     seal_byte* buffer = nullptr;
     int length = AnalystRPCClient.getPublicKey(buffer);
+    cout << length << endl;
+
+    if (length == 0) 
+    {
+        cerr << "[UserRPC] Error: Analyst HE Public key not found" << endl;
+        return 1;
+    }
+
     cout << "The Analyst HE Public key (AnalystId: " << analystUrl <<")" << endl;
     for (int i = 0; i < 10; i++) 
     {

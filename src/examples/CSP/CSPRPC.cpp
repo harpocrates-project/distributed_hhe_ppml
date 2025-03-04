@@ -187,16 +187,20 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
         csp->addUserEncryptedData(patientID, analystId, values);
 
         // HHE decomposition
-        csp->decompose(patientID, analystId, inputLen);
+        if (!csp->decompose(patientID, analystId, inputLen))
+        {
+            return Status(StatusCode::INTERNAL, "Failed to decompose data");
+        }
 
         // Write HHE decomposition data from memory to a file
         string analystUUID = csp->getAnalystUUID(analystId);
         string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
         csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(patientID, analystId));
     }
+    // catching unexpected exceptions in addUserEncryptedData or writeHHEDecompositionDataToFile
     catch (const runtime_error &e)
     {
-        cerr << "[CSP] Error during decomposition: " << e.what() << endl;
+        cerr << "[CSP] Unexpected error during decomposition: " << e.what() << endl;
         return Status(StatusCode::INTERNAL, e.what());
     }
 
@@ -250,7 +254,10 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
     int inputLen = 300;
 
     // HHE evaluation
-    csp->evaluateModel(patientId, analystId, inputLen);
+    if (!csp->evaluateModel(patientId, analystId, inputLen))
+    {
+        return Status(StatusCode::INTERNAL, "Failed to evaluate model");
+    }
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
@@ -294,7 +301,11 @@ Status CSPServiceImpl::evaluateModelFromFile(ServerContext* context, const DataF
     csp->setHHEEncDataProcessedMap(patientId, analystId, ciphertexts);
 
     int inputLen = 300;
-    csp->evaluateModel(patientId, analystId, inputLen);
+
+    if (!csp->evaluateModel(patientId, analystId, inputLen))
+    {
+        return Status(StatusCode::INTERNAL, "Failed to evaluate model");
+    }
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);

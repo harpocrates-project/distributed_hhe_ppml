@@ -335,42 +335,56 @@ void BaseCSP::hEInitialization()
 /**
 HHE decomposition
 */
-void BaseCSP::decompose(string patientId, string analystId, int inputLen)
+bool BaseCSP::decompose(string patientId, string analystId, int inputLen)
 {
-    cout << "[CSP] Making a PASTA_SEAL HHE object based on the CSP's HE sk and Analyst's HE pk, rk, gk (Analyst Id: " << analystId << ")" << endl;
+    try
+    {
+        cout << "[CSP] Making a PASTA_SEAL HHE object based on the CSP's HE sk and Analyst's HE pk, rk, gk (Analyst Id: " << analystId << ")" << endl;
 
-    pasta::PASTA_SEAL HHE(context,
-                          getAnalystHEPublicKey(analystId),
-                          getHESecretKey(),
-                          getAnalystHERelinKeys(analystId),
-                          getAnalystHEGaloisKeys(analystId));
+        pasta::PASTA_SEAL HHE(context,
+                              getAnalystHEPublicKey(analystId),
+                              getHESecretKey(),
+                              getAnalystHERelinKeys(analystId),
+                              getAnalystHEGaloisKeys(analystId));
 
-    cout << "[CSP] Decomposition: CSP does HHE decomposition to turn User's symmetric input into HE input" << endl;
+        cout << "[CSP] Decomposition: CSP does HHE decomposition to turn User's symmetric input into HE input" << endl;
 
-    auto start = high_resolution_clock::now();
+        auto start = high_resolution_clock::now();
 
-    // Perform decomposition
-    performDecomposition(patientId, analystId, HHE);
+        // Perform decomposition
+        performDecomposition(patientId, analystId, HHE);
 
-    // Perform masking
-    performMasking(patientId, analystId, inputLen, HHE);
+        // Perform masking
+        performMasking(patientId, analystId, inputLen, HHE);
 
-    // Perform flattening
-    performFlattening(patientId, analystId, HHE);
+        // Perform flattening
+        performFlattening(patientId, analystId, HHE);
 
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start);
-    cout << "Total decompose time: " << duration.count() << " ms" << endl;
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        cout << "Total decompose time: " << duration.count() << " ms" << endl;
 
-    cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
-    for (Ciphertext record : getHEEncDataProcessedMap(patientId, analystId))
-        print_Ciphertext(record);
+        cout << "The HHE decomposition postprocessing result is " << endl; // vi_he_processed
+        for (Ciphertext record : getHEEncDataProcessedMap(patientId, analystId))
+            print_Ciphertext(record);
+
+        cout << "[CSP] Decomposition completed" << endl;
+        return true;
+    }
+    catch (const runtime_error &e)
+    {
+        cerr << "[CSP] Error during decomposition: " << e.what() << endl;
+        return false;
+    }
+    catch (...)
+    {
+        cerr << "[CSP] Unknown error during decomposition" << endl;
+        return false;
+    }
 }
 
 void BaseCSP::performDecomposition(string patientId, string analystId, pasta::PASTA_SEAL &HHE)
 {
-try
-    {
     for (vector<uint64_t> &record : getUserEncryptedData(patientId, analystId))
     {
         // Perform decomposition and store the result in a local variable
@@ -379,16 +393,9 @@ try
         he_enc_data_map[analystId][patientId].push_back(std::move(local_result));
     }
 }
-catch (const runtime_error &e)
-    {
-        cerr << "[CSP] Error during decomposition: " << e.what() << endl;
-    }
-}
 
 void BaseCSP::performMasking(string patientId, string analystId, int inputLen, pasta::PASTA_SEAL &HHE)
 {
-try
-    {
     size_t rem = inputLen % HHE.get_plain_size();
 
     if (rem != 0)
@@ -408,16 +415,9 @@ try
         }
     }
 }
-catch (const runtime_error &e)
-    {
-        cerr << "[CSP] Error during masking: " << e.what() << endl;
-    }
-}
 
 void BaseCSP::performFlattening(string patientId, string analystId, pasta::PASTA_SEAL &HHE)
 {
-try
-    {
     Ciphertext tmp;
     for (vector<Ciphertext> record : getHEEncryptedData(patientId, analystId))
     {
@@ -434,64 +434,61 @@ try
         he_enc_data_processed_map[analystId][patientId].push_back(tmp);
     }
 }
-catch (const runtime_error &e)
-    {
-        cerr << "[CSP] Error during flattening: " << e.what() << endl;
-    }
-}
 
 /**
 HHE evaluation
 */
-void CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int inputLen)
+bool CSP_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int inputLen)
 {
     cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << endl;
 
     auto start = high_resolution_clock::now();
 
-try
+    try
     {
-    Ciphertext tmp;
-    for (Ciphertext record : getHEEncDataProcessedMapValue(patientId, analystId))
-    {
-        sealhelper::packed_enc_multiply(record,
-                                        getEncWeightsMapFirstValue(analystId),
-                                        tmp,
-                                        *getEvaluator());
+        Ciphertext tmp;
+        for (Ciphertext record : getHEEncDataProcessedMapValue(patientId, analystId))
+        {
+            sealhelper::packed_enc_multiply(record,
+                                            getEncWeightsMapFirstValue(analystId),
+                                            tmp,
+                                            *getEvaluator());
 
-        he_enc_product_map[analystId][patientId].push_back(tmp);
+            he_enc_product_map[analystId][patientId].push_back(tmp);
+        }
+
+        Ciphertext tmp1;
+        for (Ciphertext record : getHEEncProductMapValue(patientId, analystId))
+        {
+            cout << "encrypted_product size before relinearization = " << record.size() << endl;
+            getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
+            cout << "encrypted_product size after relinearization = " << record.size() << endl;
+
+            // Do encrypted sum on the resulting product vector
+            cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
+
+            sealhelper::encrypted_vec_sum(record,
+                                          tmp1,
+                                          *getEvaluator(),
+                                          getAnalystHEGaloisKeys(analystId),
+                                          inputLen);
+
+            he_sum_enc_product_map[analystId][patientId].push_back(tmp1);
+        }
+
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        cout << "Total evaluation time: " << duration.count() << " ms" << endl;
+
+        print_vec_Ciphertext(getHESumEncProductMapValue(patientId, analystId), getHESumEncProductMapValue(patientId, analystId).size());
+
+        cout << "[CSP] Evaluation completed" << endl;
+        return true;
     }
-
-    Ciphertext tmp1;
-    for (Ciphertext record : getHEEncProductMapValue(patientId, analystId))
-    {
-        cout << "encrypted_product size before relinearization = " << record.size() << endl;
-        getEvaluator()->relinearize_inplace(record, getCSPHERelinKeysMapValue(analystId));
-        cout << "encrypted_product size after relinearization = " << record.size() << endl;
-
-        // Do encrypted sum on the resulting product vector
-        cout << "[CSP] Executing encrypted sum on the encrypted vector" << endl;
-
-        sealhelper::encrypted_vec_sum(record,
-                                      tmp1,
-                                      *getEvaluator(),
-                                      getAnalystHEGaloisKeys(analystId),
-                                      inputLen);
-
-        he_sum_enc_product_map[analystId][patientId].push_back(tmp1);
-    }
-
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start);
-    cout << "Total evaluation time: " << duration.count() << " ms" << endl;
-
-    print_vec_Ciphertext(getHESumEncProductMapValue(patientId, analystId), getHESumEncProductMapValue(patientId, analystId).size());
-
-    cout << "[CSP] Evaluation completed" << endl;
-}
-catch (const runtime_error &e)
+    catch (const runtime_error &e)
     {
         cerr << "[CSP] Error during evaluation: " << e.what() << endl;
+        return false;
     }
 }
 
@@ -709,7 +706,7 @@ bool BaseCSP::readHHEDecompositionDataFromFile(string fileName, vector<Ciphertex
     ifstream in(fileName, ios::binary);
     if (!in.is_open())
     {
-        throw ios_base::failure("Failed to open file for reading");
+        return false;
     }
 
     // Read the size of the vector
@@ -824,10 +821,12 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
         catch (const std::exception &e)
         {
             std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
+            throw;
         }
         catch (...)
         {
             std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
+            throw;
         }
     };
 
@@ -874,10 +873,11 @@ void CSPParallel_hhe_pktnn_1fc::performDecomposition(string patientId, std::stri
     cout << "[CSP] Initial Decomposition completed" << endl;
 }
 
-void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int inputLen)
+bool CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId, int inputLen)
 {
     unsigned int num_threads = std::thread::hardware_concurrency();
     std::vector<std::thread> thread_pool;
+    bool success = true;
 
     std::cout << "[CSP] Evaluating the HE weights on the decomposed HE data" << std::endl;
 
@@ -903,10 +903,12 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
         catch (const std::exception &e)
         {
             std::cerr << "Exception in thread " << std::this_thread::get_id() << " for record " << index << ": " << e.what() << std::endl;
+            success = false;
         }
         catch (...)
         {
             std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for record " << index << std::endl;
+            success = false;
         }
     };
 
@@ -955,10 +957,12 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
         catch (const std::exception &e)
         {
             std::cerr << "Exception in thread " << std::this_thread::get_id() << " for relinearization and sum of record " << index << ": " << e.what() << std::endl;
+            success = false;
         }
         catch (...)
         {
             std::cerr << "Unknown exception in thread " << std::this_thread::get_id() << " for relinearization and sum of record " << index << std::endl;
+            success = false;
         }
     };
 
@@ -980,6 +984,12 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
 
     waitForRemainingThreads(thread_pool);
 
+    if (!success)
+    {
+        std::cerr << "[CSP] Error during evaluation" << std::endl;
+        return false;
+    }
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start);
     std::cout << "Total evaluation time: " << duration.count() << " ms" << std::endl;
@@ -987,6 +997,7 @@ void CSPParallel_hhe_pktnn_1fc::evaluateModel(string patientId, string analystId
     print_vec_Ciphertext(getHESumEncProduct(patientId, analystId), getHESumEncProduct(patientId, analystId).size());
 
     std::cout << "[CSP] Evaluation completed" << std::endl;
+    return true;
 }
 
 // Helper method to manage the thread pool
