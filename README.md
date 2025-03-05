@@ -53,7 +53,7 @@ Before compiling the application, you can take a look at `src/config.cpp` and ch
 To compile and run this project, in the terminal, `cd` into the project's directory, then run:
 
 ```
-cmake -S . -B build`  
+cmake -S . -B build  
 cmake --build build --target csp user analyst
 ```
 
