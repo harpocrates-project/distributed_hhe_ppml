@@ -368,3 +368,6 @@ libs/pasta3/
 
 # Docker env file
 .env
+
+# Python virtual env
+env
