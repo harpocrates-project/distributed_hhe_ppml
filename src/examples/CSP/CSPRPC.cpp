@@ -177,25 +177,31 @@ Status CSPServiceImpl::addEncryptedData(ServerContext* context, const EncSymmetr
         //utils::print_vec(record_values, record_values.size(), "record");
     }
 
-    // Receive the patientID from the User
-    string patientID = request->patientid();
+    // Receive the patientId from the User
+    string patientId = request->patientid();
 
     int inputLen = 300;
 
     try
     {
-        csp->addUserEncryptedData(patientID, analystId, values);
+        csp->addUserEncryptedData(patientId, analystId, values);
 
         // HHE decomposition
-        if (!csp->decompose(patientID, analystId, inputLen))
+        if (!csp->decompose(patientId, analystId, inputLen))
         {
             return Status(StatusCode::INTERNAL, "Failed to decompose data");
         }
 
         // Write HHE decomposition data from memory to a file
         string analystUUID = csp->getAnalystUUID(analystId);
-        string fileName = "./" + patientID + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
-        csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMap(patientID, analystId));
+        string fileName = "./" + patientId + "_" + analystUUID + ".bin"; // This needs to be changed in line with Analyst's ID and User's ID
+        if(csp->writeHHEDecompositionDataToFile(fileName, csp->getHEEncDataProcessedMapValue(patientId, analystId))) {
+            cout << "Removing decompose data from memory for " << analystId << " " << patientId << endl;
+            // remove data from memory
+            csp->removeHEDecomposeData(patientId, analystId);
+        } else {
+            return Status(StatusCode::INTERNAL, "Failed to write HHE decomposition data to file");
+        }
     }
     // catching unexpected exceptions in addUserEncryptedData or writeHHEDecompositionDataToFile
     catch (const runtime_error &e)
@@ -261,7 +267,16 @@ Status CSPServiceImpl::evaluateModel(ServerContext* context, const CiphertextByt
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
-    analystRPCClient->addEncryptedResult(patientId, analystId);    
+
+    if (analystRPCClient->addEncryptedResult(patientId, analystId))
+    {
+        cout << "Removing evaluation data from memory for " << analystId << " " << patientId << endl;
+        csp->removeHEEvaluateData(patientId, analystId);
+    }
+    else
+    {
+        return Status(StatusCode::INTERNAL, "Failed to send the encrypted result to Analyst");
+    }
 
     return Status::OK;
 }
@@ -309,7 +324,16 @@ Status CSPServiceImpl::evaluateModelFromFile(ServerContext* context, const DataF
 
     // creates an object that is used to callback the Analyst
     AnalystServiceCSPClient* analystRPCClient = new AnalystServiceCSPClient(grpc::CreateChannel(analystId, grpc::InsecureChannelCredentials()), csp);
-    analystRPCClient->addEncryptedResult(patientId, analystId);    
+
+    if (analystRPCClient->addEncryptedResult(patientId, analystId))
+    {
+        cout << "Removing evaluation data from memory for " << analystId << " " << patientId << endl;
+        csp->removeHEEvaluateData(patientId, analystId);
+    }
+    else
+    {
+        return Status(StatusCode::INTERNAL, "Failed to send the encrypted result to Analyst");
+    }
 
     return Status::OK; 
 }

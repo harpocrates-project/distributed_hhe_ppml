@@ -90,13 +90,13 @@ class BaseCSP
         Return the User encrypted data
         @param[in] analystId The Analyst IP Addr
         */       
-        vector<vector<uint64_t>> getUserEncryptedData(string patientId, string analystId);  // vi_se
+        vector<vector<uint64_t>>& getUserEncryptedData(string patientId, string analystId);  // vi_se
         
         /**
         Return the HE encrypted data
         @param[in] analystId The Analyst IP Addr
         */
-        vector<vector<Ciphertext>> getHEEncryptedData(string patientId, string analystId); // vi_he
+        vector<vector<Ciphertext>>& getHEEncryptedData(string patientId, string analystId); // vi_he
 
         /**
         Return the encrypted result calculated by CSP via HHE decomposition and evaluation
@@ -107,7 +107,7 @@ class BaseCSP
         Return the HE encrypted processed data 
         @param[in] analystId The Analyst IP Addr
         */
-        vector<Ciphertext> getHEEncDataProcessedMapValue(string patientId, string analystId);
+        vector<Ciphertext>& getHEEncDataProcessedMapValue(string patientId, string analystId);
 
         /** 
         Return the first value of encrypted weights map
@@ -134,25 +134,18 @@ class BaseCSP
         vector<Ciphertext> getHESumEncProduct(string patientId, string analystId);
 
         /** 
-        Return the HE encrypted processed data 
-        @param[in] analystId The Analyst IP Addr
-        */
-        vector<Ciphertext> getHEEncDataProcessedMap(string patientId, string analystId);
-
-
-        /** 
          * Return the HE encrypted product data
          * @param[in] analystId The Analyst IP Addr
          * @param[in] patientId The Patient ID
          */
-        vector<Ciphertext> getHEEncProductMapValue(string patientId, string analystId);
+        vector<Ciphertext>& getHEEncProductMapValue(string patientId, string analystId);
 
         /**
          * Return the HE sum encrypted product data
          * @param[in] analystId The Analyst IP Addr
          * @param[in] patientId The Patient ID
          */
-        vector<Ciphertext> getHESumEncProductMapValue(string patientId, string analystId);
+        vector<Ciphertext>& getHESumEncProductMapValue(string patientId, string analystId);
 
         /**
         Return the Analyst's UUID
@@ -275,7 +268,7 @@ class BaseCSP
         @param[in] fileName  The file name for HHE Decomposition data
         @param[in] input     The HHE Decomposition data
         */
-        bool writeHHEDecompositionDataToFile(string fileName, vector<Ciphertext> input);
+        bool writeHHEDecompositionDataToFile(string fileName, vector<Ciphertext>& input);
         
         /** 
         Read HHE Decomposition data from a file
@@ -289,6 +282,10 @@ class BaseCSP
         bool deserializeCiphertexts(const google::protobuf::RepeatedPtrField<std::string>& serializedDataList, 
                             std::vector<Ciphertext>& ciphertexts, 
                             std::string& errorMessage);
+
+        void removeHEDecomposeData(string patientId, string analystId);
+        void removeHEEvaluateData(string patientId, string analystId);
+
     private: 
 
         void performMasking(string patiendId, string analystId, int inputLen, pasta::PASTA_SEAL& HHE);
