@@ -1,0 +1,36 @@
+
+name: lint check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cpplint:
+    name: cpplint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install cpplint
+        run: |
+          python -m pip install --upgrade pip
+          pip install cpplint
+
+      - name: Run cpplint (all C/C++ files)
+        run: 
+          # Adjust extensions or path as needed. This runs cpplint recursively from repo root.
+          # Use --extensions to cover the file types you want (cpp, c, h, hpp, cxx, cc, etc.)
+          cpplint --extensions=cpp,h,hpp,c,cc,cxx $(git ls-files '*.cpp' '*.cc' '*.cxx' '*.c' '*.h' '*.hpp' || true)
