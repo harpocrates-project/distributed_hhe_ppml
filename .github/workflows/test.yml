@@ -1,0 +1,36 @@
+name: CMake on a single platform
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++
+
+      - name: Compile and run tests in tests/
+        run: |
+          set -e
+          mkdir -p build
+          cd build
+
+          for test_file in ../tests/*.cpp; do
+            test_name=$(basename "$test_file" .cpp)
+            echo "Compiling $test_name..."
+            g++ -std=c++17 "$test_file" -o "$test_name"
+
+            echo "Running $test_name..."
+            ./"$test_name"
+            echo "$test_name finished successfully."
+          done
